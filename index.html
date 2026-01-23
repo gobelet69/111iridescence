@@ -2,129 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Personal Portfolio</title>
-    <link rel="icon" href="data:,">
-    <style>
-        /* Theme Variables - Default Dark */
-        :root { --bg: #0a0a0a; --txt: #eee; --card: #1a1a1a; --acc: #00ff41; }
-        .light { --bg: #f5f5f5; --txt: #222; --card: #fff; --acc: #0070f3; }
-        
-        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--txt); max-width: 650px; margin: 0 auto; padding: 20px; line-height: 1.5; transition: background 0.3s; }
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        button { cursor: pointer; background: var(--acc); border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; color: #000; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0; }
-        .card { background: var(--card); border: 1px solid #333; padding: 15px; border-radius: 8px; }
-        a { color: var(--acc); text-decoration: none; font-weight: 500; }
-        
-        #game-container { text-align: center; margin-top: 40px; border-top: 1px solid #444; padding-top: 20px; }
-        canvas { display: block; margin: 15px auto; background: #000; border: 2px solid var(--acc); width: 100%; max-width: 400px; touch-action: none; }
-        
-        footer { margin-top: 50px; padding: 20px; font-size: 0.85em; border-top: 1px solid #333; opacity: 0.8; }
-        code { background: rgba(128,128,128,0.2); padding: 2px 4px; border-radius: 3px; font-family: monospace; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>YOUR NAME</h1>
-        <button onclick="document.body.classList.toggle('light')">🌓 Theme</button>
-    </header>
-
-    <main>
-        <section>
-            <p>Introduce yourself here. This site is designed to be ultra-lightweight for maximum speed.</p>
-            
-            <div class="grid">
-                <div class="card">
-                    <strong>Project One</strong>
-                    <p>Brief description of your work.</p>
-                    <a href="#">View Link →</a>
-                </div>
-                <div class="card">
-                    <strong>Project Two</strong>
-                    <p>Brief description of your work.</p>
-                    <a href="#">View Link →</a>
-                </div>
-            </div>
-
-            <p>
-                <a href="#">GitHub</a> • 
-                <a href="#">LinkedIn</a> • 
-                <a href="mailto:your-email@example.com">Email Me</a>
-            </p>
-        </section>
-
-        <section id="game-container">
-            <strong>Snake Game — Score: <span id="s">0</span></strong>
-            <canvas id="g" width="400" height="400"></canvas>
-            <p><small>(Use arrow keys to start and play)</small></p>
-        </section>
-    </main>
-
-    <footer>
-        <p>
-            <strong>Performance Optimization:</strong><br>
-            This page is under <code>14 KB</code> to optimize for the <strong>TCP Initial Congestion Window (IW10)</strong>. 
-        </p>
-        <p>
-            By staying below this limit, the entire payload is delivered in a single <code>Round-Trip Time (RTT)</code> after the <code>TCP Handshake</code>, preventing additional network delays.
-        </p>
-    </footer>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>111iridescence | App Hub</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 
     <script>
-        const c=document.getElementById("g"), x=c.getContext("2d"), s=document.getElementById("s");
-        let score=0, sn=[{x:10,y:10}], f={x:15,y:15}, dx=0, dy=0, sz=20, ct=20;
-
-        function draw() {
-            // Wait for input to start moving
-            if (dx === 0 && dy === 0) {
-                render();
-                return;
+        tailwind.config = {
+            theme: { 
+                extend: { 
+                    colors: { 
+                        iri: '#6366f1', 
+                        iriDark: '#4338ca', 
+                        accent: '#f43f5e',
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                } 
             }
-
-            let h = {x: sn[0].x + dx, y: sn[0].y + dy};
-
-            // Wrap around edges
-            if(h.x<0) h.x=ct-1; if(h.x>=ct) h.x=0;
-            if(h.y<0) h.y=ct-1; if(h.y>=ct) h.y=0;
-
-            // Collision check
-            for(let i=0; i<sn.length; i++) {
-                if(h.x==sn[i].x && h.y==sn[i].y) {
-                    dx=dy=score=0; sn=[{x:10,y:10}]; s.innerText=0; return;
-                }
-            }
-
-            sn.unshift(h);
-
-            // Eat fruit
-            if(h.x==f.x && h.y==f.y) {
-                score++; s.innerText=score;
-                f={x:Math.floor(Math.random()*ct), y:Math.floor(Math.random()*ct)};
-            } else {
-                sn.pop();
-            }
-            render();
         }
-
-        function render() {
-            x.fillStyle="#000"; x.fillRect(0,0,400,400);
-            x.fillStyle="#0f3"; sn.forEach(p=>x.fillRect(p.x*sz, p.y*sz, sz-1, sz-1));
-            x.fillStyle="#f00"; x.fillRect(f.x*sz, f.y*sz, sz-1, sz-1);
-        }
-
-        window.onkeydown = e => {
-            const k=e.keyCode;
-            if(k==37 && dx==0) {dx=-1;dy=0}
-            else if(k==38 && dy==0) {dx=0;dy=-1}
-            else if(k==39 && dx==0) {dx=1;dy=0}
-            else if(k==40 && dy==0) {dx=0;dy=1}
-            if(k>=37 && k<=40) e.preventDefault(); // Stop scrolling
-        };
-
-        setInterval(draw, 100);
     </script>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-slate-800 font-sans bg-slate-50">
+
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center px-6 justify-between flex-shrink-0 z-20">
+        <div class="flex items-center gap-3 select-none">
+            <div class="w-8 h-8 bg-gradient-to-br from-iri to-accent rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg">111</div>
+            <h1 class="font-bold text-xl tracking-tight">111<span class="text-iri">iridescence</span></h1>
+        </div>
+        <div class="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            ALL SYSTEMS OPERATIONAL
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-6 md:p-10 fade-in">
+        <div class="max-w-7xl mx-auto space-y-12 pb-20">
+            
+            <div>
+                <h2 class="text-4xl font-extrabold mb-2 text-slate-900 tracking-tight">App Hub</h2>
+                <p class="text-lg text-slate-500 max-w-2xl">Access all your tools, vaults, and projects from one secure location.</p>
+            </div>
+            
+            <section>
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="text-2xl">🛠️</span>
+                    <h3 class="text-xl font-bold text-slate-800">Tools</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    
+                    <a href="/pdf" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-indigo-50 text-indigo-600 transition-transform group-hover:scale-110">
+                            📚
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">111 PDF Tools</h4>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Secure, client-side PDF editing and merging suite.</p>
+                        </div>
+                    </a>
+
+                    <a href="/converter" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-emerald-50 text-emerald-600 transition-transform group-hover:scale-110">
+                            🔄
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">111 Converter</h4>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Fast universal file conversion utility.</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <hr class="border-slate-200">
+
+            <section>
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="text-2xl">✨</span>
+                    <h3 class="text-xl font-bold text-slate-800">Other Webapps</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    
+                    <a href="/portfolio" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-rose-50 text-rose-500 transition-transform group-hover:scale-110">
+                            🎨
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">Portfolio</h4>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Personal work, projects, and creative showcase.</p>
+                        </div>
+                    </a>
+
+                    <a href="/vault" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-slate-100 text-slate-600 transition-transform group-hover:scale-110">
+                            🔒
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">Vault</h4>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Secure personal storage and data archive.</p>
+                        </div>
+                    </a>
+
+                    <a href="/advanced" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-purple-50 text-purple-600 transition-transform group-hover:scale-110">
+                            ⚡
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">Advanced</h4>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Developer toolkit and advanced configurations.</p>
+                        </div>
+                    </a>
+
+                    <a href="/habits" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-orange-50 text-orange-600 transition-transform group-hover:scale-110">
+                            📈
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">Habits Tracker</h4>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Daily routines, goals, and progress monitoring.</p>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
 </body>
 </html>

@@ -1,0 +1,8 @@
+{
+  "name": "111iridescence",
+  "compatibility_date": "2024-09-23",
+  "pages_build_output_dir": ".",
+  "routes": [
+    { "pattern": "111iridescence.org", "zone_name": "111iridescence.org" }
+  ]
+}
