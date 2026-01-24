@@ -2,10 +2,19 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Common headers for SharedArrayBuffer support
+    const headers = {
+      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Opener-Policy": "same-origin",
+    };
+
     // --- 1. ROOT PATH (App Hub) ---
     if (url.pathname === "/") {
       return new Response(renderIndex(), {
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        headers: { 
+          "Content-Type": "text/html; charset=utf-8",
+          ...headers
+        },
       });
     }
 
@@ -19,14 +28,20 @@ export default {
     // --- 3. CONVERTER APP ---
     if (url.pathname === "/converter") {
       return new Response(renderConverter(), {
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        headers: { 
+          "Content-Type": "text/html; charset=utf-8",
+          ...headers
+        },
       });
     }
 
     // --- 4. PDF TOOLS APP ---
     if (url.pathname === "/pdf") {
       return new Response(renderPDFTools(), {
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        headers: { 
+          "Content-Type": "text/html; charset=utf-8",
+          ...headers
+        },
       });
     }
 
@@ -132,6 +147,8 @@ function renderConverter() {
 '        }' +
 '    </script>' +
 '    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>' +
+'    <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>' +
+'    <script src="https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>' +
 '</head>' +
 '<body class="h-screen flex flex-col overflow-hidden text-slate-800 font-sans bg-slate-50">' +
 '    <header class="bg-white border-b border-slate-200 h-16 flex items-center px-6 justify-between flex-shrink-0 z-20">' +
@@ -147,7 +164,7 @@ function renderConverter() {
 '    <main class="flex-1 overflow-hidden relative flex flex-col">' +
 '        <div class="bg-white border-b border-slate-200 p-4 flex flex-col md:flex-row items-center justify-between shadow-sm z-10 gap-4">' +
 '            <div class="text-sm text-slate-500 font-medium">' +
-'                Supports: <span class="text-slate-800">Video, Audio, Images</span>' +
+'                Supports: <span class="text-slate-800">Video, Audio, Images, Documents</span>' +
 '            </div>' +
 '            <div class="flex items-center gap-3">' +
 '                <button onclick="document.getElementById(' + "'folder-upload'" + ').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-bold text-sm border border-slate-200">' +
@@ -165,7 +182,7 @@ function renderConverter() {
 '            <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none opacity-100 transition-opacity">' +
 '                <div class="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center text-5xl mb-6 text-iri shadow-inner">♻️</div>' +
 '                <h3 class="text-2xl font-bold text-slate-700 mb-2">Universal Converter</h3>' +
-'                <p class="text-slate-500 text-center max-w-md">Drag & Drop files or folders here.<br>Convert MP4, AVI, MOV, MP3, WAV, PNG, JPG, WEBP and more.</p>' +
+'                <p class="text-slate-500 text-center max-w-md">Drag & Drop files or folders here.<br>Convert MP4, AVI, MOV, MP3, WAV, PNG, JPG, WEBP, DOCX and more.</p>' +
 '            </div>' +
 '            <div id="file-list" class="grid grid-cols-1 gap-4 max-w-5xl mx-auto pb-20 hidden">' +
 '                </div>' +
@@ -271,7 +288,8 @@ function getConverterJS() {
 'const FORMATS = {\n' +
 '    video: ["mp4", "webm", "avi", "mov", "mkv", "flv", "gif", "mp3"],\n' +
 '    audio: ["mp3", "wav", "aac", "ogg", "m4a", "flac"],\n' +
-'    image: ["jpg", "png", "webp", "bmp", "tiff", "ico", "gif"]\n' +
+'    image: ["jpg", "png", "webp", "bmp", "tiff", "ico", "gif"],\n' +
+'    document: ["pdf"]\n' +
 '};\n' +
 'const getType = (file) => {\n' +
 '    if (file.type.startsWith("video/")) return "video";\n' +
@@ -279,6 +297,7 @@ function getConverterJS() {
 '    if (file.type.startsWith("image/")) return "image";\n' +
 '    const ext = file.name.split(".").pop().toLowerCase();\n' +
 '    if (["mkv","avi","mov"].includes(ext)) return "video";\n' +
+'    if (["docx","doc"].includes(ext)) return "document";\n' +
 '    return "unknown";\n' +
 '};\n' +
 'let files = [];\n' +
@@ -291,14 +310,24 @@ function getConverterJS() {
 '};\n' +
 'async function initFFmpeg() {\n' +
 '    try {\n' +
-'        ffmpeg = createFFmpeg({ log: true });\n' +
+'        if (typeof SharedArrayBuffer === "undefined") {\n' +
+'            dom.status.className = "flex items-center gap-2 text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200";\n' +
+'            dom.status.innerHTML = \'<span class="w-2 h-2 rounded-full bg-blue-500"></span> Limited Mode (No Video/Audio)\';\n' +
+'            console.log("SharedArrayBuffer not available - FFmpeg disabled");\n' +
+'            return;\n' +
+'        }\n' +
+'        ffmpeg = createFFmpeg({ \n' +
+'            log: true,\n' +
+'            corePath: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"\n' +
+'        });\n' +
 '        await ffmpeg.load();\n' +
 '        dom.status.className = "flex items-center gap-2 text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200";\n' +
 '        dom.status.innerHTML = \'<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Engine Ready\';\n' +
 '        console.log("FFmpeg Loaded");\n' +
 '    } catch (e) {\n' +
 '        console.error(e);\n' +
-'        dom.status.innerHTML = "Engine Error (Check Headers)";\n' +
+'        dom.status.className = "flex items-center gap-2 text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200";\n' +
+'        dom.status.innerHTML = \'<span class="w-2 h-2 rounded-full bg-blue-500"></span> Limited Mode (Images/Docs Only)\';\n' +
 '    }\n' +
 '}\n' +
 'initFFmpeg();\n' +
@@ -327,6 +356,7 @@ function getConverterJS() {
 '        let defaultTarget = "mp4";\n' +
 '        if (type === "audio") defaultTarget = "mp3";\n' +
 '        if (type === "image") defaultTarget = "png";\n' +
+'        if (type === "document") defaultTarget = "pdf";\n' +
 '        files.push({ id, file, type, targetFormat: defaultTarget, status: "idle" });\n' +
 '        renderFileCard(id, file, type, defaultTarget);\n' +
 '    });\n' +
@@ -335,7 +365,7 @@ function getConverterJS() {
 '    const div = document.createElement("div");\n' +
 '    div.id = "card-" + id;\n' +
 '    div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center gap-4 fade-in";\n' +
-'    const icon = type === "video" ? "🎬" : type === "audio" ? "🎵" : "🖼️";\n' +
+'    const icon = type === "video" ? "🎬" : type === "audio" ? "🎵" : type === "document" ? "📄" : "🖼️";\n' +
 '    const options = FORMATS[type].map(fmt => "<option value=\\"" + fmt + "\\"" + (fmt === defaultTarget ? " selected" : "") + ">to " + fmt.toUpperCase() + "</option>").join("");\n' +
 '    div.innerHTML = "<div class=\\"w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0\\">" + icon + "</div>" +\n' +
 '        "<div class=\\"flex-1 min-w-0 w-full text-center md:text-left\\"><h4 class=\\"font-bold text-slate-700 truncate\\">" + file.name + "</h4><p class=\\"text-xs text-slate-500\\">" + (file.size / 1024 / 1024).toFixed(2) + " MB</p></div>" +\n' +
@@ -359,7 +389,11 @@ function getConverterJS() {
 '    }\n' +
 '}\n' +
 'async function convertAll() {\n' +
-'    if (!ffmpeg) return alert("Engine loading... please wait.");\n' +
+'    const needsFFmpeg = files.some(f => f.type === "video" || f.type === "audio");\n' +
+'    if (needsFFmpeg && !ffmpeg) {\n' +
+'        alert("Video/Audio conversion requires FFmpeg engine. Only image and document conversion available in limited mode.");\n' +
+'        return;\n' +
+'    }\n' +
 '    dom.convertBtn.disabled = true;\n' +
 '    dom.convertBtn.innerText = "Converting...";\n' +
 '    for (const f of files) {\n' +
@@ -378,27 +412,106 @@ function getConverterJS() {
 '    statusTxt.innerText = "Processing...";\n' +
 '    fObj.status = "processing";\n' +
 '    try {\n' +
-'        const { file, id, targetFormat } = fObj;\n' +
-'        const inputName = "input_" + id + "." + file.name.split(".").pop();\n' +
-'        const outputName = "output_" + id + "." + targetFormat;\n' +
-'        ffmpeg.FS("writeFile", inputName, await fetchFile(file));\n' +
-'        ffmpeg.setProgress(({ ratio }) => {\n' +
-'            progBar.style.width = (ratio * 100) + "%";\n' +
-'            statusTxt.innerText = (ratio * 100).toFixed(0) + "%";\n' +
-'        });\n' +
-'        await ffmpeg.run("-i", inputName, outputName);\n' +
-'        const data = ffmpeg.FS("readFile", outputName);\n' +
-'        const blob = new Blob([data.buffer], { type: fObj.type + "/" + targetFormat });\n' +
-'        const url = URL.createObjectURL(blob);\n' +
-'        actionArea.innerHTML = "<a href=\\"" + url + "\\" download=\\"" + file.name.split(".")[0] + "." + targetFormat + "\\" class=\\"bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow block text-center\\">Download</a>";\n' +
+'        const { file, id, targetFormat, type } = fObj;\n' +
+'        \n' +
+'        if (type === "document") {\n' +
+'            await processDocumentFile(fObj, progBar, statusTxt, actionArea);\n' +
+'        } else if (type === "image") {\n' +
+'            await processImageFile(fObj, progBar, statusTxt, actionArea);\n' +
+'        } else {\n' +
+'            // Video/Audio processing with FFmpeg\n' +
+'            const inputName = "input_" + id + "." + file.name.split(".").pop();\n' +
+'            const outputName = "output_" + id + "." + targetFormat;\n' +
+'            ffmpeg.FS("writeFile", inputName, await fetchFile(file));\n' +
+'            ffmpeg.setProgress(({ ratio }) => {\n' +
+'                progBar.style.width = (ratio * 100) + "%";\n' +
+'                statusTxt.innerText = (ratio * 100).toFixed(0) + "%";\n' +
+'            });\n' +
+'            await ffmpeg.run("-i", inputName, outputName);\n' +
+'            const data = ffmpeg.FS("readFile", outputName);\n' +
+'            const blob = new Blob([data.buffer], { type: type + "/" + targetFormat });\n' +
+'            const url = URL.createObjectURL(blob);\n' +
+'            actionArea.innerHTML = "<a href=\\"" + url + "\\" download=\\"" + file.name.split(".")[0] + "." + targetFormat + "\\" class=\\"bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow block text-center\\">Download</a>";\n' +
+'            ffmpeg.FS("unlink", inputName);\n' +
+'            ffmpeg.FS("unlink", outputName);\n' +
+'        }\n' +
 '        fObj.status = "done";\n' +
-'        ffmpeg.FS("unlink", inputName);\n' +
-'        ffmpeg.FS("unlink", outputName);\n' +
 '    } catch (err) {\n' +
 '        console.error(err);\n' +
 '        statusTxt.innerText = "Error";\n' +
 '        statusTxt.classList.add("text-red-500");\n' +
 '    }\n' +
+'}\n' +
+'async function processDocumentFile(fObj, progBar, statusTxt, actionArea) {\n' +
+'    const { file, targetFormat } = fObj;\n' +
+'    \n' +
+'    if (targetFormat === "pdf") {\n' +
+'        statusTxt.innerText = "Reading document...";\n' +
+'        progBar.style.width = "25%";\n' +
+'        \n' +
+'        const arrayBuffer = await file.arrayBuffer();\n' +
+'        \n' +
+'        statusTxt.innerText = "Converting to HTML...";\n' +
+'        progBar.style.width = "50%";\n' +
+'        \n' +
+'        const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});\n' +
+'        const html = result.value;\n' +
+'        \n' +
+'        statusTxt.innerText = "Generating PDF...";\n' +
+'        progBar.style.width = "75%";\n' +
+'        \n' +
+'        const element = document.createElement("div");\n' +
+'        element.innerHTML = html;\n' +
+'        element.style.padding = "20px";\n' +
+'        element.style.fontFamily = "Arial, sans-serif";\n' +
+'        element.style.fontSize = "12px";\n' +
+'        element.style.lineHeight = "1.5";\n' +
+'        \n' +
+'        const opt = {\n' +
+'            margin: 1,\n' +
+'            filename: file.name.split(".")[0] + ".pdf",\n' +
+'            image: { type: "jpeg", quality: 0.98 },\n' +
+'            html2canvas: { scale: 2 },\n' +
+'            jsPDF: { unit: "in", format: "letter", orientation: "portrait" }\n' +
+'        };\n' +
+'        \n' +
+'        const pdfBlob = await html2pdf().set(opt).from(element).output("blob");\n' +
+'        \n' +
+'        progBar.style.width = "100%";\n' +
+'        statusTxt.innerText = "Complete";\n' +
+'        \n' +
+'        const url = URL.createObjectURL(pdfBlob);\n' +
+'        actionArea.innerHTML = "<a href=\\"" + url + "\\" download=\\"" + file.name.split(".")[0] + ".pdf\\" class=\\"bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow block text-center\\">Download</a>";\n' +
+'    }\n' +
+'}\n' +
+'async function processImageFile(fObj, progBar, statusTxt, actionArea) {\n' +
+'    const { file, targetFormat } = fObj;\n' +
+'    \n' +
+'    statusTxt.innerText = "Processing image...";\n' +
+'    progBar.style.width = "50%";\n' +
+'    \n' +
+'    const canvas = document.createElement("canvas");\n' +
+'    const ctx = canvas.getContext("2d");\n' +
+'    const img = new Image();\n' +
+'    \n' +
+'    return new Promise((resolve, reject) => {\n' +
+'        img.onload = () => {\n' +
+'            canvas.width = img.width;\n' +
+'            canvas.height = img.height;\n' +
+'            ctx.drawImage(img, 0, 0);\n' +
+'            \n' +
+'            progBar.style.width = "100%";\n' +
+'            statusTxt.innerText = "Complete";\n' +
+'            \n' +
+'            canvas.toBlob((blob) => {\n' +
+'                const url = URL.createObjectURL(blob);\n' +
+'                actionArea.innerHTML = "<a href=\\"" + url + "\\" download=\\"" + file.name.split(".")[0] + "." + targetFormat + "\\" class=\\"bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow block text-center\\">Download</a>";\n' +
+'                resolve();\n' +
+'            }, "image/" + targetFormat);\n' +
+'        };\n' +
+'        img.onerror = reject;\n' +
+'        img.src = URL.createObjectURL(file);\n' +
+'    });\n' +
 '}';
 }
 
