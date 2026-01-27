@@ -26,8 +26,11 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // Note: Removed COEP headers that were blocking external resources
-    const headers = {};
+    // Common headers for SharedArrayBuffer support
+    const headers = {
+      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Opener-Policy": "same-origin",
+    };
 
     // --- 1. ROOT PATH (App Hub) ---
     if (url.pathname === "/") {
@@ -99,7 +102,7 @@ function renderIndex() {
             </div>
             <section>
                 <div class="flex items-center gap-2 mb-6"><span class="text-2xl">🛠️</span><h3 class="text-xl font-bold text-slate-800">Tools</h3></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
                     <a href="/pdf" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-indigo-50 text-indigo-600 transition-transform group-hover:scale-110">📚</div>
                         <div><h4 class="font-bold text-lg text-slate-800">111 PDF Tools</h4><p class="text-sm text-slate-500 mt-1 leading-relaxed">Secure, client-side PDF editing and merging suite.</p></div>
@@ -113,7 +116,7 @@ function renderIndex() {
             <hr class="border-slate-200">
             <section>
                 <div class="flex items-center gap-2 mb-6"><span class="text-2xl">✨</span><h3 class="text-xl font-bold text-slate-800">Other Webapps</h3></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
                     <a href="/vault" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-slate-100 text-slate-600 transition-transform group-hover:scale-110">🔒</div>
                         <div><h4 class="font-bold text-lg text-slate-800">Vault</h4><p class="text-sm text-slate-500 mt-1 leading-relaxed">Secure personal storage and data archive.</p></div>
@@ -179,7 +182,7 @@ function renderConverter() {
                 <h3 class="text-2xl font-bold text-slate-700 mb-2">Universal Converter</h3>
                 <p class="text-slate-500 text-center max-w-md">Drag & Drop files or folders here.<br>Convert MP4, AVI, MOV, MP3, WAV, PNG, JPG, WEBP, DOCX and more.</p>
             </div>
-            <div id="file-list" class="grid grid-cols-1 gap-4 max-w-5xl mx-auto pb-20 hidden"></div>
+            <div id="file-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto pb-20 hidden"></div>
         </div>
 
         <input type="file" id="file-upload" class="hidden" multiple>
@@ -222,7 +225,7 @@ function renderPDFTools() {
                     <h2 class="text-3xl font-bold mb-2 text-slate-900">PDF Tools</h2>
                     <p class="text-slate-500">Secure processing in your browser.</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="tool-grid"></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5" id="tool-grid"></div>
             </div>
         </div>
 
@@ -249,7 +252,7 @@ function renderPDFTools() {
                     <div class="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center text-4xl mb-4 text-slate-400">📂</div>
                     <h3 class="text-xl font-bold text-slate-400">Drop files here</h3>
                 </div>
-                <div id="grid-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-6 max-w-7xl mx-auto pb-20"></div>
+                <div id="grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto pb-20"></div>
             </div>
             <input type="file" id="file-upload" class="hidden" multiple>
         </div>
@@ -267,7 +270,7 @@ function renderPDFTools() {
 
 // Create output directory
 if (!fs.existsSync('./dist')) {
-  fs.mkdirSync('./dist');
+    fs.mkdirSync('./dist');
 }
 
 // Write the final worker.js

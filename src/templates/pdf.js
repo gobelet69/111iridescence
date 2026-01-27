@@ -1,7 +1,7 @@
 import { getPDFToolsJS } from '../scripts/pdf.js';
 
 export function renderPDFTools() {
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@ export function renderPDFTools() {
                     <h2 class="text-3xl font-bold mb-2 text-slate-900">PDF Tools</h2>
                     <p class="text-slate-500">Secure processing in your browser.</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="tool-grid"></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5" id="tool-grid"></div>
             </div>
         </div>
 
@@ -58,7 +58,7 @@ export function renderPDFTools() {
                     <div class="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center text-4xl mb-4 text-slate-400">📂</div>
                     <h3 class="text-xl font-bold text-slate-400">Drop files here</h3>
                 </div>
-                <div id="grid-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-6 max-w-7xl mx-auto pb-20"></div>
+                <div id="grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto pb-20"></div>
             </div>
             <input type="file" id="file-upload" class="hidden" multiple>
         </div>

@@ -1,7 +1,7 @@
 import { getConverterJS } from '../scripts/converter.js';
 
 export function renderConverter() {
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +49,7 @@ export function renderConverter() {
                 <h3 class="text-2xl font-bold text-slate-700 mb-2">Universal Converter</h3>
                 <p class="text-slate-500 text-center max-w-md">Drag & Drop files or folders here.<br>Convert MP4, AVI, MOV, MP3, WAV, PNG, JPG, WEBP, DOCX and more.</p>
             </div>
-            <div id="file-list" class="grid grid-cols-1 gap-4 max-w-5xl mx-auto pb-20 hidden"></div>
+            <div id="file-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto pb-20 hidden"></div>
         </div>
 
         <input type="file" id="file-upload" class="hidden" multiple>

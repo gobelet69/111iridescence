@@ -418,8 +418,8 @@ const getType = (file) => {
     if (file.type.startsWith("audio/")) return "audio";
     if (file.type.startsWith("image/")) return "image";
     const ext = file.name.split(".").pop().toLowerCase();
-    if (["mkv","avi","mov"].includes(ext)) return "video";
-    if (["docx","doc"].includes(ext)) return "document";
+    if (["mkv", "avi", "mov"].includes(ext)) return "video";
+    if (["docx", "doc"].includes(ext)) return "document";
     return "unknown";
 };
 
@@ -441,7 +441,7 @@ async function initFFmpeg() {
             console.log("SharedArrayBuffer not available - FFmpeg disabled");
             return;
         }
-        ffmpeg = createFFmpeg({ 
+        ffmpeg = createFFmpeg({
             log: true,
             corePath: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"
         });
@@ -475,7 +475,7 @@ document.getElementById("folder-upload").addEventListener("change", (e) => handl
 
 function handleFiles(fileList) {
     if (!fileList.length) return;
-    
+
     dom.empty.style.display = "none";
     dom.fileList.classList.remove("hidden");
     dom.convertBtn.disabled = false;
@@ -499,46 +499,54 @@ function handleFiles(fileList) {
 function renderFileCard(id, file, type, defaultTarget) {
     const div = document.createElement("div");
     div.id = "card-" + id;
-    div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center gap-4 fade-in";
-    
+    div.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-3 fade-in relative hover:shadow-md transition-all";
+
     const icon = type === "video" ? "🎬" : type === "audio" ? "🎵" : type === "document" ? "📄" : "🖼️";
-    const options = FORMATS[type].map(fmt => 
+    const options = FORMATS[type].map(fmt =>
         \`<option value="\${fmt}"\${fmt === defaultTarget ? " selected" : ""}>to \${fmt.toUpperCase()}</option>\`
     ).join("");
 
     div.innerHTML = \`
-        <div class="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">\${icon}</div>
-        <div class="flex-1 min-w-0 w-full text-center md:text-left">
-            <h4 class="font-bold text-slate-700 truncate">\${file.name}</h4>
-            <p class="text-xs text-slate-500">\${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+        <div class="absolute top-2 right-2">
+             <button onclick="removeFile('\${id}')" class="text-slate-300 hover:text-red-500 p-1 rounded-full hover:bg-slate-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
-        <div class="flex items-center gap-3 w-full md:w-auto justify-center">
-            <span class="text-slate-400 text-sm">Convert to:</span>
-            <select onchange="updateTarget('\${id}', this.value)" class="bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2">
-                \${options}
-            </select>
+        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 mb-1">\${icon}</div>
+        <div class="w-full text-center">
+            <h4 class="font-bold text-slate-700 truncate w-full px-2 text-sm" title="\${file.name}">\${file.name}</h4>
+            <p class="text-xs text-slate-400 mt-0.5">\${(file.size / 1024 / 1024).toFixed(2)} MB</p>
         </div>
-        <div id="action-\${id}" class="flex-shrink-0 w-full md:w-32">
-             <div class="w-full bg-slate-200 rounded-full h-2.5 hidden" id="progress-container-\${id}">
-                <div class="bg-indigo-500 h-2.5 rounded-full progress-bar" style="width: 0%" id="progress-\${id}"></div>
+        <div class="flex flex-col items-center gap-2 w-full mt-1">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <span>Convert to:</span>
+                <select onchange="updateTarget('\${id}', this.value)" class="bg-indigo-50 border-0 text-indigo-700 font-semibold text-xs rounded-md focus:ring-2 focus:ring-indigo-200 block py-1 px-2 cursor-pointer">
+                    \${options}
+                </select>
             </div>
-            <div id="status-text-\${id}" class="text-xs text-center text-slate-500 mt-1">Ready</div>
         </div>
-        <button onclick="removeFile('\${id}')" class="text-slate-400 hover:text-red-500 px-2">&times;</button>
+        <div id="action-\${id}" class="w-full mt-2">
+             <div class="w-full bg-slate-100 rounded-full h-2 hidden overflow-hidden" id="progress-container-\${id}">
+                <div class="bg-indigo-500 h-2 rounded-full progress-bar" style="width: 0%" id="progress-\${id}"></div>
+            </div>
+            <div id="status-text-\${id}" class="text-[10px] font-medium text-center text-slate-400 mt-1 h-4">Ready</div>
+        </div>
     \`;
-    
+
     dom.fileList.appendChild(div);
 }
 
 function updateTarget(id, val) {
     const f = files.find(x => x.id === id);
-    if(f) f.targetFormat = val;
+    if (f) f.targetFormat = val;
 }
 
 function removeFile(id) {
     files = files.filter(f => f.id !== id);
     document.getElementById("card-" + id).remove();
-    if(files.length === 0) {
+    if (files.length === 0) {
         dom.empty.style.display = "flex";
         dom.fileList.classList.add("hidden");
         dom.convertBtn.disabled = true;
@@ -574,7 +582,7 @@ async function processFile(fObj) {
 
     try {
         const { file, id, targetFormat, type } = fObj;
-        
+
         if (type === "document") {
             await processDocumentFile(fObj, progBar, statusTxt, actionArea);
         } else if (type === "image") {
@@ -606,29 +614,29 @@ async function processFile(fObj) {
 
 async function processDocumentFile(fObj, progBar, statusTxt, actionArea) {
     const { file, targetFormat } = fObj;
-    
+
     if (targetFormat === "pdf") {
         statusTxt.innerText = "Reading document...";
         progBar.style.width = "25%";
-        
+
         const arrayBuffer = await file.arrayBuffer();
-        
+
         statusTxt.innerText = "Converting to HTML...";
         progBar.style.width = "50%";
-        
-        const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});
+
+        const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
         const html = result.value;
-        
+
         statusTxt.innerText = "Generating PDF...";
         progBar.style.width = "75%";
-        
+
         const element = document.createElement("div");
         element.innerHTML = html;
         element.style.padding = "20px";
         element.style.fontFamily = "Arial, sans-serif";
         element.style.fontSize = "12px";
         element.style.lineHeight = "1.5";
-        
+
         const opt = {
             margin: 1,
             filename: file.name.split(".")[0] + ".pdf",
@@ -636,12 +644,12 @@ async function processDocumentFile(fObj, progBar, statusTxt, actionArea) {
             html2canvas: { scale: 2 },
             jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
         };
-        
+
         const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
-        
+
         progBar.style.width = "100%";
         statusTxt.innerText = "Complete";
-        
+
         const url = URL.createObjectURL(pdfBlob);
         actionArea.innerHTML = \`<a href="\${url}" download="\${file.name.split(".")[0]}.pdf" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow block text-center">Download</a>\`;
     }
@@ -649,23 +657,23 @@ async function processDocumentFile(fObj, progBar, statusTxt, actionArea) {
 
 async function processImageFile(fObj, progBar, statusTxt, actionArea) {
     const { file, targetFormat } = fObj;
-    
+
     statusTxt.innerText = "Processing image...";
     progBar.style.width = "50%";
-    
+
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
-    
+
     return new Promise((resolve, reject) => {
         img.onload = () => {
             canvas.width = img.width;
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
-            
+
             progBar.style.width = "100%";
             statusTxt.innerText = "Complete";
-            
+
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 actionArea.innerHTML = \`<a href="\${url}" download="\${file.name.split(".")[0]}.\${targetFormat}" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow block text-center">Download</a>\`;
@@ -682,21 +690,29 @@ const TOOLS = [
     { id: "merge", icon: "📚", color: "bg-indigo-50 text-indigo-600", title: "Merge PDF", desc: "Combine multiple files & reorder pages." },
     { id: "organize", icon: "✂️", color: "bg-rose-50 text-rose-500", title: "Split & Edit", desc: "Rotate, delete, or extract specific pages.", type: "pages" },
     { id: "img2pdf", icon: "🖼️", color: "bg-emerald-50 text-emerald-600", title: "Image to PDF", desc: "Convert JPG/PNG to PDF documents.", accept: "image/*" },
-    { id: "watermark", icon: "💧", color: "bg-blue-50 text-blue-500", title: "Watermark", desc: "Add text overlay to pages.", inputs: [
-        { id: "wm-text", type: "text", placeholder: "Watermark Text", width: "w-48" },
-        { id: "wm-color", type: "select", options: ["Red", "Grey", "Blue"], width: "w-24" }
-    ]},
+    {
+        id: "watermark", icon: "💧", color: "bg-blue-50 text-blue-500", title: "Watermark", desc: "Add text overlay to pages.", inputs: [
+            { id: "wm-text", type: "text", placeholder: "Watermark Text", width: "w-48" },
+            { id: "wm-color", type: "select", options: ["Red", "Grey", "Blue"], width: "w-24" }
+        ]
+    },
     { id: "numbers", icon: "🔢", color: "bg-slate-50 text-slate-600", title: "Page Numbers", desc: "Add pagination to footer." },
-    { id: "protect", icon: "🔒", color: "bg-orange-50 text-orange-600", title: "Protect", desc: "Encrypt with password.", inputs: [
-        { id: "pass-set", type: "password", placeholder: "Set Password", width: "w-40" }
-    ]},
-    { id: "unlock", icon: "🔓", color: "bg-teal-50 text-teal-600", title: "Unlock", desc: "Remove PDF password.", inputs: [
-        { id: "pass-unlock", type: "password", placeholder: "Original Password", width: "w-40" }
-    ]},
-    { id: "metadata", icon: "🏷️", color: "bg-purple-50 text-purple-600", title: "Metadata", desc: "Edit Title & Author.", inputs: [
-        { id: "meta-title", type: "text", placeholder: "New Title", width: "w-40" },
-        { id: "meta-author", type: "text", placeholder: "New Author", width: "w-40" }
-    ]},
+    {
+        id: "protect", icon: "🔒", color: "bg-orange-50 text-orange-600", title: "Protect", desc: "Encrypt with password.", inputs: [
+            { id: "pass-set", type: "password", placeholder: "Set Password", width: "w-40" }
+        ]
+    },
+    {
+        id: "unlock", icon: "🔓", color: "bg-teal-50 text-teal-600", title: "Unlock", desc: "Remove PDF password.", inputs: [
+            { id: "pass-unlock", type: "password", placeholder: "Original Password", width: "w-40" }
+        ]
+    },
+    {
+        id: "metadata", icon: "🏷️", color: "bg-purple-50 text-purple-600", title: "Metadata", desc: "Edit Title & Author.", inputs: [
+            { id: "meta-title", type: "text", placeholder: "New Title", width: "w-40" },
+            { id: "meta-author", type: "text", placeholder: "New Author", width: "w-40" }
+        ]
+    },
     { id: "flatten", icon: "🔨", color: "bg-gray-50 text-gray-600", title: "Flatten", desc: "Make forms un-editable." }
 ];
 
@@ -730,13 +746,13 @@ initDashboard();
 function launchTool(toolId) {
     app.activeTool = toolId;
     const conf = TOOLS.find(t => t.id === toolId);
-    
+
     dom.dash.classList.add("hidden");
     dom.work.classList.remove("hidden");
     dom.title.innerText = conf.title;
     dom.input.accept = conf.accept || ".pdf";
     dom.input.value = "";
-    
+
     renderSettings(conf.inputs || []);
     initSortable();
 }
@@ -749,7 +765,7 @@ function goHome() {
 
 function renderSettings(inputs) {
     dom.settings.innerHTML = "";
-    
+
     if (app.activeTool === "organize") {
         const grp = document.createElement("div");
         grp.className = "flex gap-2 bg-slate-100 p-1.5 rounded-lg";
@@ -784,7 +800,7 @@ dom.input.addEventListener("change", async (e) => {
     if (!e.target.files.length) return;
     showToast("Processing files...", true);
     dom.empty.classList.add("hidden");
-    
+
     for (const file of e.target.files) {
         await addFileToGrid(file);
     }
@@ -799,22 +815,22 @@ async function addFileToGrid(file) {
     if (conf.type === "pages" && isPdf) {
         const buff = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument(buff).promise;
-        
+
         for (let i = 1; i <= pdf.numPages; i++) {
             const div = createCard(id, true);
             div.dataset.fileId = id;
             div.dataset.pageIdx = i - 1;
             div.dataset.rotation = 0;
-            
+
             await renderThumbnail(pdf, i, div.querySelector(".thumb-area"));
-            
+
             const num = document.createElement("span");
             num.className = "absolute bottom-2 right-2 bg-slate-900/70 text-white text-[10px] font-bold px-1.5 py-0.5 rounded";
             num.innerText = i;
             div.querySelector(".thumb-area").appendChild(num);
 
             div.onclick = (e) => {
-                if (!e.target.closest(".drag-handle")) {
+                if (!e.target.closest("button")) {
                     div.querySelector(".thumb-area").classList.toggle("selected");
                 }
             };
@@ -824,7 +840,7 @@ async function addFileToGrid(file) {
     } else {
         const div = createCard(id, false);
         div.dataset.fileId = id;
-        
+
         const thumbArea = div.querySelector(".thumb-area");
         if (isPdf) {
             const buff = await file.arrayBuffer();
@@ -836,10 +852,10 @@ async function addFileToGrid(file) {
             img.className = "w-full h-full object-contain";
             thumbArea.appendChild(img);
         }
-        
+
         const name = document.createElement("div");
-        name.className = "p-3 text-xs font-semibold text-slate-700 truncate bg-white border-t border-slate-100";
-        name.innerText = file.name;
+        name.className = "w-full text-center px-4 pb-4";
+        name.innerHTML = \`<h4 class="font-bold text-slate-700 truncate w-full text-sm" title="\${file.name}">\${file.name}</h4><p class="text-xs text-slate-400 mt-0.5">\${(file.size / 1024 / 1024).toFixed(2)} MB</p>\`;
         div.appendChild(name);
 
         dom.workGrid.appendChild(div);
@@ -849,21 +865,23 @@ async function addFileToGrid(file) {
 
 function createCard(id, isPage) {
     const div = document.createElement("div");
-    div.className = "group relative bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-all select-none";
-    
+    div.className = "group relative bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col items-center gap-3 hover:shadow-md transition-all select-none";
+
+    // Drag Handle
     const handle = document.createElement("div");
-    handle.className = "drag-handle absolute top-2 left-2 bg-white p-1.5 rounded shadow-sm border border-slate-100 cursor-grab z-10 text-slate-400 hover:text-indigo-500 transition-colors";
+    handle.className = "drag-handle absolute top-2 left-2 bg-white/90 backdrop-blur p-1.5 rounded-lg shadow-sm border border-slate-100 cursor-grab z-10 text-slate-400 hover:text-indigo-500 transition-colors";
     handle.innerHTML = \`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>\`;
     div.appendChild(handle);
 
+    // Delete Button
     const del = document.createElement("button");
-    del.className = "absolute top-2 right-2 bg-white text-slate-400 hover:text-red-500 w-7 h-7 rounded shadow-sm border border-slate-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10";
-    del.innerHTML = "&times;";
+    del.className = "absolute top-2 right-2 text-slate-300 hover:text-red-500 p-1 rounded-full hover:bg-slate-50 transition-colors z-20";
+    del.innerHTML = \`<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>\`;
     del.onclick = (e) => { e.stopPropagation(); div.remove(); };
     div.appendChild(del);
 
     const thumb = document.createElement("div");
-    thumb.className = \`thumb-area w-full \${isPage ? "h-56" : "h-40"} bg-slate-50 relative overflow-hidden flex items-center justify-center\`;
+    thumb.className = \`thumb-area w-full \${isPage ? "h-48" : "h-32"} bg-slate-50 relative overflow-hidden flex items-center justify-center mt-3\`;
     div.appendChild(thumb);
 
     return div;
@@ -923,7 +941,7 @@ function resetWorkspace() {
 async function processFiles() {
     if (dom.workGrid.children.length === 0) return alert("Please add files first.");
     showToast("Generating PDF...", true);
-    
+
     const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
 
     try {
@@ -939,7 +957,7 @@ async function processFiles() {
                 const fid = card.dataset.fileId;
                 const pIdx = parseInt(card.dataset.pageIdx);
                 const rot = parseInt(card.dataset.rotation);
-                
+
                 const [page] = await newPdf.copyPages(pdfCache[fid], [pIdx]);
                 if (rot !== 0) page.setRotation(degrees(page.getRotation().angle + rot));
                 newPdf.addPage(page);
@@ -947,16 +965,16 @@ async function processFiles() {
         } else {
             for (const card of cards) {
                 const fObj = app.files.find(f => f.id === card.dataset.fileId);
-                
+
                 if (fObj.file.type.includes("image")) {
                     const imgBuff = await fObj.file.arrayBuffer();
                     let img = fObj.file.type.includes("png") ? await newPdf.embedPng(imgBuff) : await newPdf.embedJpg(imgBuff);
                     const p = newPdf.addPage([img.width, img.height]);
-                    p.drawImage(img, {x:0, y:0, width: img.width, height: img.height});
+                    p.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
                 } else {
                     const srcBuff = await fObj.file.arrayBuffer();
                     let srcPdf;
-                    
+
                     if (app.activeTool === "unlock") {
                         const pass = document.getElementById("pass-unlock").value;
                         try { srcPdf = await PDFDocument.load(srcBuff, { password: pass }); }
@@ -964,7 +982,7 @@ async function processFiles() {
                     } else {
                         srcPdf = await PDFDocument.load(srcBuff);
                     }
-                    
+
                     const pgs = await newPdf.copyPages(srcPdf, srcPdf.getPageIndices());
                     pgs.forEach(p => newPdf.addPage(p));
                 }
@@ -976,13 +994,13 @@ async function processFiles() {
         if (app.activeTool === "watermark") {
             const text = document.getElementById("wm-text").value || "DRAFT";
             const colorName = document.getElementById("wm-color").value;
-            const col = colorName === "Red" ? [1,0,0] : colorName === "Blue" ? [0,0,1] : [0.5,0.5,0.5];
+            const col = colorName === "Red" ? [1, 0, 0] : colorName === "Blue" ? [0, 0, 1] : [0.5, 0.5, 0.5];
             const font = await newPdf.embedFont(StandardFonts.HelveticaBold);
-            
+
             pages.forEach(p => {
-                const {width, height} = p.getSize();
+                const { width, height } = p.getSize();
                 p.drawText(text, {
-                    x: width/2 - (text.length*15), y: height/2,
+                    x: width / 2 - (text.length * 15), y: height / 2,
                     size: 60, font: font, color: rgb(...col),
                     opacity: 0.3, rotate: degrees(45)
                 });
@@ -992,8 +1010,8 @@ async function processFiles() {
         if (app.activeTool === "numbers") {
             const font = await newPdf.embedFont(StandardFonts.Courier);
             pages.forEach((p, i) => {
-                p.drawText(\`\${i+1} / \${pages.length}\`, {
-                    x: p.getWidth() - 100, y: 20, size: 10, font: font, color: rgb(0,0,0)
+                p.drawText(\`\${i + 1} / \${pages.length}\`, {
+                    x: p.getWidth() - 100, y: 20, size: 10, font: font, color: rgb(0, 0, 0)
                 });
             });
         }
@@ -1001,8 +1019,8 @@ async function processFiles() {
         if (app.activeTool === "metadata") {
             const t = document.getElementById("meta-title").value;
             const a = document.getElementById("meta-author").value;
-            if(t) newPdf.setTitle(t);
-            if(a) newPdf.setAuthor(a);
+            if (t) newPdf.setTitle(t);
+            if (a) newPdf.setAuthor(a);
         }
 
         if (app.activeTool === "flatten") newPdf.getForm().flatten();
@@ -1042,8 +1060,11 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // Note: Removed COEP headers that were blocking external resources
-    const headers = {};
+    // Common headers for SharedArrayBuffer support
+    const headers = {
+      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Opener-Policy": "same-origin",
+    };
 
     // --- 1. ROOT PATH (App Hub) ---
     if (url.pathname === "/") {
@@ -1115,7 +1136,7 @@ function renderIndex() {
             </div>
             <section>
                 <div class="flex items-center gap-2 mb-6"><span class="text-2xl">🛠️</span><h3 class="text-xl font-bold text-slate-800">Tools</h3></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
                     <a href="/pdf" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-indigo-50 text-indigo-600 transition-transform group-hover:scale-110">📚</div>
                         <div><h4 class="font-bold text-lg text-slate-800">111 PDF Tools</h4><p class="text-sm text-slate-500 mt-1 leading-relaxed">Secure, client-side PDF editing and merging suite.</p></div>
@@ -1129,7 +1150,7 @@ function renderIndex() {
             <hr class="border-slate-200">
             <section>
                 <div class="flex items-center gap-2 mb-6"><span class="text-2xl">✨</span><h3 class="text-xl font-bold text-slate-800">Other Webapps</h3></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
                     <a href="/vault" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-slate-100 text-slate-600 transition-transform group-hover:scale-110">🔒</div>
                         <div><h4 class="font-bold text-lg text-slate-800">Vault</h4><p class="text-sm text-slate-500 mt-1 leading-relaxed">Secure personal storage and data archive.</p></div>
@@ -1195,7 +1216,7 @@ function renderConverter() {
                 <h3 class="text-2xl font-bold text-slate-700 mb-2">Universal Converter</h3>
                 <p class="text-slate-500 text-center max-w-md">Drag & Drop files or folders here.<br>Convert MP4, AVI, MOV, MP3, WAV, PNG, JPG, WEBP, DOCX and more.</p>
             </div>
-            <div id="file-list" class="grid grid-cols-1 gap-4 max-w-5xl mx-auto pb-20 hidden"></div>
+            <div id="file-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto pb-20 hidden"></div>
         </div>
 
         <input type="file" id="file-upload" class="hidden" multiple>
@@ -1238,7 +1259,7 @@ function renderPDFTools() {
                     <h2 class="text-3xl font-bold mb-2 text-slate-900">PDF Tools</h2>
                     <p class="text-slate-500">Secure processing in your browser.</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="tool-grid"></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-5" id="tool-grid"></div>
             </div>
         </div>
 
@@ -1265,7 +1286,7 @@ function renderPDFTools() {
                     <div class="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center text-4xl mb-4 text-slate-400">📂</div>
                     <h3 class="text-xl font-bold text-slate-400">Drop files here</h3>
                 </div>
-                <div id="grid-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-6 max-w-7xl mx-auto pb-20"></div>
+                <div id="grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto pb-20"></div>
             </div>
             <input type="file" id="file-upload" class="hidden" multiple>
         </div>

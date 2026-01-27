@@ -4,21 +4,29 @@ const TOOLS = [
     { id: "merge", icon: "📚", color: "bg-indigo-50 text-indigo-600", title: "Merge PDF", desc: "Combine multiple files & reorder pages." },
     { id: "organize", icon: "✂️", color: "bg-rose-50 text-rose-500", title: "Split & Edit", desc: "Rotate, delete, or extract specific pages.", type: "pages" },
     { id: "img2pdf", icon: "🖼️", color: "bg-emerald-50 text-emerald-600", title: "Image to PDF", desc: "Convert JPG/PNG to PDF documents.", accept: "image/*" },
-    { id: "watermark", icon: "💧", color: "bg-blue-50 text-blue-500", title: "Watermark", desc: "Add text overlay to pages.", inputs: [
-        { id: "wm-text", type: "text", placeholder: "Watermark Text", width: "w-48" },
-        { id: "wm-color", type: "select", options: ["Red", "Grey", "Blue"], width: "w-24" }
-    ]},
+    {
+        id: "watermark", icon: "💧", color: "bg-blue-50 text-blue-500", title: "Watermark", desc: "Add text overlay to pages.", inputs: [
+            { id: "wm-text", type: "text", placeholder: "Watermark Text", width: "w-48" },
+            { id: "wm-color", type: "select", options: ["Red", "Grey", "Blue"], width: "w-24" }
+        ]
+    },
     { id: "numbers", icon: "🔢", color: "bg-slate-50 text-slate-600", title: "Page Numbers", desc: "Add pagination to footer." },
-    { id: "protect", icon: "🔒", color: "bg-orange-50 text-orange-600", title: "Protect", desc: "Encrypt with password.", inputs: [
-        { id: "pass-set", type: "password", placeholder: "Set Password", width: "w-40" }
-    ]},
-    { id: "unlock", icon: "🔓", color: "bg-teal-50 text-teal-600", title: "Unlock", desc: "Remove PDF password.", inputs: [
-        { id: "pass-unlock", type: "password", placeholder: "Original Password", width: "w-40" }
-    ]},
-    { id: "metadata", icon: "🏷️", color: "bg-purple-50 text-purple-600", title: "Metadata", desc: "Edit Title & Author.", inputs: [
-        { id: "meta-title", type: "text", placeholder: "New Title", width: "w-40" },
-        { id: "meta-author", type: "text", placeholder: "New Author", width: "w-40" }
-    ]},
+    {
+        id: "protect", icon: "🔒", color: "bg-orange-50 text-orange-600", title: "Protect", desc: "Encrypt with password.", inputs: [
+            { id: "pass-set", type: "password", placeholder: "Set Password", width: "w-40" }
+        ]
+    },
+    {
+        id: "unlock", icon: "🔓", color: "bg-teal-50 text-teal-600", title: "Unlock", desc: "Remove PDF password.", inputs: [
+            { id: "pass-unlock", type: "password", placeholder: "Original Password", width: "w-40" }
+        ]
+    },
+    {
+        id: "metadata", icon: "🏷️", color: "bg-purple-50 text-purple-600", title: "Metadata", desc: "Edit Title & Author.", inputs: [
+            { id: "meta-title", type: "text", placeholder: "New Title", width: "w-40" },
+            { id: "meta-author", type: "text", placeholder: "New Author", width: "w-40" }
+        ]
+    },
     { id: "flatten", icon: "🔨", color: "bg-gray-50 text-gray-600", title: "Flatten", desc: "Make forms un-editable." }
 ];
 
@@ -52,13 +60,13 @@ initDashboard();
 function launchTool(toolId) {
     app.activeTool = toolId;
     const conf = TOOLS.find(t => t.id === toolId);
-    
+
     dom.dash.classList.add("hidden");
     dom.work.classList.remove("hidden");
     dom.title.innerText = conf.title;
     dom.input.accept = conf.accept || ".pdf";
     dom.input.value = "";
-    
+
     renderSettings(conf.inputs || []);
     initSortable();
 }
@@ -71,7 +79,7 @@ function goHome() {
 
 function renderSettings(inputs) {
     dom.settings.innerHTML = "";
-    
+
     if (app.activeTool === "organize") {
         const grp = document.createElement("div");
         grp.className = "flex gap-2 bg-slate-100 p-1.5 rounded-lg";
@@ -106,7 +114,7 @@ dom.input.addEventListener("change", async (e) => {
     if (!e.target.files.length) return;
     showToast("Processing files...", true);
     dom.empty.classList.add("hidden");
-    
+
     for (const file of e.target.files) {
         await addFileToGrid(file);
     }
@@ -121,22 +129,22 @@ async function addFileToGrid(file) {
     if (conf.type === "pages" && isPdf) {
         const buff = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument(buff).promise;
-        
+
         for (let i = 1; i <= pdf.numPages; i++) {
             const div = createCard(id, true);
             div.dataset.fileId = id;
             div.dataset.pageIdx = i - 1;
             div.dataset.rotation = 0;
-            
+
             await renderThumbnail(pdf, i, div.querySelector(".thumb-area"));
-            
+
             const num = document.createElement("span");
             num.className = "absolute bottom-2 right-2 bg-slate-900/70 text-white text-[10px] font-bold px-1.5 py-0.5 rounded";
             num.innerText = i;
             div.querySelector(".thumb-area").appendChild(num);
 
             div.onclick = (e) => {
-                if (!e.target.closest(".drag-handle")) {
+                if (!e.target.closest("button")) {
                     div.querySelector(".thumb-area").classList.toggle("selected");
                 }
             };
@@ -146,7 +154,7 @@ async function addFileToGrid(file) {
     } else {
         const div = createCard(id, false);
         div.dataset.fileId = id;
-        
+
         const thumbArea = div.querySelector(".thumb-area");
         if (isPdf) {
             const buff = await file.arrayBuffer();
@@ -158,10 +166,10 @@ async function addFileToGrid(file) {
             img.className = "w-full h-full object-contain";
             thumbArea.appendChild(img);
         }
-        
+
         const name = document.createElement("div");
-        name.className = "p-3 text-xs font-semibold text-slate-700 truncate bg-white border-t border-slate-100";
-        name.innerText = file.name;
+        name.className = "w-full text-center px-4 pb-4";
+        name.innerHTML = `<h4 class="font-bold text-slate-700 truncate w-full text-sm" title="${file.name}">${file.name}</h4><p class="text-xs text-slate-400 mt-0.5">${(file.size / 1024 / 1024).toFixed(2)} MB</p>`;
         div.appendChild(name);
 
         dom.workGrid.appendChild(div);
@@ -171,21 +179,23 @@ async function addFileToGrid(file) {
 
 function createCard(id, isPage) {
     const div = document.createElement("div");
-    div.className = "group relative bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-all select-none";
-    
+    div.className = "group relative bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col items-center gap-3 hover:shadow-md transition-all select-none";
+
+    // Drag Handle
     const handle = document.createElement("div");
-    handle.className = "drag-handle absolute top-2 left-2 bg-white p-1.5 rounded shadow-sm border border-slate-100 cursor-grab z-10 text-slate-400 hover:text-indigo-500 transition-colors";
+    handle.className = "drag-handle absolute top-2 left-2 bg-white/90 backdrop-blur p-1.5 rounded-lg shadow-sm border border-slate-100 cursor-grab z-10 text-slate-400 hover:text-indigo-500 transition-colors";
     handle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>`;
     div.appendChild(handle);
 
+    // Delete Button
     const del = document.createElement("button");
-    del.className = "absolute top-2 right-2 bg-white text-slate-400 hover:text-red-500 w-7 h-7 rounded shadow-sm border border-slate-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10";
-    del.innerHTML = "&times;";
+    del.className = "absolute top-2 right-2 text-slate-300 hover:text-red-500 p-1 rounded-full hover:bg-slate-50 transition-colors z-20";
+    del.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
     del.onclick = (e) => { e.stopPropagation(); div.remove(); };
     div.appendChild(del);
 
     const thumb = document.createElement("div");
-    thumb.className = `thumb-area w-full ${isPage ? "h-56" : "h-40"} bg-slate-50 relative overflow-hidden flex items-center justify-center`;
+    thumb.className = `thumb-area w-full ${isPage ? "h-48" : "h-32"} bg-slate-50 relative overflow-hidden flex items-center justify-center mt-3`;
     div.appendChild(thumb);
 
     return div;
@@ -245,7 +255,7 @@ function resetWorkspace() {
 async function processFiles() {
     if (dom.workGrid.children.length === 0) return alert("Please add files first.");
     showToast("Generating PDF...", true);
-    
+
     const { PDFDocument, rgb, degrees, StandardFonts } = PDFLib;
 
     try {
@@ -261,7 +271,7 @@ async function processFiles() {
                 const fid = card.dataset.fileId;
                 const pIdx = parseInt(card.dataset.pageIdx);
                 const rot = parseInt(card.dataset.rotation);
-                
+
                 const [page] = await newPdf.copyPages(pdfCache[fid], [pIdx]);
                 if (rot !== 0) page.setRotation(degrees(page.getRotation().angle + rot));
                 newPdf.addPage(page);
@@ -269,16 +279,16 @@ async function processFiles() {
         } else {
             for (const card of cards) {
                 const fObj = app.files.find(f => f.id === card.dataset.fileId);
-                
+
                 if (fObj.file.type.includes("image")) {
                     const imgBuff = await fObj.file.arrayBuffer();
                     let img = fObj.file.type.includes("png") ? await newPdf.embedPng(imgBuff) : await newPdf.embedJpg(imgBuff);
                     const p = newPdf.addPage([img.width, img.height]);
-                    p.drawImage(img, {x:0, y:0, width: img.width, height: img.height});
+                    p.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
                 } else {
                     const srcBuff = await fObj.file.arrayBuffer();
                     let srcPdf;
-                    
+
                     if (app.activeTool === "unlock") {
                         const pass = document.getElementById("pass-unlock").value;
                         try { srcPdf = await PDFDocument.load(srcBuff, { password: pass }); }
@@ -286,7 +296,7 @@ async function processFiles() {
                     } else {
                         srcPdf = await PDFDocument.load(srcBuff);
                     }
-                    
+
                     const pgs = await newPdf.copyPages(srcPdf, srcPdf.getPageIndices());
                     pgs.forEach(p => newPdf.addPage(p));
                 }
@@ -298,13 +308,13 @@ async function processFiles() {
         if (app.activeTool === "watermark") {
             const text = document.getElementById("wm-text").value || "DRAFT";
             const colorName = document.getElementById("wm-color").value;
-            const col = colorName === "Red" ? [1,0,0] : colorName === "Blue" ? [0,0,1] : [0.5,0.5,0.5];
+            const col = colorName === "Red" ? [1, 0, 0] : colorName === "Blue" ? [0, 0, 1] : [0.5, 0.5, 0.5];
             const font = await newPdf.embedFont(StandardFonts.HelveticaBold);
-            
+
             pages.forEach(p => {
-                const {width, height} = p.getSize();
+                const { width, height } = p.getSize();
                 p.drawText(text, {
-                    x: width/2 - (text.length*15), y: height/2,
+                    x: width / 2 - (text.length * 15), y: height / 2,
                     size: 60, font: font, color: rgb(...col),
                     opacity: 0.3, rotate: degrees(45)
                 });
@@ -314,8 +324,8 @@ async function processFiles() {
         if (app.activeTool === "numbers") {
             const font = await newPdf.embedFont(StandardFonts.Courier);
             pages.forEach((p, i) => {
-                p.drawText(`${i+1} / ${pages.length}`, {
-                    x: p.getWidth() - 100, y: 20, size: 10, font: font, color: rgb(0,0,0)
+                p.drawText(`${i + 1} / ${pages.length}`, {
+                    x: p.getWidth() - 100, y: 20, size: 10, font: font, color: rgb(0, 0, 0)
                 });
             });
         }
@@ -323,8 +333,8 @@ async function processFiles() {
         if (app.activeTool === "metadata") {
             const t = document.getElementById("meta-title").value;
             const a = document.getElementById("meta-author").value;
-            if(t) newPdf.setTitle(t);
-            if(a) newPdf.setAuthor(a);
+            if (t) newPdf.setTitle(t);
+            if (a) newPdf.setAuthor(a);
         }
 
         if (app.activeTool === "flatten") newPdf.getForm().flatten();
