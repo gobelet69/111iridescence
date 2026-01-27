@@ -1,0 +1,17 @@
+{
+  "name": "111iridescence",
+  "version": "1.0.0",
+  "description": "Unified app hub with PDF tools and universal converter",
+  "main": "worker.js",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
+  "keywords": ["cloudflare", "workers", "pdf", "converter"],
+  "author": "",
+  "license": "MIT"
+}
