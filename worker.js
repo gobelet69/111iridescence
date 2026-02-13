@@ -1,30 +1,30 @@
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+    async fetch(request, env) {
+        const url = new URL(request.url);
 
-    // --- 1. ROOT PATH (App Hub) ---
-    if (url.pathname === "/") {
-      return new Response(renderIndex(), {
-        headers: { "Content-Type": "text/html; charset=utf-8" },
-      });
+        // --- 1. ROOT PATH (App Hub) ---
+        if (url.pathname === "/") {
+            return new Response(renderIndex(), {
+                headers: { "Content-Type": "text/html; charset=utf-8" },
+            });
+        }
+
+        // --- 2. CSS STYLESHEET ---
+        if (url.pathname === "/style.css") {
+            return new Response(renderCSS(), {
+                headers: { "Content-Type": "text/css" },
+            });
+        }
+
+        // --- 404 NOT FOUND ---
+        return new Response("404 - Page Not Found", { status: 404 });
     }
-
-    // --- 2. CSS STYLESHEET ---
-    if (url.pathname === "/style.css") {
-      return new Response(renderCSS(), {
-        headers: { "Content-Type": "text/css" },
-      });
-    }
-
-    // --- 404 NOT FOUND ---
-    return new Response("404 - Page Not Found", { status: 404 });
-  }
 };
 
 // --- HTML TEMPLATES ---
 
 function renderIndex() {
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -85,6 +85,10 @@ function renderIndex() {
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-orange-50 text-orange-600 transition-transform group-hover:scale-110">📈</div>
                         <div><h4 class="font-bold text-lg text-slate-800">Habits Tracker</h4><p class="text-sm text-slate-500 mt-1 leading-relaxed">Daily routines, goals, and progress monitoring.</p></div>
                     </a>
+                    <a href="/todo" class="tool-card bg-white p-6 rounded-2xl border border-slate-200 text-left flex flex-col items-start gap-4 no-underline group">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-blue-50 text-blue-600 transition-transform group-hover:scale-110">✅</div>
+                        <div><h4 class="font-bold text-lg text-slate-800">Todo List</h4><p class="text-sm text-slate-500 mt-1 leading-relaxed">Task management and productivity tracking.</p></div>
+                    </a>
                 </div>
             </section>
         </div>
@@ -94,7 +98,7 @@ function renderIndex() {
 }
 
 function renderCSS() {
-  return `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    return `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 /* Animations */
 .fade-in { animation: fadeIn 0.4s ease-out; }
 @keyframes fadeIn { 
