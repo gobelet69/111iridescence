@@ -57,10 +57,10 @@ function renderIndex() {
             <div class="w-8 h-8 bg-gradient-to-br from-iri to-accent rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(99,102,241,0.5)]">111</div>
             <h1 class="font-bold text-xl tracking-tight text-white">111<span class="text-iri">iridescence</span></h1>
         </div>
-        <div class="hidden md:flex items-center gap-2 text-xs font-medium text-slate-400 bg-white/5 px-3 py-1.5 rounded-full border border-borderMuted shadow-inner">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
-            ALL SYSTEMS OPERATIONAL
-        </div>
+        <a href="/auth/login" class="flex items-center gap-2 text-sm font-semibold text-white bg-iri hover:bg-iriDark px-4 py-2 rounded-xl border border-iri/30 shadow-[0_0_12px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_18px_rgba(99,102,241,0.45)] hover:-translate-y-px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            Sign In
+        </a>
     </header>
     <main class="flex-1 overflow-y-auto p-6 md:p-10 fade-in">
         <div class="max-w-7xl mx-auto space-y-12 pb-20">
@@ -69,21 +69,7 @@ function renderIndex() {
                 <p class="text-lg text-slate-400 max-w-2xl">Access all your tools, vaults, and projects from one secure location.</p>
             </div>
             <section>
-                <div class="flex items-center gap-2 mb-6"><span class="text-2xl drop-shadow-md pb-1">🛠️</span><h3 class="text-xl font-bold text-slate-100">Tools</h3></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    <a href="/pdf" class="tool-card bg-cardBg p-6 rounded-2xl border border-borderMuted text-left flex flex-col items-start gap-4 no-underline group hover:bg-cardHover">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-indigo-500/10 text-indigo-400 transition-transform group-hover:scale-110 shadow-inner">📚</div>
-                        <div><h4 class="font-bold text-lg text-slate-100 group-hover:text-iri transition-colors">111 PDF Tools</h4><p class="text-sm text-slate-400 mt-1 leading-relaxed">Secure, client-side PDF editing and merging suite.</p></div>
-                    </a>
-                    <a href="/converter" class="tool-card bg-cardBg p-6 rounded-2xl border border-borderMuted text-left flex flex-col items-start gap-4 no-underline group hover:bg-cardHover">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-emerald-500/10 text-emerald-400 transition-transform group-hover:scale-110 shadow-inner">🔄</div>
-                        <div><h4 class="font-bold text-lg text-slate-100 group-hover:text-iri transition-colors">111 Converter</h4><p class="text-sm text-slate-400 mt-1 leading-relaxed">Fast universal file conversion utility.</p></div>
-                    </a>
-                </div>
-            </section>
-            <hr class="border-borderMuted">
-            <section>
-                <div class="flex items-center gap-2 mb-6"><span class="text-2xl drop-shadow-md pb-1">✨</span><h3 class="text-xl font-bold text-slate-100">Other Webapps</h3></div>
+                <div class="flex items-center gap-2 mb-6"><span class="text-2xl drop-shadow-md pb-1">✨</span><h3 class="text-xl font-bold text-slate-100">Iridescent Cloud</h3></div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     <a href="/vault" class="tool-card bg-cardBg p-6 rounded-2xl border border-borderMuted text-left flex flex-col items-start gap-4 no-underline group hover:bg-cardHover">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-slate-500/10 text-slate-300 transition-transform group-hover:scale-110 shadow-inner">🔒</div>
@@ -96,6 +82,20 @@ function renderIndex() {
                     <a href="/todo" class="tool-card bg-cardBg p-6 rounded-2xl border border-borderMuted text-left flex flex-col items-start gap-4 no-underline group hover:bg-cardHover">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-blue-500/10 text-blue-400 transition-transform group-hover:scale-110 shadow-inner">✅</div>
                         <div><h4 class="font-bold text-lg text-slate-100 group-hover:text-iri transition-colors">Todo List</h4><p class="text-sm text-slate-400 mt-1 leading-relaxed">Task management and productivity tracking.</p></div>
+                    </a>
+                </div>
+            </section>
+            <hr class="border-borderMuted">
+            <section>
+                <div class="flex items-center gap-2 mb-6"><span class="text-2xl drop-shadow-md pb-1">🛠️</span><h3 class="text-xl font-bold text-slate-100">Tools</h3></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <a href="/pdf" class="tool-card bg-cardBg p-6 rounded-2xl border border-borderMuted text-left flex flex-col items-start gap-4 no-underline group hover:bg-cardHover">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-indigo-500/10 text-indigo-400 transition-transform group-hover:scale-110 shadow-inner">📚</div>
+                        <div><h4 class="font-bold text-lg text-slate-100 group-hover:text-iri transition-colors">111 PDF Tools</h4><p class="text-sm text-slate-400 mt-1 leading-relaxed">Secure, client-side PDF editing and merging suite.</p></div>
+                    </a>
+                    <a href="/converter" class="tool-card bg-cardBg p-6 rounded-2xl border border-borderMuted text-left flex flex-col items-start gap-4 no-underline group hover:bg-cardHover">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl bg-emerald-500/10 text-emerald-400 transition-transform group-hover:scale-110 shadow-inner">🔄</div>
+                        <div><h4 class="font-bold text-lg text-slate-100 group-hover:text-iri transition-colors">111 Converter</h4><p class="text-sm text-slate-400 mt-1 leading-relaxed">Fast universal file conversion utility.</p></div>
                     </a>
                 </div>
             </section>
