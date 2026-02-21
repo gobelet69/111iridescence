@@ -4,7 +4,18 @@ export default {
 
         // --- 1. ROOT PATH (App Hub) ---
         if (url.pathname === "/") {
-            return new Response(renderIndex(), {
+            // Check session to show user dropdown vs sign-in button
+            let username = null;
+            const cookie = request.headers.get('Cookie') || '';
+            const sessId = cookie.split(';').find(c => c.trim().startsWith('sess='))?.split('=')[1];
+            if (sessId && env.AUTH_DB) {
+                const sess = await env.AUTH_DB
+                    .prepare('SELECT username FROM sessions WHERE id = ? AND expires > ?')
+                    .bind(sessId, Date.now())
+                    .first();
+                if (sess) username = sess.username;
+            }
+            return new Response(renderIndex(username), {
                 headers: { "Content-Type": "text/html; charset=utf-8" },
             });
         }
@@ -23,7 +34,47 @@ export default {
 
 // --- HTML TEMPLATES ---
 
-function renderIndex() {
+function renderIndex(username = null) {
+    const userNav = username ? `
+    <div style="position:relative" id="hubUW">
+      <button onclick="document.getElementById('hubUW').classList.toggle('open')" style="display:flex;align-items:center;gap:8px;color:#f8fafc;font-size:0.9em;font-weight:500;padding:9px 16px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:inherit;transition:background 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.querySelector('.hud')||this.style.background != 'rgba(255,255,255,0.06)'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+        ${username}
+        <svg id="hubCaret" style="transition:transform 0.2s;margin-left:2px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#1a2030;border:1px solid rgba(255,255,255,0.08);border-radius:14px;min-width:210px;box-shadow:0 24px 48px rgba(0,0,0,0.5);z-index:200;overflow:hidden" id="hubDD">
+        <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.08)">
+          <div style="font-weight:700;color:#f8fafc;font-size:0.95em">${username}</div>
+          <div style="color:#94a3b8;font-size:0.78em;margin-top:2px">111iridescence Hub</div>
+        </div>
+        <a href="/auth/account" style="display:flex;align-items:center;gap:10px;padding:11px 16px;color:#f8fafc;text-decoration:none;font-size:0.9em;font-weight:500;transition:background 0.15s" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background=''">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+          Account Preferences
+        </a>
+        <div style="height:1px;background:rgba(255,255,255,0.08);margin:4px 0"></div>
+        <a href="/auth/logout" style="display:flex;align-items:center;gap:10px;padding:11px 16px;color:#f43f5e;text-decoration:none;font-size:0.9em;font-weight:500;transition:background 0.15s" onmouseover="this.style.background='rgba(244,63,94,0.08)'" onmouseout="this.style.background=''">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </a>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const wrap = document.getElementById('hubUW');
+        const dd = document.getElementById('hubDD');
+        const caret = document.getElementById('hubCaret');
+        wrap.querySelector('button').addEventListener('click', () => {
+          const open = dd.style.display === 'block';
+          dd.style.display = open ? 'none' : 'block';
+          caret.style.transform = open ? '' : 'rotate(180deg)';
+        });
+        document.addEventListener('click', e => { if (!wrap.contains(e.target)) { dd.style.display='none'; caret.style.transform=''; } });
+      })();
+    </script>`
+        : `<a href="/auth/login" class="flex items-center gap-2 text-sm font-semibold text-white bg-iri hover:bg-iriDark px-4 py-2 rounded-xl border border-iri/30 shadow-[0_0_12px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_18px_rgba(99,102,241,0.45)] hover:-translate-y-px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            Sign In
+        </a>`;
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,10 +108,7 @@ function renderIndex() {
             <div class="w-8 h-8 bg-gradient-to-br from-iri to-accent rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(99,102,241,0.5)]">111</div>
             <h1 class="font-bold text-xl tracking-tight text-white">111<span class="text-iri">iridescence</span></h1>
         </div>
-        <a href="/auth/login" class="flex items-center gap-2 text-sm font-semibold text-white bg-iri hover:bg-iriDark px-4 py-2 rounded-xl border border-iri/30 shadow-[0_0_12px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_18px_rgba(99,102,241,0.45)] hover:-translate-y-px">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-            Sign In
-        </a>
+        ${userNav}
     </header>
     <main class="flex-1 overflow-y-auto p-6 md:p-10 fade-in">
         <div class="max-w-7xl mx-auto space-y-12 pb-20">
