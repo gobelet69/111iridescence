@@ -37,8 +37,7 @@ export default {
 function renderIndex(username = null) {
     const userNav = username ? `
     <div style="position:relative" id="hubUW">
-      <button onclick="document.getElementById('hubUW').classList.toggle('open')" style="display:flex;align-items:center;gap:8px;color:#f8fafc;font-size:0.9em;font-weight:500;padding:9px 16px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:inherit;transition:background 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.querySelector('.hud')||this.style.background != 'rgba(255,255,255,0.06)'">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+      <button onclick="document.getElementById('hubUW').classList.toggle('open')" style="display:flex;align-items:center;gap:8px;color:#f8fafc;font-size:0.9em;font-weight:500;padding:9px 16px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:inherit;transition:background 0.2s">
         ${username}
         <svg id="hubCaret" style="transition:transform 0.2s;margin-left:2px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
@@ -106,7 +105,7 @@ function renderIndex(username = null) {
     <header class="bg-cardBg border-b border-borderMuted h-16 flex items-center px-6 justify-between flex-shrink-0 z-20 shadow-sm">
         <div class="flex items-center gap-3 select-none">
             <div class="w-8 h-8 bg-gradient-to-br from-iri to-accent rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(99,102,241,0.5)]">111</div>
-            <h1 class="font-bold text-xl tracking-tight text-white">111<span class="text-iri">iridescence</span></h1>
+            <h1 class="font-bold text-xl tracking-tight text-white">111<span class="text-iri" style="text-shadow:0 0 20px rgba(99,102,241,0.6)">iridescence</span></h1>
         </div>
         ${userNav}
     </header>
