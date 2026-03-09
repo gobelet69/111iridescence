@@ -2,55 +2,55 @@
 function normalizeRole(r) { if (r === 'admin') return 'owner'; if (r === 'guest+') return 'member'; if (r === 'guest') return 'viewer'; return r || 'viewer'; }
 function isOwner(u) { return normalizeRole(u?.role) === 'owner'; }
 const ROLE_META = {
-    owner: { label: 'Owner', color: '#f43f5e', bg: 'rgba(244,63,94,0.15)', border: 'rgba(244,63,94,0.3)', icon: '🔑' },
-    member: { label: 'Member', color: '#6366f1', bg: 'rgba(99,102,241,0.15)', border: 'rgba(99,102,241,0.3)', icon: '📁' },
-    viewer: { label: 'Viewer', color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)', icon: '👁' }
+  owner: { label: 'Owner', color: '#f43f5e', bg: 'rgba(244,63,94,0.15)', border: 'rgba(244,63,94,0.3)', icon: '🔑' },
+  member: { label: 'Member', color: '#6366f1', bg: 'rgba(99,102,241,0.15)', border: 'rgba(99,102,241,0.3)', icon: '📁' },
+  viewer: { label: 'Viewer', color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)', icon: '👁' }
 };
 const ROLE_PERMS = {
-    owner: ['Upload any file type', 'Delete any file', 'Share files', 'Manage users & roles', 'Access admin panel'],
-    member: ['Upload any file type', 'Delete own files', 'Share files'],
-    viewer: ['Upload PDF files only', 'Delete own files']
+  owner: ['Upload any file type', 'Delete any file', 'Share files', 'Manage users & roles', 'Access admin panel'],
+  member: ['Upload any file type', 'Delete own files', 'Share files'],
+  viewer: ['Upload PDF files only', 'Delete own files']
 };
 
 export default {
-    async fetch(request, env) {
-        const url = new URL(request.url);
+  async fetch(request, env) {
+    const url = new URL(request.url);
 
-        // ── CSS ──────────────────────────────────────────────────────────────────
-        if (url.pathname === '/style.css') {
-            return new Response(renderCSS(), { headers: { 'Content-Type': 'text/css' } });
-        }
-
-        // ── ROOT ─────────────────────────────────────────────────────────────────
-        if (url.pathname === '/') {
-            let user = null;
-            const cookie = request.headers.get('Cookie') || '';
-            const sessId = cookie.split(';').find(c => c.trim().startsWith('sess='))?.split('=')[1];
-            if (sessId && env.AUTH_DB) {
-                try {
-                    const sess = await env.AUTH_DB.prepare('SELECT * FROM sessions WHERE id=? AND expires>?').bind(sessId, Date.now()).first();
-                    if (sess) {
-                        user = sess;
-                        const du = await env.AUTH_DB.prepare('SELECT role FROM users WHERE username=?').bind(sess.username).first();
-                        user.role = du?.role || 'viewer';
-                    }
-                } catch (e) { }
-            }
-            return new Response(renderIndex(user), { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
-        }
-
-        return new Response('404 - Page Not Found', { status: 404 });
+    // ── CSS ──────────────────────────────────────────────────────────────────
+    if (url.pathname === '/style.css') {
+      return new Response(renderCSS(), { headers: { 'Content-Type': 'text/css' } });
     }
+
+    // ── ROOT ─────────────────────────────────────────────────────────────────
+    if (url.pathname === '/') {
+      let user = null;
+      const cookie = request.headers.get('Cookie') || '';
+      const sessId = cookie.split(';').find(c => c.trim().startsWith('sess='))?.split('=')[1];
+      if (sessId && env.AUTH_DB) {
+        try {
+          const sess = await env.AUTH_DB.prepare('SELECT * FROM sessions WHERE id=? AND expires>?').bind(sessId, Date.now()).first();
+          if (sess) {
+            user = sess;
+            const du = await env.AUTH_DB.prepare('SELECT role FROM users WHERE username=?').bind(sess.username).first();
+            user.role = du?.role || 'viewer';
+          }
+        } catch (e) { }
+      }
+      return new Response(renderIndex(user), { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    }
+
+    return new Response('404 - Page Not Found', { status: 404 });
+  }
 };
 
 // ── HEADER ────────────────────────────────────────────────────────────────────
 function renderHeader(user) {
-    const id = 'hubUW';
-    let rightSide;
-    if (user) {
-        const role = normalizeRole(user.role), rm = ROLE_META[role] || ROLE_META.viewer, perms = ROLE_PERMS[role] || [];
-        const all = ['Upload any file type', 'Delete any file', 'Share files', 'Manage users & roles', 'Access admin panel'];
-        rightSide = `<div class="user-wrap" id="${id}">
+  const id = 'hubUW';
+  let rightSide;
+  if (user) {
+    const role = normalizeRole(user.role), rm = ROLE_META[role] || ROLE_META.viewer, perms = ROLE_PERMS[role] || [];
+    const all = ['Upload any file type', 'Delete any file', 'Share files', 'Manage users & roles', 'Access admin panel'];
+    rightSide = `<div class="user-wrap" id="${id}">
       <button class="user-btn" onclick="document.getElementById('${id}').classList.toggle('open')">
         ${user.username}<svg class="caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
@@ -67,14 +67,14 @@ function renderHeader(user) {
       </div>
     </div>
     <script>document.addEventListener('click',e=>{const w=document.getElementById('${id}');if(w&&!w.contains(e.target))w.classList.remove('open')});<\/script>`;
-    } else {
-        rightSide = `<a href="/auth/login" style="display:inline-flex;align-items:center;gap:7px;font-size:.88em;font-weight:600;padding:8px 16px;border-radius:9px;background:var(--p);color:#fff;text-decoration:none;border:none;transition:background .2s" onmouseover="this.style.background='var(--ph)'" onmouseout="this.style.background='var(--p)'">
+  } else {
+    rightSide = `<a href="/auth/login" style="display:inline-flex;align-items:center;gap:7px;font-size:.88em;font-weight:600;padding:8px 16px;border-radius:9px;background:var(--p);color:#fff;text-decoration:none;border:none;transition:background .2s" onmouseover="this.style.background='var(--ph)'" onmouseout="this.style.background='var(--p)'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
       Sign In
     </a>`;
-    }
+  }
 
-    return `<a href="/" style="text-decoration:none;display:flex;align-items:center;gap:10px;flex-shrink:0">
+  return `<a href="/" style="text-decoration:none;display:flex;align-items:center;gap:10px;flex-shrink:0">
     <span style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#f43f5e);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9em;color:#fff;flex-shrink:0;box-shadow:0 0 18px rgba(99,102,241,.5)">111</span>
     <div style="display:flex;flex-direction:column;line-height:1.25">
       <span style="font-weight:700;font-size:1.1em;color:#fff;letter-spacing:-.02em">111<span style="color:#6366f1;text-shadow:0 0 20px rgba(99,102,241,.6)">iridescence</span></span>
@@ -86,9 +86,9 @@ function renderHeader(user) {
 
 // ── MAIN PAGE ─────────────────────────────────────────────────────────────────
 function renderIndex(user) {
-    const FAVICON = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%23f43f5e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='21' font-family='Arial,sans-serif' font-weight='900' font-size='12' fill='white' text-anchor='middle'%3E111%3C/text%3E%3C/svg%3E`;
+  const FAVICON = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%23f43f5e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='21' font-family='Arial,sans-serif' font-weight='900' font-size='12' fill='white' text-anchor='middle'%3E111%3C/text%3E%3C/svg%3E`;
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -121,6 +121,10 @@ function renderIndex(user) {
             <div class="tool-icon" style="background:rgba(59,130,246,.1)">✅</div>
             <div><h4>Todo List</h4><p>Task management and productivity tracking.</p></div>
           </a>
+          <a href="/courses" class="tool-card">
+            <div class="tool-icon" style="background:rgba(16,185,129,.1)">🎓</div>
+            <div><h4>Courses</h4><p>University course shortcuts, organized by quarter.</p></div>
+          </a>
         </div>
       </section>
 
@@ -147,7 +151,7 @@ function renderIndex(user) {
 
 // ── CSS ───────────────────────────────────────────────────────────────────────
 function renderCSS() {
-    return `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  return `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 :root{--bg:#0f1117;--card:#161b22;--card2:#1c2130;--txt:#f8fafc;--muted:#94a3b8;--dim:#475569;--p:#6366f1;--ph:#4f46e5;--border:rgba(255,255,255,0.07);--ring:rgba(99,102,241,0.4)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;line-height:1.5}
