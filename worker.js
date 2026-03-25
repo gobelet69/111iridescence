@@ -125,6 +125,10 @@ function renderIndex(user) {
             <div class="tool-icon" style="background:rgba(16,185,129,.1)">🎓</div>
             <div><h4>Courses</h4><p>University course shortcuts, organized by quarter.</p></div>
           </a>
+          <a href="/editor" class="tool-card">
+            <div class="tool-icon" style="background:rgba(99,102,241,.1)">📝</div>
+            <div><h4>Editor</h4><p>Collaborative Markdown, LaTeX & Mermaid editor with live preview.</p></div>
+          </a>
         </div>
       </section>
 
