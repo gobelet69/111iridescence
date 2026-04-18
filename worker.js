@@ -129,6 +129,14 @@ function renderIndex(user) {
             <div class="tool-icon" style="background:rgba(99,102,241,.1)">📝</div>
             <div><h4>Editor</h4><p>Collaborative Markdown, LaTeX & Mermaid editor with live preview.</p></div>
           </a>
+          <a href="/dashboard" class="tool-card">
+            <div class="tool-icon" style="background:rgba(59,130,246,.1)">📊</div>
+            <div><h4>Dashboard</h4><p>Centralized overview of your metrics and activity.</p></div>
+          </a>
+          <a href="/feed" class="tool-card">
+            <div class="tool-icon" style="background:rgba(236,72,153,.1)">📰</div>
+            <div><h4>Feed</h4><p>Personalized stream of updates, notes, and highlights.</p></div>
+          </a>
         </div>
       </section>
 
