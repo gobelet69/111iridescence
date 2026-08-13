@@ -2,7 +2,7 @@
 title: Vault
 description: Interface personnelle de fichiers et de notes, avec métadonnées D1 et stockage R2.
 slug: vault
-repo: gobelet69/vault
+repo: gobelet69/portail-vault
 stack:
   - JavaScript
   - React

@@ -18,7 +18,7 @@ describe('admin-editable content files', () => {
 
     expect(about.sections).toHaveLength(3);
     expect(settings.pinned).toEqual([
-      'gobelet69/vault',
+      'gobelet69/portail-vault',
       'gobelet69/PwdGen',
       'gobelet69/Osint-Framework',
     ]);
