@@ -1,0 +1,77 @@
+---
+interface Props {
+  kind: 'article' | 'note' | 'project';
+  title: string;
+  href: string;
+  meta: string;
+}
+
+const { kind, title, href, meta } = Astro.props;
+const kindLabel = kind === 'article' ? 'Article' : kind === 'note' ? 'Note' : 'Projet';
+---
+
+<article class="content-preview">
+  <p class="kind type-metadata">{kindLabel}</p>
+  <h3>
+    <a href={href}>
+      <span>{title}</span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </h3>
+  <p class="meta type-metadata">{meta}</p>
+</article>
+
+<style>
+  .content-preview {
+    padding-block: var(--space-5) var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .kind {
+    margin-block-end: var(--space-4);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  h3 {
+    margin-block-end: var(--space-3);
+  }
+
+  a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-5);
+    text-decoration: none;
+  }
+
+  a:hover span:first-child {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .arrow {
+    color: var(--blue);
+    font-family: var(--font-display);
+    font-weight: 400;
+    transition: transform 160ms ease;
+  }
+
+  a:hover .arrow {
+    transform: translateX(0.2rem);
+  }
+
+  .meta {
+    max-width: 40ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arrow {
+      transition: none;
+    }
+  }
+</style>

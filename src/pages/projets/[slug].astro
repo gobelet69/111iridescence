@@ -1,0 +1,116 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ProjectStatus from '../../components/ProjectStatus.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects');
+  return entries
+    .filter((entry) => entry.data.caseStudy)
+    .map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <article class="project-case-study container">
+    <header class="case-study-header">
+      <div class="case-study-kicker">
+        <p class="type-metadata">Étude de projet</p>
+        <ProjectStatus status={entry.data.status} />
+      </div>
+      <h1>{entry.data.title}</h1>
+      <p class="description">{entry.data.description}</p>
+      <ul class="stack" aria-label={`Technologies de ${entry.data.title}`}>
+        {entry.data.stack.map((technology) => <li>{technology}</li>)}
+      </ul>
+      <nav class="project-actions type-navigation" aria-label="Liens du projet">
+        <a href={`https://github.com/${entry.data.repo}`} rel="noreferrer">Dépôt GitHub <span aria-hidden="true">↗</span></a>
+        {entry.data.demoUrl && <a href={entry.data.demoUrl} rel="noreferrer">Voir la démo <span aria-hidden="true">↗</span></a>}
+      </nav>
+    </header>
+
+    <div class="prose case-study-body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-case-study {
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  .case-study-header,
+  .case-study-body {
+    max-width: var(--prose);
+    margin-inline: auto;
+  }
+
+  .case-study-header {
+    margin-bottom: var(--space-7);
+  }
+
+  .case-study-kicker {
+    display: flex;
+    margin-bottom: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .case-study-kicker > p {
+    margin: 0;
+    color: var(--presence);
+    font-size: var(--step--1);
+  }
+
+  h1 {
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.045em;
+  }
+
+  .description {
+    margin-bottom: var(--space-5);
+    color: var(--muted);
+    font-size: var(--step-1);
+  }
+
+  .stack {
+    display: flex;
+    margin: 0 0 var(--space-5);
+    padding: 0;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+  }
+
+  .stack li {
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+  }
+
+  .project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .project-actions a {
+    color: var(--blue);
+    font-size: var(--step--1);
+    font-weight: 700;
+    text-underline-offset: 0.3em;
+  }
+
+  .case-study-body {
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+</style>

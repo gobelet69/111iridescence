@@ -1,0 +1,32 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<aside class="technical-aside" aria-label={title}>
+  <p class="aside-title type-metadata">{title}</p>
+  <div><slot /></div>
+</aside>
+
+<style>
+  .technical-aside {
+    margin-block: var(--space-6);
+    padding: var(--space-5);
+    border-inline-start: 0.25rem solid var(--presence);
+    background: color-mix(in srgb, var(--presence) 9%, var(--paper-strong));
+  }
+
+  .aside-title {
+    margin: 0 0 var(--space-2);
+    color: var(--ink);
+    font-size: var(--step--1);
+    font-weight: 700;
+  }
+
+  :global(.technical-aside p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

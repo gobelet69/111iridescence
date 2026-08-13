@@ -1,0 +1,146 @@
+---
+import type { CatalogProject } from '../lib/project-catalog';
+import { projectUrl } from '../lib/project-catalog';
+import ProjectStatus from './ProjectStatus.astro';
+
+interface Props {
+  project: CatalogProject;
+  position?: number;
+}
+
+const { project, position } = Astro.props;
+const updatedAt = new Date(project.updatedAt);
+const updatedLabel = new Intl.DateTimeFormat('fr-BE', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+}).format(updatedAt);
+const starsLabel = `${project.stars} ${project.stars === 1 ? 'étoile' : 'étoiles'}`;
+---
+
+<article class="project-card" data-project-card>
+  <div class="project-card-heading">
+    {project.status ? <ProjectStatus status={project.status} /> : <p class="project-origin type-metadata">GitHub</p>}
+    {position && <p class="project-number type-metadata" aria-hidden="true">{String(position).padStart(2, '0')}</p>}
+  </div>
+
+  <h2>
+    {project.caseStudy ? <a href={projectUrl(project)}>{project.title}</a> : project.title}
+  </h2>
+  <p class="project-description">{project.displayDescription ?? '—'}</p>
+
+  {project.stack.length > 0 && (
+    <ul class="project-stack" aria-label={`Technologies de ${project.title}`}>
+      {project.stack.map((technology) => <li>{technology}</li>)}
+    </ul>
+  )}
+
+  <div class="project-footer">
+    <p class="github-meta type-metadata" data-github-meta>
+      {project.language && <span>{project.language}</span>}
+      <span>{starsLabel}</span>
+      <span>mis à jour <time datetime={project.updatedAt}>{updatedLabel}</time></span>
+    </p>
+    <a class="github-link type-navigation" href={project.url} rel="noreferrer">
+      Voir sur GitHub <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    min-width: 0;
+    padding: var(--space-6);
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-strong);
+  }
+
+  .project-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .project-number {
+    margin: 0;
+    color: var(--line);
+    font-size: var(--step--1);
+  }
+
+  .project-origin {
+    margin: 0;
+    color: var(--presence);
+    font-size: var(--step--1);
+  }
+
+  h2 {
+    margin-bottom: var(--space-3);
+    font-size: var(--step-2);
+    letter-spacing: -0.03em;
+  }
+
+  h2 a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  h2 a:hover {
+    color: var(--blue);
+  }
+
+  .project-description {
+    margin-bottom: var(--space-5);
+    color: var(--muted);
+  }
+
+  .project-stack {
+    display: flex;
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+  }
+
+  .project-stack li {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+  }
+
+  .project-stack li + li::before {
+    margin-right: var(--space-4);
+    color: var(--line);
+    content: '/';
+  }
+
+  .project-footer {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: auto;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .github-meta {
+    display: flex;
+    margin: 0;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .github-link {
+    width: fit-content;
+    color: var(--blue);
+    font-size: var(--step--1);
+    font-weight: 700;
+    text-underline-offset: 0.3em;
+  }
+</style>

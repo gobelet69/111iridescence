@@ -1,0 +1,51 @@
+---
+import type { ProjectStatus } from '../lib/projects';
+
+interface Props {
+  status: ProjectStatus;
+}
+
+const labels: Record<ProjectStatus, string> = {
+  actif: 'Actif',
+  experimental: 'Expérimental',
+  'en-pause': 'En pause',
+  archive: 'Archivé',
+};
+
+const { status } = Astro.props;
+---
+
+<span class:list={['project-status', `status-${status}`, 'type-metadata']}>
+  <span class="status-dot" aria-hidden="true"></span>
+  {labels[status]}
+</span>
+
+<style>
+  .project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .status-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+
+  .status-actif .status-dot {
+    background: var(--presence);
+  }
+
+  .status-experimental .status-dot {
+    background: var(--coral);
+  }
+
+  .status-en-pause .status-dot {
+    background: var(--violet);
+  }
+</style>

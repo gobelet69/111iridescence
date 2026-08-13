@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content';
+import ContentPreview from '../components/ContentPreview.astro';
+import PixelHero from '../components/PixelHero.astro';
+import { SITE } from '../config/site';
+import githubData from '../generated/github-projects.json';
+import projectSettings from '../data/project-settings.json';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatPublishedDate, getPublishedPosts, postUrl } from '../lib/blog';
+import {
+  buildProjectCatalog,
+  projectUrl,
+  type GitHubRepository,
+  type ProjectSettings,
+} from '../lib/project-catalog';
+import {
+  type ProjectEntry,
+} from '../lib/projects';
+
+const latestPost = getPublishedPosts(await getCollection('blog'))[0];
+const latestProject = buildProjectCatalog({
+  editorial: await getCollection('projects') as ProjectEntry[],
+  repositories: githubData as GitHubRepository[],
+  settings: projectSettings as ProjectSettings,
+}).pinned[0];
+---
+
+<BaseLayout title={SITE.title} description={SITE.description}>
+  <PixelHero />
+
+  <section class="content-section" aria-labelledby="content-title">
+    <div class="container section-grid">
+      <header class="section-heading">
+        <h2 id="content-title">À lire et à explorer</h2>
+      </header>
+
+      <div class="previews">
+        {latestPost ? (
+          <ContentPreview
+            kind={latestPost.data.format}
+            title={latestPost.data.title}
+            href={postUrl(latestPost)}
+            meta={formatPublishedDate(latestPost.data.publishedAt)}
+          />
+        ) : (
+          <ContentPreview
+            kind="article"
+            title="Aucun article publié pour le moment."
+            href="/blog"
+            meta="Le blog est vide."
+          />
+        )}
+        {latestProject && (
+          <ContentPreview
+            kind="project"
+            title={latestProject.title}
+            href={projectUrl(latestProject)}
+            meta={latestProject.displayDescription ?? latestProject.repo}
+          />
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="profile-section" aria-label="Profil">
+    <div class="container profile-inner">
+      <p>{SITE.profile}</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .content-section {
+    padding-block: var(--space-8);
+    border-block: 1px solid var(--line);
+    background: var(--paper-strong);
+  }
+
+  .section-grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .section-heading h2 {
+    max-width: 12ch;
+    margin: 0;
+    letter-spacing: -0.035em;
+  }
+
+  .previews {
+    display: grid;
+  }
+
+  .profile-section {
+    padding-block: var(--space-8);
+  }
+
+  .profile-inner {
+    display: grid;
+  }
+
+  .profile-inner p {
+    max-width: 39ch;
+    margin: 0;
+    color: var(--ink);
+    font-size: var(--step-2);
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+  }
+
+  @media (min-width: 48rem) {
+    .section-grid {
+      grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+    }
+
+    .previews {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7);
+    }
+
+    .profile-inner {
+      grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+    }
+
+    .profile-inner p {
+      grid-column: 2;
+    }
+  }
+</style>

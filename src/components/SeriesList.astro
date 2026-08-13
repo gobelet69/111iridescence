@@ -1,0 +1,60 @@
+---
+import type { BlogEntry } from '../lib/blog';
+import { postUrl } from '../lib/blog';
+
+interface Props {
+  entries: BlogEntry[];
+  currentSlug: string;
+}
+
+const { entries, currentSlug } = Astro.props;
+---
+
+{entries.length >= 2 && (
+  <nav class="series-list" aria-label="Dans cette série">
+    <p class="series-title type-metadata">Dans cette série</p>
+    <ol>
+      {entries.map((entry) => (
+        <li>
+          <a
+            href={postUrl(entry)}
+            aria-current={entry.data.slug === currentSlug ? 'page' : undefined}
+          >
+            {entry.data.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<style>
+  .series-list {
+    max-width: var(--prose);
+    margin: var(--space-7) auto 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .series-title {
+    margin: 0 0 var(--space-3);
+    color: var(--ink);
+    font-size: var(--step--1);
+    font-weight: 700;
+  }
+
+  ol {
+    margin: 0;
+    padding-inline-start: 1.4rem;
+  }
+
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  a[aria-current='page'] {
+    color: var(--muted);
+    text-decoration: none;
+  }
+</style>

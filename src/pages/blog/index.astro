@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../../lib/blog';
+
+const posts = getPublishedPosts(await getCollection('blog'));
+---
+
+<BaseLayout title="Blog" description="Articles et notes techniques sur le développement, les systèmes et la sécurité.">
+  <section class="blog-index container">
+    <header class="blog-intro">
+      <p class="eyebrow type-metadata">/blog</p>
+      <h1>Blog</h1>
+      <p>Des notes courtes et des articles sur les choix techniques réellement rencontrés dans mes projets.</p>
+    </header>
+
+    <div class="blog-filters" data-blog-filters aria-label="Filtrer les publications">
+      <span class="filter-label type-metadata">Afficher</span>
+      <button type="button" data-filter="all" aria-pressed="true">Tout</button>
+      <button type="button" data-filter="article" aria-pressed="false">Articles</button>
+      <button type="button" data-filter="note" aria-pressed="false">Notes</button>
+      <a href="/tags">Par tag</a>
+    </div>
+
+    <div class="post-list">
+      {posts.map((post) => <PostCard entry={post} />)}
+    </div>
+  </section>
+  <script>
+    import '../../scripts/blog-filter';
+  </script>
+</BaseLayout>
+
+<style>
+  .blog-index {
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  .blog-intro {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 1fr);
+    gap: 0 var(--space-6);
+    margin-bottom: var(--space-7);
+  }
+
+  .eyebrow {
+    grid-row: span 2;
+    margin: 0;
+    color: var(--presence);
+    font-size: var(--step--1);
+  }
+
+  h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .blog-intro > p:last-child {
+    max-width: 54ch;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .blog-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .filter-label {
+    margin-right: var(--space-2);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  button,
+  .blog-filters a {
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--step--1);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  button[aria-pressed='true'] {
+    border-color: var(--blue);
+    background: color-mix(in srgb, var(--blue) 9%, transparent);
+    color: var(--ink);
+  }
+
+  button:hover,
+  .blog-filters a:hover {
+    border-color: var(--blue);
+    color: var(--ink);
+  }
+
+  @media (max-width: 42rem) {
+    .blog-intro {
+      grid-template-columns: 1fr;
+    }
+
+    .eyebrow {
+      grid-row: auto;
+      margin-bottom: var(--space-3);
+    }
+  }
+</style>

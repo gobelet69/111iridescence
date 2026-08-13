@@ -1,0 +1,35 @@
+{
+  "name": "111iridescence",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "predev": "npm run sync:github:if-needed",
+    "dev": "astro dev",
+    "prebuild": "npm run sync:github:if-needed",
+    "build": "astro build",
+    "precheck": "npm run sync:github:if-needed",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:worker": "playwright test --config playwright.worker.config.ts",
+    "test": "npm run check && npm run test:unit && npm run build && npm run test:e2e && npm run test:worker",
+    "deploy": "npm run build && wrangler deploy",
+    "sync:github": "node scripts/sync-github-projects.mjs",
+    "sync:github:if-needed": "node scripts/sync-github-if-needed.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "7.0.5",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.3",
+    "astro": "7.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@playwright/test": "1.62.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10",
+    "wrangler": "4.120.1"
+  }
+}

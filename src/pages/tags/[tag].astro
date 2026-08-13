@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { aggregateTags, getPublishedPosts } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = getPublishedPosts(await getCollection('blog'));
+  return aggregateTags(posts).map(({ tag }) => ({
+    params: { tag },
+    props: { posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`} description={`Publications techniques classées sous le tag ${tag}.`}>
+  <section class="tag-archive container">
+    <header>
+      <p class="eyebrow type-metadata">/tags/{tag}</p>
+      <h1>#{tag}</h1>
+      <p>{posts.length} publication{posts.length > 1 ? 's' : ''}</p>
+    </header>
+    <div class="post-list">
+      {posts.map((post) => <PostCard entry={post} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tag-archive {
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  header {
+    margin-bottom: var(--space-7);
+  }
+
+  .eyebrow {
+    margin-bottom: var(--space-3);
+    color: var(--presence);
+    font-size: var(--step--1);
+  }
+
+  h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  header > p:last-child {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>

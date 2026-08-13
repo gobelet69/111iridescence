@@ -1,0 +1,42 @@
+---
+interface Props {
+  tags: string[];
+  labelledBy?: string;
+}
+
+const { tags, labelledBy } = Astro.props;
+---
+
+<ul class="tag-list" aria-labelledby={labelledBy} aria-label={labelledBy ? undefined : 'Tags'}>
+  {tags.map((tag) => (
+    <li><a class="type-metadata" href={`/tags/${tag}`}>#{tag}</a></li>
+  ))}
+</ul>
+
+<style>
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-flex;
+    padding: 0.22rem 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--blue) 38%, var(--line));
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.25;
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-color: var(--blue);
+    color: var(--ink);
+    background: color-mix(in srgb, var(--blue) 7%, transparent);
+  }
+</style>

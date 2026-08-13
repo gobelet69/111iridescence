@@ -1,0 +1,32 @@
+---
+interface Props {
+  href?: string;
+}
+
+const { href = '/' } = Astro.props;
+---
+
+<a class="brand-mark type-identity" href={href} aria-label="111iridescence.">
+  <span class="presence-dot" aria-hidden="true"></span><span>111iridescence.</span>
+</a>
+
+<style>
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--ink);
+    font-size: clamp(1rem, 0.94rem + 0.3vw, 1.2rem);
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .presence-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--presence);
+  }
+</style>

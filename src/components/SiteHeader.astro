@@ -1,0 +1,61 @@
+---
+import { PUBLIC_NAV } from '../config/site';
+import BrandMark from './BrandMark.astro';
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <BrandMark />
+    <nav class="type-navigation" aria-label="Navigation principale">
+      <ul>
+        {PUBLIC_NAV.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: 4.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: clamp(1rem, 3vw, 2rem);
+    list-style: none;
+  }
+
+  a {
+    color: var(--muted);
+    font-size: var(--step--1);
+    font-weight: 650;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+  }
+
+  a:hover {
+    color: var(--ink);
+  }
+
+  @media (max-width: 31rem) {
+    .header-inner {
+      min-height: auto;
+      padding-block: var(--space-4);
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

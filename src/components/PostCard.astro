@@ -1,0 +1,86 @@
+---
+import type { BlogEntry } from '../lib/blog';
+import { formatPublishedDate, postUrl } from '../lib/blog';
+import TagList from './TagList.astro';
+
+interface Props {
+  entry: BlogEntry;
+}
+
+const { entry } = Astro.props;
+const themeLabels = {
+  developpement: 'Développement',
+  securite: 'Sécurité',
+  systemes: 'Systèmes',
+  projets: 'Projets',
+};
+---
+
+<article class="post-card" data-format={entry.data.format}>
+  <div class="post-meta type-metadata">
+    <span>{entry.data.format === 'article' ? 'Article' : 'Note'}</span>
+    <span>{themeLabels[entry.data.theme]}</span>
+    <time datetime={entry.data.publishedAt.toISOString()}>{formatPublishedDate(entry.data.publishedAt)}</time>
+  </div>
+  <div class="post-body">
+    <h2><a href={postUrl(entry)}>{entry.data.title}</a></h2>
+    <p>{entry.data.description}</p>
+    <TagList tags={entry.data.tags} />
+  </div>
+</article>
+
+<style>
+  .post-card {
+    display: grid;
+    grid-template-columns: minmax(9rem, 0.28fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .post-card[hidden] {
+    display: none;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .post-meta span:first-child {
+    color: var(--ink);
+  }
+
+  h2 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--step-2);
+  }
+
+  h2 a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  p {
+    max-width: 62ch;
+    margin: 0 0 var(--space-4);
+    color: var(--muted);
+  }
+
+  @media (max-width: 42rem) {
+    .post-card {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .post-meta {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-3);
+    }
+  }
+</style>

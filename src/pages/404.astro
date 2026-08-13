@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page introuvable"
+  description="Cette adresse n'existe pas. Revenez à l'accueil, au blog ou aux projets."
+>
+  <section class="not-found container">
+    <div class="not-found-copy">
+      <h1>Page introuvable</h1>
+      <p>Cette adresse n'existe pas.</p>
+      <nav class="type-navigation" aria-label="Revenir au site">
+        <ul>
+          <li><a href="/">Accueil <span aria-hidden="true">→</span></a></li>
+          <li><a href="/blog">Blog <span aria-hidden="true">→</span></a></li>
+          <li><a href="/projets">Projets <span aria-hidden="true">→</span></a></li>
+          <li><a href="/a-propos">À propos <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: min(38rem, calc(100svh - 11rem));
+    align-items: center;
+    padding-block: var(--space-8);
+  }
+
+  .not-found-copy {
+    max-width: 42rem;
+  }
+
+  h1 {
+    margin-block-end: var(--space-5);
+    letter-spacing: -0.045em;
+  }
+
+  p {
+    margin-block-end: var(--space-7);
+    color: var(--muted);
+    font-size: var(--step-1);
+  }
+
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: var(--space-5) var(--space-6);
+    list-style: none;
+  }
+
+  a {
+    font-weight: 700;
+    text-underline-offset: 0.3em;
+  }
+
+  a span {
+    color: var(--blue);
+    font-family: var(--font-display);
+  }
+</style>

@@ -1,0 +1,132 @@
+---
+import { getCollection } from 'astro:content';
+import ContributionGraph from '../../components/ContributionGraph.astro';
+import PinnedProjectGrid from '../../components/PinnedProjectGrid.astro';
+import RepositoryRow from '../../components/RepositoryRow.astro';
+import projectSettings from '../../data/project-settings.json';
+import contributionData from '../../generated/github-contributions.json';
+import githubData from '../../generated/github-projects.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  buildProjectCatalog,
+  type GitHubRepository,
+  type ProjectSettings,
+} from '../../lib/project-catalog';
+import type { ProjectEntry } from '../../lib/projects';
+
+const catalog = buildProjectCatalog({
+  editorial: await getCollection('projects') as ProjectEntry[],
+  repositories: githubData as GitHubRepository[],
+  settings: projectSettings as ProjectSettings,
+});
+for (const warning of catalog.warnings) console.warn(warning);
+---
+
+<BaseLayout
+  title="Projets"
+  description="Dépôts publics, projets sélectionnés et activité GitHub de 111iridescence."
+>
+  <header class="projects-header container">
+    <p class="eyebrow type-metadata">Code public</p>
+    <h1>Projets</h1>
+    <p>Une sélection de projets suivie de l’inventaire complet des dépôts publics visibles.</p>
+  </header>
+
+  <section class="projects-section activity-section container" aria-labelledby="activity-title">
+    <div class="section-heading">
+      <h2 id="activity-title">Contributions</h2>
+      <p>Les 53 dernières semaines, directement depuis GitHub.</p>
+    </div>
+    <ContributionGraph calendar={contributionData} />
+  </section>
+
+  {catalog.pinned.length > 0 && (
+    <section class="projects-section container" aria-labelledby="pinned-projects-title">
+      <div class="section-heading">
+        <h2 id="pinned-projects-title">Épinglés</h2>
+        <p>{catalog.pinned.length} projet{catalog.pinned.length === 1 ? '' : 's'} mis en avant.</p>
+      </div>
+      <PinnedProjectGrid projects={catalog.pinned} />
+    </section>
+  )}
+
+  {catalog.others.length > 0 && (
+    <section class="projects-section repositories-section container" aria-labelledby="repositories-title">
+      <div class="section-heading">
+        <h2 id="repositories-title">Tous les dépôts</h2>
+        <p>{catalog.others.length} dépôts visibles, du plus récemment actif au plus ancien.</p>
+      </div>
+      <div class="repository-list">
+        {catalog.others.map((project) => <RepositoryRow project={project} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .projects-header {
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  .eyebrow {
+    margin-bottom: var(--space-3);
+    color: var(--presence);
+    font-size: var(--step--1);
+  }
+
+  .projects-header h1 {
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.045em;
+  }
+
+  .projects-header > p:last-child {
+    max-width: 56ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--step-1);
+  }
+
+  .projects-section {
+    padding-block: var(--space-7);
+    border-top: 1px solid var(--line);
+  }
+
+  .section-heading {
+    display: grid;
+    margin-bottom: var(--space-6);
+    gap: var(--space-2);
+  }
+
+  .section-heading h2,
+  .section-heading p {
+    margin: 0;
+  }
+
+  .section-heading h2 {
+    font-size: var(--step-1);
+  }
+
+  .section-heading p {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .repositories-section {
+    padding-bottom: var(--space-8);
+  }
+
+  .repository-list {
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 48rem) {
+    .section-heading {
+      grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+      align-items: baseline;
+    }
+
+    .section-heading p {
+      grid-column: 2;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+{
+  "eyebrow": "Derrière le site",
+  "title": "À propos",
+  "description": "Ce que je construis, les sujets qui m'intéressent et la raison d'être de 111iridescence.",
+  "intro": "Je construis des outils que j'utilise moi-même et je garde ici une trace publique des projets, essais et choix techniques qui méritent d'être documentés.",
+  "sections": [
+    {
+      "id": "work",
+      "title": "Ce que je fais",
+      "body": "Je développe surtout des interfaces web et des outils personnels. Vault, par exemple, réunit fichiers, notes et métadonnées dans une application que je fais évoluer selon mes propres usages."
+    },
+    {
+      "id": "interests",
+      "title": "Ce qui m'intéresse",
+      "body": "L'architecture web, les systèmes, la sécurité informatique et les détails d'interface qui rendent un outil plus clair. Je travaille notamment avec Astro, TypeScript et l'écosystème Cloudflare."
+    },
+    {
+      "id": "site",
+      "title": "Pourquoi ce site",
+      "body": "111iridescence me sert à publier sans transformer chaque expérience en produit. Le blog accueille les notes ; la page projets présente les dépôts qui ont encore quelque chose à raconter."
+    }
+  ],
+  "contact": {
+    "label": "Code public",
+    "text": "GitHub",
+    "href": "https://github.com/gobelet69"
+  }
+}
