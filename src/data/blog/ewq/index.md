@@ -8,8 +8,9 @@ tags:
   - tech
   - notes
 publishedAt: "2026-08-13T22:11:39+02:00"
-draft: true
+draft: false
 series: "ewq"
 ---
+
 
 ewq
