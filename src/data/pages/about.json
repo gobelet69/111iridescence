@@ -18,6 +18,11 @@
       "id": "site",
       "title": "Pourquoi ce site",
       "body": "111iridescence me sert à publier sans transformer chaque expérience en produit. Le blog accueille les notes ; la page projets présente les dépôts qui ont encore quelque chose à raconter."
+    },
+    {
+      "id": "test",
+      "title": "test",
+      "body": "test"
     }
   ],
   "contact": {
