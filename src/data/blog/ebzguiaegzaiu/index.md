@@ -8,7 +8,7 @@ tags:
   - tech
   - notes
 publishedAt: "2026-08-14T11:53:15+02:00"
-draft: true
+draft: false
 series: "enzai"
 ---
 
