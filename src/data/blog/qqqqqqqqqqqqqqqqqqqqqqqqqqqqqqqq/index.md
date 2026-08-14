@@ -8,7 +8,7 @@ tags:
   - tech
   - notes
 publishedAt: "2026-08-13T22:18:45+02:00"
-draft: true
+draft: false
 series: "qqqqqqqqqqqqqqqqqq"
 ---
 
