@@ -8,7 +8,7 @@ tags:
   - tech
   - notes
 publishedAt: "2026-08-14T12:29:05+02:00"
-draft: true
+draft: false
 series: "feur"
 ---
 
