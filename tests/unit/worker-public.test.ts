@@ -13,6 +13,29 @@ function executionContext() {
 }
 
 describe('public asset delegation', () => {
+  it.each([
+    ['/portail', 'https://portail.111iridescence.org/'],
+    ['/portail/vault/file?id=7', 'https://portail.111iridescence.org/vault/file?id=7'],
+    ['/portail//evil.example', 'https://portail.111iridescence.org//evil.example'],
+  ])('redirects the exact legacy portal family permanently: %s', async (path, location) => {
+    const response = await worker.fetch(new Request(`${origin}${path}`), {
+      ASSETS: { fetch: async () => new Response('must not reach assets') },
+    }, executionContext());
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe(location);
+    expect(response.headers.get('set-cookie')).toContain('sess=');
+    expect(response.headers.get('set-cookie')).toContain('Max-Age=0');
+  });
+
+  it('does not redirect a near-prefix portal path', async () => {
+    const response = await worker.fetch(new Request(`${origin}/portail-old`), {
+      ASSETS: { fetch: async () => new Response('Astro route', { status: 200 }) },
+    }, executionContext());
+
+    expect(response.status).toBe(200);
+  });
+
   it('serves the Astro homepage through ASSETS without mutating its response', async () => {
     const homepage = '<!doctype html><html><body><h1>Astro</h1></body></html>';
     const request = new Request(`${origin}/`);

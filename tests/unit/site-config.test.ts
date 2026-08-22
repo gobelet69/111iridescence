@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PORTAL_LINK, PUBLIC_NAV, SITE } from '../../src/config/site';
+import { PORTAL_LINK, PORTAL_ORIGIN, PUBLIC_NAV, SITE } from '../../src/config/site';
 
 describe('public site contract', () => {
   it('keeps the approved anonymous identity and routes', () => {
@@ -15,6 +15,7 @@ describe('public site contract', () => {
       { href: '/projets', label: 'Projets' },
       { href: '/a-propos', label: 'À propos' },
     ]);
-    expect(PORTAL_LINK).toEqual({ href: '/portail', label: 'Portail' });
+    expect(PORTAL_ORIGIN).toBe('https://portail.111iridescence.org');
+    expect(PORTAL_LINK).toEqual({ href: 'https://portail.111iridescence.org/', label: 'Portail' });
   });
 });

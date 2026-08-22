@@ -29,7 +29,7 @@ test('renders the anonymous public identity and discreet portal link', async ({ 
   await expect(page.getByRole('link', { name: '111iridescence.' })).toHaveAttribute('href', '/');
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('Blog');
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('À propos');
-  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portail' })).toHaveAttribute('href', '/portail');
+  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portail' })).toHaveAttribute('href', 'https://portail.111iridescence.org/');
   await expect(page.locator('body')).not.toContainText(/Théo|Deville/i);
 });
 

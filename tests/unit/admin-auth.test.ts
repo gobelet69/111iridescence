@@ -62,7 +62,7 @@ describe('private content administration access', () => {
 
     expect(response.status).toBe(302);
     expect(response.headers.get('location')).toBe(
-      '/portail/auth/login?redirect=%2Fadmin',
+      'https://portail.111iridescence.org/auth/login?redirect=https%3A%2F%2F111iridescence.org%2Fadmin',
     );
   });
 

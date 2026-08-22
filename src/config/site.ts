@@ -13,4 +13,5 @@ export const PUBLIC_NAV = [
   { href: '/a-propos', label: 'À propos' },
 ] as const;
 
-export const PORTAL_LINK = { href: '/portail', label: 'Portail' } as const;
+export const PORTAL_ORIGIN = 'https://portail.111iridescence.org';
+export const PORTAL_LINK = { href: `${PORTAL_ORIGIN}/`, label: 'Portail' } as const;

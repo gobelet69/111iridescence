@@ -21,7 +21,7 @@ test('public release surfaces stay coherent and anonymous', async ({ page, reque
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('Blog');
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('Projets');
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('À propos');
-  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portail' })).toHaveAttribute('href', '/portail');
+  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portail' })).toHaveAttribute('href', 'https://portail.111iridescence.org/');
   await expect(page.locator('body')).not.toContainText(/Théo|Theo|Deville/i);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://111iridescence.org/');
   await expect(page.locator('link[rel="alternate"][type="application/rss+xml"]')).toHaveAttribute('href', '/rss.xml');

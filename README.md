@@ -2,7 +2,7 @@
 
 Source du site public [111iridescence.org](https://111iridescence.org) : accueil Astro, blog technique, projets et interface d'administration autonome sur `/admin`.
 
-Le portail d'outils est déployé séparément depuis [`gobelet69/portail`](https://github.com/gobelet69/portail) et reste accessible sur [`/portail`](https://111iridescence.org/portail).
+Le portail d'outils est déployé séparément depuis [`gobelet69/portail`](https://github.com/gobelet69/portail) sur [portail.111iridescence.org](https://portail.111iridescence.org/). Les anciennes URLs `/portail/*` redirigent définitivement vers ce sous-domaine.
 
 ## Développement
 

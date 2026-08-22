@@ -58,7 +58,9 @@ export default {
     const identity = await getAuthIdentity(request, env);
     if (!identity) {
       if (url.pathname.startsWith('/admin/api/')) return json({ error: 'Authentication required' }, 401);
-      return redirect('/portail/auth/login?redirect=%2Fadmin');
+      const login = new URL('https://portail.111iridescence.org/auth/login');
+      login.search = new URLSearchParams({ redirect: 'https://111iridescence.org/admin' }).toString();
+      return redirect(login.href);
     }
     if (!isPrivilegedRole(identity.role)) {
       return noStoreResponse('Accès interdit', {

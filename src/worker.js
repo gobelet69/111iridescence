@@ -143,6 +143,21 @@ async function publicNotFound(request, env) {
   });
 }
 
+function redirectLegacyPortal(request) {
+  const source = new URL(request.url);
+  const suffix = source.pathname.slice('/portail'.length) || '/';
+  const target = new URL('https://portail.111iridescence.org/');
+  target.pathname = suffix;
+  target.search = source.search;
+  return new Response(null, {
+    status: 308,
+    headers: {
+      Location: target.href,
+      'Set-Cookie': 'sess=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
+    },
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -154,6 +169,9 @@ export default {
     }
     if (inspectProtectedPath(url.pathname).blocked) {
       return publicNotFound(request, env);
+    }
+    if (url.pathname === '/portail' || url.pathname.startsWith('/portail/')) {
+      return redirectLegacyPortal(request);
     }
     return env.ASSETS.fetch(request);
   },
