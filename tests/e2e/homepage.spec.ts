@@ -54,11 +54,11 @@ test('homepage previews only factual blog and project destinations', async ({
   ).toHaveAttribute('href', /^\/blog\/[^/]+$/);
 
   await expect(previews.nth(1)).toContainText('Projet');
-  await expect(previews.nth(1)).toContainText('Vault');
+  await expect(previews.nth(1)).toContainText('PwdGen');
 
   await expect(
     previews.nth(1).getByRole('link'),
-  ).toHaveAttribute('href', '/projets/vault');
+  ).toHaveAttribute('href', 'https://github.com/gobelet69/PwdGen');
 });
 
 test('homepage advertises the RSS feed in document metadata', async ({

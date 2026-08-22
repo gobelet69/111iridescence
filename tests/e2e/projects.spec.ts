@@ -1,14 +1,13 @@
 import { expect, test } from '@playwright/test';
 
-test('projects page presents the three approved repositories in editorial order', async ({ page }) => {
+test('projects page presents the approved repositories in editorial order', async ({ page }) => {
   await page.goto('/projets');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Projets');
   const cards = page.locator('[data-project-card]');
-  await expect(cards).toHaveCount(3);
-  await expect(cards.nth(0).getByRole('heading', { level: 2 })).toHaveText('Vault');
-  await expect(cards.nth(1).getByRole('heading', { level: 2 })).toHaveText('PwdGen');
-  await expect(cards.nth(2).getByRole('heading', { level: 2 })).toHaveText('OSINT Framework');
+  await expect(cards).toHaveCount(2);
+  await expect(cards.nth(0).getByRole('heading', { level: 2 })).toHaveText('PwdGen');
+  await expect(cards.nth(1).getByRole('heading', { level: 2 })).toHaveText('OSINT Framework');
 
   for (const card of await cards.all()) {
     await expect(card.getByText('Actif', { exact: true })).toBeVisible();
@@ -30,7 +29,7 @@ test('projects page exposes real contribution activity and all other visible rep
   await expect(page.getByRole('img', { name: /\d+ contributions GitHub/i })).toBeVisible();
   await expect(page.locator('[data-contribution-day]')).toHaveCount(369);
   await expect(page.locator('[data-contribution-day][tabindex="0"]')).toHaveCount(0);
-  await expect(page.locator('[data-pinned-project]')).toHaveCount(3);
+  await expect(page.locator('[data-pinned-project]')).toHaveCount(2);
   expect(await page.locator('[data-repository-row]').count()).toBeGreaterThan(20);
   await expect(page.getByText(/111-showcase/i)).toHaveCount(0);
 });
@@ -40,7 +39,7 @@ test('the complete project catalog remains present without JavaScript', async ({
   const page = await context.newPage();
   await page.goto('/projets');
 
-  await expect(page.locator('[data-pinned-project]')).toHaveCount(3);
+  await expect(page.locator('[data-pinned-project]')).toHaveCount(2);
   expect(await page.locator('[data-repository-row]').count()).toBeGreaterThan(20);
   await context.close();
 });
@@ -48,21 +47,16 @@ test('the complete project catalog remains present without JavaScript', async ({
 test('GitHub popularity stays secondary to editorial project information', async ({ page }) => {
   await page.goto('/projets');
 
-  const vault = page.locator('[data-project-card]').filter({ hasText: 'Vault' });
-  await expect(vault).toContainText('Interface personnelle de fichiers et de notes');
-  await expect(vault).toContainText('JavaScript');
-  await expect(vault).toContainText('Cloudflare Workers');
-  await expect(vault.locator('[data-github-meta]')).toContainText(/mis à jour/i);
-  await expect(vault.locator('[data-github-meta]')).toContainText(/étoile/i);
+  const pwdgen = page.locator('[data-project-card]').filter({ hasText: 'PwdGen' });
+  await expect(pwdgen).toContainText('Générateur terminal');
+  await expect(pwdgen).toContainText('C');
+  await expect(pwdgen).toContainText('ncurses');
+  await expect(pwdgen.locator('[data-github-meta]')).toContainText(/mis à jour/i);
+  await expect(pwdgen.locator('[data-github-meta]')).toContainText(/étoile/i);
 });
 
 test('only approved case studies generate local project routes', async ({ page }) => {
-  const vaultResponse = await page.goto('/projets/vault');
-  expect(vaultResponse?.status()).toBe(200);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Vault');
-  await expect(page.getByRole('heading', { name: 'Architecture' })).toBeVisible();
-
-  for (const slug of ['pwdgen', 'osint-framework', 'editor']) {
+  for (const slug of ['vault', 'pwdgen', 'osint-framework', 'editor']) {
     const response = await page.goto(`/projets/${slug}`);
     expect(response?.status()).toBe(404);
   }
@@ -73,8 +67,8 @@ test('homepage highlights the first curated project case study', async ({ page }
 
   const section = page.getByRole('region', { name: 'À lire et à explorer' });
   const project = section.getByRole('article').nth(1);
-  await expect(project).toContainText('Vault');
-  await expect(project.getByRole('link')).toHaveAttribute('href', '/projets/vault');
+  await expect(project).toContainText('PwdGen');
+  await expect(project.getByRole('link')).toHaveAttribute('href', 'https://github.com/gobelet69/PwdGen');
 });
 
 test('project cards remain single-column without horizontal overflow on mobile', async ({ page }) => {

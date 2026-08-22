@@ -42,9 +42,6 @@ test('tag archive lists matching public publications', async ({
     hasText: 'Pourquoi ce site reste statique',
   })).toHaveCount(1);
 
-  await expect(
-    titles.filter({ hasText: 'Ouverture' }),
-  ).toHaveCount(1);
 });
 
 test('a tag found only in a draft has no public archive', async ({

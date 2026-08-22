@@ -37,7 +37,7 @@ test('uses the identity typeface for headings, navigation, and factual metadata'
   await page.goto('/');
 
   const displayElements = [
-    page.getByRole('heading', { level: 3, name: 'PwdGen' }),
+    page.getByRole('heading', { level: 3, name: 'PwdGen', exact: true }),
     page.getByRole('navigation', { name: 'Navigation principale' }).getByRole('link', { name: 'Blog' }),
     page.getByText('Générateur terminal de mots de passe et de phrases Diceware pour macOS, construit en C avec ncurses.', { exact: true }),
     page.getByRole('contentinfo').getByRole('link', { name: 'GitHub' }),
