@@ -38,7 +38,6 @@ describe('admin-editable content files', () => {
     }
 
     expect(settings.pinned).toEqual([
-      'gobelet69/portail-vault',
       'gobelet69/PwdGen',
       'gobelet69/Osint-Framework',
     ]);

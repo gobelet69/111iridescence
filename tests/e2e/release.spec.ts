@@ -7,7 +7,7 @@ test('public release surfaces stay coherent and anonymous', async ({ page, reque
     '/blog/pourquoi-ce-site-reste-statique',
     '/tags',
     '/projets',
-    '/projets/vault',
+    '/projets/pwdgen',
     '/a-propos',
     '/rss.xml',
   ]) {

@@ -16,7 +16,7 @@ const post = {
 
 describe('admin content service', () => {
   it('parses every checked-in historical post before its first admin save', async () => {
-    for (const slug of ['architecture-astro', 'brouillon-prive', 'ouverture']) {
+    for (const slug of ['architecture-astro', 'cybersecurite']) {
       const markdown = await readFile(`src/data/blog/${slug}/index.md`, 'utf8');
       const parsed = (contentModule as any).parsePost(markdown);
       expect(parsed.tags.length).toBeGreaterThanOrEqual(2);
