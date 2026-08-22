@@ -7,8 +7,10 @@ function getCookie(request, name) {
   return null;
 }
 
+export const SESSION_COOKIE_NAME = '__Secure-iri_session';
+
 export async function getAuthIdentity(request, env) {
-  const sessionId = getCookie(request, 'sess');
+  const sessionId = getCookie(request, SESSION_COOKIE_NAME);
   if (!sessionId) return null;
 
   const session = await env.AUTH_DB.prepare(

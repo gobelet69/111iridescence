@@ -44,7 +44,7 @@ function authDb(role: string) {
 
 async function fetchAdmin(path: string, options: { role?: string; method?: string; headers?: HeadersInit; body?: string } = {}) {
   const headers = new Headers(options.headers);
-  if (options.role && !headers.has('cookie')) headers.set('cookie', 'sess=session-1');
+  if (options.role && !headers.has('cookie')) headers.set('cookie', '__Secure-iri_session=session-1');
   return worker.fetch(new Request(`${origin}${path}`, {
     method: options.method,
     headers,
@@ -111,7 +111,7 @@ describe('private content administration access', () => {
       headers: {
         origin,
         'content-type': 'application/json',
-        cookie: `sess=session-1; ${csrfCookie}`,
+        cookie: `__Secure-iri_session=session-1; ${csrfCookie}`,
         'x-iridescence-csrf': csrfToken!,
       },
       body: JSON.stringify({ baseSha: 'a'.repeat(40) }),
@@ -119,5 +119,14 @@ describe('private content administration access', () => {
 
     expect(response.status).toBe(404);
     expect(await response.json()).toEqual({ error: 'Admin route not found' });
+  });
+
+  it('ignores the retired host-only session cookie', async () => {
+    const response = await fetchAdmin('/admin', {
+      role: 'admin',
+      headers: { cookie: 'sess=session-1' },
+    });
+
+    expect(response.status).toBe(302);
   });
 });
