@@ -47,7 +47,7 @@ function fakeClient() {
 
 async function adminRequest(path: string, client: ReturnType<typeof fakeClient>, options: RequestInit = {}) {
   const headers = new Headers(options.headers);
-  headers.set('cookie', headers.get('cookie') ?? 'sess=session-1');
+  headers.set('cookie', headers.get('cookie') ?? '__Secure-iri_session=session-1');
   return worker.fetch(new Request(`${origin}${path}`, { ...options, headers }), {
     ASSETS: { async fetch() { return new Response('missing', { status: 404 }); } },
     AUTH_DB: authDb(),
@@ -63,7 +63,7 @@ async function mutation(path: string, client: ReturnType<typeof fakeClient>, bod
     method: 'PUT',
     headers: {
       origin,
-      cookie: `sess=session-1; ${csrfCookie}`,
+      cookie: `__Secure-iri_session=session-1; ${csrfCookie}`,
       'content-type': 'application/json',
       'x-iridescence-csrf': csrf,
     },
@@ -77,7 +77,7 @@ describe('admin content API', () => {
     const shell = await adminRequest('/admin', client);
     const csrfCookie = shell.headers.get('set-cookie')!.split(';', 1)[0];
     const response = await adminRequest('/admin/api/bootstrap', client, {
-      headers: { cookie: `sess=session-1; ${csrfCookie}` },
+      headers: { cookie: `__Secure-iri_session=session-1; ${csrfCookie}` },
     });
     const body = await response.json() as any;
 
@@ -119,7 +119,7 @@ describe('admin content API', () => {
     const csrf = csrfCookie.split('=', 2)[1];
     const sync = await adminRequest('/admin/api/github/sync', client, {
       method: 'POST',
-      headers: { origin, cookie: `sess=session-1; ${csrfCookie}`, 'x-iridescence-csrf': csrf, 'content-type': 'application/json' },
+      headers: { origin, cookie: `__Secure-iri_session=session-1; ${csrfCookie}`, 'x-iridescence-csrf': csrf, 'content-type': 'application/json' },
       body: JSON.stringify({ baseSha: headSha }),
     });
     expect(sync.status).toBe(202);
