@@ -31,7 +31,7 @@ const { app, index } = Astro.props;
   </div>
   <div class="product-chapter__visual">
     <div class="product-chapter__halo" aria-hidden="true"></div>
-    <AppScreenshot screenshot={app.primaryScreenshot} eager />
+    <AppScreenshot screenshot={app.primaryScreenshot} eager={index === 0} />
   </div>
 </article>
 

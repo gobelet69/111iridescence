@@ -69,7 +69,13 @@ function asRelease(value: unknown): GitHubRelease | null {
 function matchesPolicy(name: string, policy: AcceptedAsset): boolean {
   const normalized = name.toLowerCase();
   if (policy === 'universal-dmg') return normalized.endsWith('.dmg') && normalized.includes('universal');
-  if (policy === 'dmg') return normalized.endsWith('.dmg') && normalized.includes('macos');
+  if (policy === 'dmg') {
+    return normalized.endsWith('.dmg')
+      && normalized.includes('macos')
+      && (normalized.includes('arm64')
+        || normalized.includes('apple-silicon')
+        || normalized.includes('universal'));
+  }
   return normalized.endsWith('.zip')
     && normalized.includes('macos')
     && (normalized.includes('arm64') || normalized.includes('apple-silicon'));

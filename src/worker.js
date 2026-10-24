@@ -220,11 +220,55 @@ export async function handleReleaseRequest(request, githubFetch = fetch) {
   }
 }
 
+function responseForMethod(request, response) {
+  if (request.method !== "HEAD") return response;
+  return new Response(null, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers,
+  });
+}
+
+export async function handleCachedReleaseRequest(request, options = {}) {
+  const githubFetch = options.githubFetch ?? fetch;
+  const cache = options.cache ?? globalThis.caches?.default;
+
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return handleReleaseRequest(request, githubFetch);
+  }
+
+  const cacheUrl = new URL(request.url);
+  cacheUrl.search = "";
+  cacheUrl.hash = "";
+  const cacheKey = new Request(cacheUrl, { method: "GET" });
+
+  if (cache) {
+    try {
+      const cached = await cache.match(cacheKey);
+      if (cached) return responseForMethod(request, cached);
+    } catch {
+      // Release discovery must remain available if the edge cache is degraded.
+    }
+  }
+
+  const response = await handleReleaseRequest(new Request(request, { method: "GET" }), githubFetch);
+  if (cache && response.status === 200) {
+    const cacheWrite = cache.put(cacheKey, response.clone()).catch(() => undefined);
+    if (typeof options.waitUntil === "function") options.waitUntil(cacheWrite);
+    else await cacheWrite;
+  }
+
+  return responseForMethod(request, response);
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname.startsWith(`${RELEASE_API_PREFIX}/`)) {
-      return handleReleaseRequest(request);
+      return handleCachedReleaseRequest(request, {
+        cache: globalThis.caches?.default,
+        waitUntil: (promise) => ctx.waitUntil(promise),
+      });
     }
     if (url.pathname === `${ADMIN_PREFIX}/client.js`) {
       return env.ASSETS.fetch(request);

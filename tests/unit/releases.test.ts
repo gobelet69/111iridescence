@@ -80,6 +80,32 @@ describe('release normalization', () => {
     expect(result.format).toBe('ZIP macOS');
   });
 
+  it('rejects an Intel PDF Reader DMG before selecting the compatible arm64 ZIP', () => {
+    const result = normalizeRelease(getApp('iridescence-pdf-reader'), {
+      ...baseRelease,
+      assets: [
+        asset('Iridecence-PDF-Reader-v0.5.0-macOS-x86_64.dmg'),
+        asset('Iridecence-PDF-Reader-v0.5.0-macOS-arm64.zip'),
+      ],
+    });
+
+    expect(result.available).toBe(true);
+    if (!result.available) return;
+    expect(result.format).toBe('ZIP macOS');
+    expect(result.downloadUrl).toContain('arm64.zip');
+  });
+
+  it('accepts an explicitly universal PDF Reader DMG', () => {
+    const result = normalizeRelease(getApp('iridescence-pdf-reader'), {
+      ...baseRelease,
+      assets: [asset('Iridecence-PDF-Reader-v0.5.0-macOS-universal.dmg')],
+    });
+
+    expect(result.available).toBe(true);
+    if (!result.available) return;
+    expect(result.format).toBe('DMG');
+  });
+
   it.each([
     ['draft', { ...baseRelease, draft: true, assets: [asset('Mass.Print_0.1.3_universal.dmg')] }],
     ['prerelease', { ...baseRelease, prerelease: true, assets: [asset('Mass.Print_0.1.3_universal.dmg')] }],

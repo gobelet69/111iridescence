@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import worker, { handleReleaseRequest } from '../../src/worker.js';
+import worker, { handleCachedReleaseRequest, handleReleaseRequest } from '../../src/worker.js';
 
 const origin = 'https://111iridescence.org';
 
@@ -198,5 +198,31 @@ describe('public GitHub release endpoint', () => {
 
     expect(response.status).toBe(404);
     expect(githubFetch).not.toHaveBeenCalled();
+  });
+
+  it('shares one canonical cached GitHub result across GET and HEAD requests', async () => {
+    const stored = new Map<string, Response>();
+    const cache = {
+      match: vi.fn(async (request: Request) => stored.get(request.url)?.clone()),
+      put: vi.fn(async (request: Request, response: Response) => { stored.set(request.url, response.clone()); }),
+    };
+    const githubFetch = vi.fn(async () => Response.json(massPrintRelease));
+
+    const first = await handleCachedReleaseRequest(
+      new Request(`${origin}/api/releases/mass-print?source=home`),
+      { githubFetch, cache },
+    );
+    const second = await handleCachedReleaseRequest(
+      new Request(`${origin}/api/releases/mass-print?source=product`, { method: 'HEAD' }),
+      { githubFetch, cache },
+    );
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(200);
+    expect(await second.text()).toBe('');
+    expect(githubFetch).toHaveBeenCalledTimes(1);
+    expect(cache.put).toHaveBeenCalledTimes(1);
+    expect(cache.match.mock.calls[0][0].url).toBe(`${origin}/api/releases/mass-print`);
+    expect(cache.match.mock.calls[1][0].url).toBe(`${origin}/api/releases/mass-print`);
   });
 });
