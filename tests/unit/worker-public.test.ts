@@ -14,6 +14,30 @@ function executionContext() {
 
 describe('public asset delegation', () => {
   it.each([
+    ['/blog', '/apps'],
+    ['/blog/ancienne-note?source=archive', '/apps?source=archive'],
+    ['/tags/rust', '/apps'],
+    ['/projets/mass-print?from=old', '/apps?from=old'],
+    ['/rss.xml?reader=legacy', '/apps?reader=legacy'],
+  ])('redirects retired editorial routes permanently: %s', async (path, location) => {
+    const response = await worker.fetch(new Request(`${origin}${path}`), {
+      ASSETS: { fetch: async () => new Response('must not reach assets') },
+    }, executionContext());
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe(`${origin}${location}`);
+  });
+
+  it.each(['/blogue', '/tags-old', '/projets-archive', '/rss.xml.bak'])('delegates near-prefix editorial paths: %s', async (path) => {
+    const response = await worker.fetch(new Request(`${origin}${path}`), {
+      ASSETS: { fetch: async () => new Response('Astro route') },
+    }, executionContext());
+
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe('Astro route');
+  });
+
+  it.each([
     ['/portail', 'https://portail.111iridescence.org/'],
     ['/portail/vault/file?id=7', 'https://portail.111iridescence.org/vault/file?id=7'],
     ['/portail//evil.example', 'https://portail.111iridescence.org//evil.example'],

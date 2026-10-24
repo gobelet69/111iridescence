@@ -18,8 +18,11 @@ import BrandMark from './BrandMark.astro';
 
 <style>
   .site-header {
+    position: relative;
+    z-index: 20;
     border-bottom: 1px solid var(--line);
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(18px) saturate(1.1);
   }
 
   .header-inner {

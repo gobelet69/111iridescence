@@ -7,7 +7,7 @@ test('pixel title remains readable without JavaScript', async ({ browser }) => {
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('111iridescence.');
-  await expect(page.getByText('Développement web, outils personnels et sécurité informatique.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.', { exact: true })).toBeVisible();
 
   await context.close();
 });
@@ -20,6 +20,36 @@ test('hero keeps only the quiet signal cue around the pixel title', async ({ pag
   await expect(hero.getByText('le signal n’est jamais fixe.', { exact: true })).toHaveText('le signal n’est jamais fixe.');
   await expect(hero).not.toContainText('survolez pour brouiller');
 });
+
+for (const viewport of [
+  { width: 1440, height: 900, heroHeight: 768 },
+  { width: 1280, height: 800, heroHeight: 724 },
+  { width: 768, height: 1024, heroHeight: 768 },
+  { width: 390, height: 844, heroHeight: 672 },
+]) {
+  test(`preserves hero geometry at ${viewport.width}×${viewport.height}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    const hero = page.locator('[data-pixel-hero]');
+    const canvas = page.locator('[data-pixel-canvas]');
+    const heading = hero.getByRole('heading', { level: 1 });
+    await expect(canvas).toHaveAttribute('data-render-state', 'ready');
+    const [heroBox, canvasBox, headingBox] = await Promise.all([
+      hero.boundingBox(), canvas.boundingBox(), heading.boundingBox(),
+    ]);
+    expect(heroBox).not.toBeNull();
+    expect(canvasBox).not.toBeNull();
+    expect(headingBox).not.toBeNull();
+    expect(Math.abs(heroBox!.height - viewport.heroHeight)).toBeLessThanOrEqual(2);
+    expect(Math.abs(canvasBox!.height - heroBox!.height)).toBeLessThanOrEqual(1);
+    expect(Math.abs(canvasBox!.width - heroBox!.width)).toBeLessThanOrEqual(1);
+    expect(headingBox!.x).toBeGreaterThanOrEqual(0);
+    expect(headingBox!.x + headingBox!.width).toBeLessThanOrEqual(viewport.width);
+    if (viewport.width >= 768) {
+      await expect(hero.getByText('le signal n’est jamais fixe.', { exact: true })).toBeVisible();
+    }
+  });
+}
 
 test('pointer movement visibly distorts the pixel title', async ({ page }) => {
   await page.goto('/');

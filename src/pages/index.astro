@@ -1,129 +1,133 @@
 ---
-import { getCollection } from 'astro:content';
-import ContentPreview from '../components/ContentPreview.astro';
 import PixelHero from '../components/PixelHero.astro';
+import ProductShowcase from '../components/apps/ProductShowcase.astro';
 import { SITE } from '../config/site';
-import githubData from '../generated/github-projects.json';
-import projectSettings from '../data/project-settings.json';
+import { apps } from '../data/apps';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { formatPublishedDate, getPublishedPosts, postUrl } from '../lib/blog';
-import {
-  buildProjectCatalog,
-  projectUrl,
-  type GitHubRepository,
-  type ProjectSettings,
-} from '../lib/project-catalog';
-import {
-  type ProjectEntry,
-} from '../lib/projects';
-
-const latestPost = getPublishedPosts(await getCollection('blog'))[0];
-const latestProject = buildProjectCatalog({
-  editorial: await getCollection('projects') as ProjectEntry[],
-  repositories: githubData as GitHubRepository[],
-  settings: projectSettings as ProjectSettings,
-}).pinned[0];
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description}>
   <PixelHero />
 
-  <section class="content-section" aria-labelledby="content-title">
-    <div class="container section-grid">
-      <header class="section-heading">
-        <h2 id="content-title">À lire et à explorer</h2>
+  <section id="apps" class="apps-section" aria-labelledby="apps-title">
+    <div class="apps-transition" aria-hidden="true"></div>
+    <div class="container">
+      <header class="apps-heading">
+        <p class="type-metadata">Logiciels conçus ici</p>
+        <h2 id="apps-title">Mes apps</h2>
+        <p>Des outils macOS ciblés, natifs et respectueux de vos données.</p>
       </header>
-
-      <div class="previews">
-        {latestPost ? (
-          <ContentPreview
-            kind={latestPost.data.format}
-            title={latestPost.data.title}
-            href={postUrl(latestPost)}
-            meta={formatPublishedDate(latestPost.data.publishedAt)}
-          />
-        ) : (
-          <ContentPreview
-            kind="article"
-            title="Aucun article publié pour le moment."
-            href="/blog"
-            meta="Le blog est vide."
-          />
-        )}
-        {latestProject && (
-          <ContentPreview
-            kind="project"
-            title={latestProject.title}
-            href={projectUrl(latestProject)}
-            meta={latestProject.displayDescription ?? latestProject.repo}
-          />
-        )}
+      {apps.map((app, index) => <ProductShowcase app={app} index={index} />)}
+      <div class="future-apps">
+        <p class="type-metadata">Le signal continue.</p>
+        <p>D’autres applications sont en préparation.</p>
+        <a href="/apps">Voir toutes les apps <span aria-hidden="true">→</span></a>
       </div>
-    </div>
-  </section>
-
-  <section class="profile-section" aria-label="Profil">
-    <div class="container profile-inner">
-      <p>{SITE.profile}</p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .content-section {
-    padding-block: var(--space-8);
-    border-block: 1px solid var(--line);
-    background: var(--paper-strong);
+  .apps-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 8% 22%, color-mix(in srgb, var(--violet) 12%, transparent), transparent 28rem),
+      radial-gradient(circle at 95% 68%, color-mix(in srgb, var(--blue) 13%, transparent), transparent 30rem),
+      linear-gradient(180deg, var(--paper), var(--paper-strong) 18%, var(--paper));
   }
 
-  .section-grid {
+  .apps-transition {
+    position: absolute;
+    z-index: -1;
+    top: -9rem;
+    left: 50%;
+    width: min(90rem, 120vw);
+    height: 20rem;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--violet) 13%, transparent), transparent 68%);
+    filter: blur(2rem);
+    pointer-events: none;
+  }
+
+  .apps-heading {
     display: grid;
-    gap: var(--space-7);
+    padding-top: clamp(5rem, 11vw, 9rem);
+    padding-bottom: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
   }
 
-  .section-heading h2 {
-    max-width: 12ch;
+  .apps-heading > * {
     margin: 0;
-    letter-spacing: -0.035em;
   }
 
-  .previews {
+  .apps-heading > .type-metadata {
+    color: var(--violet);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .apps-heading h2 {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    letter-spacing: -0.07em;
+  }
+
+  .apps-heading > p:last-child {
+    max-width: 40ch;
+    color: var(--muted);
+    font-size: var(--step-1);
+  }
+
+  .future-apps {
     display: grid;
-  }
-
-  .profile-section {
+    max-width: 48rem;
+    margin-inline: auto;
     padding-block: var(--space-8);
+    text-align: center;
   }
 
-  .profile-inner {
-    display: grid;
+  .future-apps p {
+    margin-bottom: var(--space-2);
   }
 
-  .profile-inner p {
-    max-width: 39ch;
-    margin: 0;
+  .future-apps .type-metadata {
+    color: var(--violet);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .future-apps p:not(.type-metadata) {
     color: var(--ink);
+    font-family: var(--font-display);
     font-size: var(--step-2);
-    line-height: 1.5;
-    letter-spacing: -0.02em;
+  }
+
+  .future-apps a {
+    margin-top: var(--space-4);
+    color: var(--muted);
+    font-size: var(--step--1);
+    text-underline-offset: 0.3em;
   }
 
   @media (min-width: 48rem) {
-    .section-grid {
-      grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+    .apps-heading {
+      grid-template-columns: 0.7fr 1.3fr;
     }
 
-    .previews {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-7);
+    .apps-heading > .type-metadata,
+    .apps-heading h2 {
+      grid-column: 1;
     }
 
-    .profile-inner {
-      grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-    }
-
-    .profile-inner p {
+    .apps-heading > p:last-child {
+      align-self: end;
+      grid-row: 1 / span 2;
       grid-column: 2;
+      justify-self: end;
     }
   }
 </style>

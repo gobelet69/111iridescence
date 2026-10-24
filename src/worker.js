@@ -5,6 +5,7 @@ import { normalizeRelease, unavailableRelease } from "./lib/releases.ts";
 const INTERNAL_PORTAL_PREFIX = "/_portal";
 const ADMIN_PREFIX = "/admin";
 const RELEASE_API_PREFIX = "/api/releases";
+const RETIRED_PUBLIC_ROOTS = Object.freeze(["/blog", "/tags", "/projets"]);
 const LEGACY_ROOTS = Object.freeze([
   "/auth", "/converter", "/courses", "/dashboard", "/editor", "/feed",
   "/habits", "/pdf", "/todo", "/vault",
@@ -161,6 +162,21 @@ function redirectLegacyPortal(request) {
   });
 }
 
+function isRetiredPublicPath(pathname) {
+  return pathname === "/rss.xml"
+    || RETIRED_PUBLIC_ROOTS.some((prefix) => hasPathPrefix(pathname, prefix));
+}
+
+function redirectRetiredPublicRoute(request) {
+  const source = new URL(request.url);
+  const target = new URL("/apps", source.origin);
+  target.search = source.search;
+  return new Response(null, {
+    status: 308,
+    headers: { Location: target.href },
+  });
+}
+
 function releaseJson(request, payload, status = 200) {
   const headers = new Headers({
     "Cache-Control": "public, max-age=300, s-maxage=300",
@@ -221,6 +237,9 @@ export default {
     }
     if (url.pathname === '/portail' || url.pathname.startsWith('/portail/')) {
       return redirectLegacyPortal(request);
+    }
+    if (isRetiredPublicPath(url.pathname)) {
+      return redirectRetiredPublicRoute(request);
     }
     return env.ASSETS.fetch(request);
   },

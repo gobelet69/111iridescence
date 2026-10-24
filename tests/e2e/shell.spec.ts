@@ -27,7 +27,7 @@ function contrastRatio(foreground: string, background: string) {
 test('renders the anonymous public identity and discreet portal link', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('link', { name: '111iridescence.' })).toHaveAttribute('href', '/');
-  await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('Blog');
+  await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('Mes apps');
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('À propos');
   await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portail' })).toHaveAttribute('href', 'https://portail.111iridescence.org/');
   await expect(page.locator('body')).not.toContainText(/Théo|Deville/i);
@@ -37,9 +37,9 @@ test('uses the identity typeface for headings, navigation, and factual metadata'
   await page.goto('/');
 
   const displayElements = [
-    page.getByRole('heading', { level: 3, name: 'PwdGen', exact: true }),
-    page.getByRole('navigation', { name: 'Navigation principale' }).getByRole('link', { name: 'Blog' }),
-    page.getByText('Générateur terminal de mots de passe et de phrases Diceware pour macOS, construit en C avec ncurses.', { exact: true }),
+    page.getByRole('heading', { level: 3, name: 'Iridescence PDF Reader', exact: true }),
+    page.getByRole('navigation', { name: 'Navigation principale' }).getByRole('link', { name: 'Mes apps' }),
+    page.getByText('Application macOS · 01', { exact: true }),
     page.getByRole('contentinfo').getByRole('link', { name: 'GitHub' }),
   ];
 

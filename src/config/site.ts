@@ -1,15 +1,14 @@
 export const SITE = {
   origin: 'https://111iridescence.org',
   title: '111iridescence',
-  description: 'Projets personnels et notes techniques sur le développement web et la sécurité informatique.',
+  description: '111iridescence conçoit des applications macOS natives, simples et rapides : Iridescence PDF Reader et Mass Print.',
   heroTitle: '111iridescence.',
-  heroDescription: 'Développement web, outils personnels et sécurité informatique.',
-  profile: "Je développe mes propres outils et je documente ce que j'apprends sur le web et la sécurité.",
+  heroDescription: 'Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.',
+  profile: 'Des logiciels macOS ciblés, natifs et respectueux de vos données.',
 } as const;
 
 export const PUBLIC_NAV = [
-  { href: '/blog', label: 'Blog' },
-  { href: '/projets', label: 'Projets' },
+  { href: '/apps', label: 'Mes apps' },
   { href: '/a-propos', label: 'À propos' },
 ] as const;
 
