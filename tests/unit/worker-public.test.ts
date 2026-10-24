@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import worker from '../../src/worker.js';
+import { describe, expect, it, vi } from 'vitest';
+import worker, { handleReleaseRequest } from '../../src/worker.js';
 
 const origin = 'https://111iridescence.org';
 
@@ -96,5 +96,83 @@ describe('public asset delegation', () => {
 
     expect(response.status).toBe(200);
     expect(await response.text()).toBe('Astro public route');
+  });
+});
+
+describe('public GitHub release endpoint', () => {
+  const massPrintRelease = {
+    tag_name: 'v0.1.3',
+    name: 'Mass Print v0.1.3',
+    html_url: 'https://github.com/gobelet69/Mass-Print/releases/tag/v0.1.3',
+    published_at: '2026-10-24T12:56:16Z',
+    body: 'Universal macOS build.',
+    draft: false,
+    prerelease: false,
+    assets: [{
+      name: 'Mass.Print_0.1.3_universal.dmg',
+      browser_download_url: 'https://github.com/gobelet69/Mass-Print/releases/download/v0.1.3/Mass.Print_0.1.3_universal.dmg',
+      state: 'uploaded',
+      size: 7_633_472,
+      content_type: 'application/octet-stream',
+    }],
+  };
+
+  it('fetches only the allow-listed Mass Print repository and returns normalized JSON', async () => {
+    const githubFetch = vi.fn(async () => Response.json(massPrintRelease));
+
+    const response = await handleReleaseRequest(
+      new Request(`${origin}/api/releases/mass-print`),
+      githubFetch,
+    );
+
+    expect(githubFetch).toHaveBeenCalledWith(
+      'https://api.github.com/repos/gobelet69/Mass-Print/releases/latest',
+      expect.objectContaining({ headers: expect.any(Headers) }),
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get('cache-control')).toBe('public, max-age=300, s-maxage=300');
+    expect(await response.json()).toMatchObject({
+      available: true,
+      version: '0.1.3',
+      format: 'DMG universel',
+      compatibility: 'macOS 12.3 ou version ultérieure',
+    });
+  });
+
+  it('returns an unavailable launch-ready payload when PDF Reader is still private', async () => {
+    const githubFetch = vi.fn(async () => Response.json({ message: 'Not Found' }, { status: 404 }));
+    const response = await handleReleaseRequest(
+      new Request(`${origin}/api/releases/iridescence-pdf-reader`),
+      githubFetch,
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      available: false,
+      compatibility: 'macOS 14 ou version ultérieure',
+      architecture: 'Apple Silicon',
+    });
+  });
+
+  it('uses the same headers for HEAD without sending a body', async () => {
+    const response = await handleReleaseRequest(
+      new Request(`${origin}/api/releases/mass-print`, { method: 'HEAD' }),
+      async () => Response.json(massPrintRelease),
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toContain('application/json');
+    expect(await response.text()).toBe('');
+  });
+
+  it('rejects unknown slugs without contacting GitHub', async () => {
+    const githubFetch = vi.fn();
+    const response = await handleReleaseRequest(
+      new Request(`${origin}/api/releases/other-owner`),
+      githubFetch,
+    );
+
+    expect(response.status).toBe(404);
+    expect(githubFetch).not.toHaveBeenCalled();
   });
 });

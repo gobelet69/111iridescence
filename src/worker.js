@@ -1,7 +1,10 @@
 import adminApp from "./apps/admin.js";
+import { getApp } from "./data/apps.ts";
+import { normalizeRelease, unavailableRelease } from "./lib/releases.ts";
 
 const INTERNAL_PORTAL_PREFIX = "/_portal";
 const ADMIN_PREFIX = "/admin";
+const RELEASE_API_PREFIX = "/api/releases";
 const LEGACY_ROOTS = Object.freeze([
   "/auth", "/converter", "/courses", "/dashboard", "/editor", "/feed",
   "/habits", "/pdf", "/todo", "/vault",
@@ -158,9 +161,55 @@ function redirectLegacyPortal(request) {
   });
 }
 
+function releaseJson(request, payload, status = 200) {
+  const headers = new Headers({
+    "Cache-Control": "public, max-age=300, s-maxage=300",
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
+  });
+  return new Response(request.method === "HEAD" ? null : JSON.stringify(payload), {
+    status,
+    headers,
+  });
+}
+
+export async function handleReleaseRequest(request, githubFetch = fetch) {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return releaseJson(request, { error: "Method not allowed" }, 405);
+  }
+
+  const pathname = new URL(request.url).pathname;
+  const slug = pathname.slice(`${RELEASE_API_PREFIX}/`.length);
+  if (!slug || slug.includes("/")) return releaseJson(request, { error: "Unknown app" }, 404);
+
+  let app;
+  try {
+    app = getApp(slug);
+  } catch {
+    return releaseJson(request, { error: "Unknown app" }, 404);
+  }
+
+  try {
+    const response = await githubFetch(`https://api.github.com/repos/${app.repository}/releases/latest`, {
+      headers: new Headers({
+        Accept: "application/vnd.github+json",
+        "User-Agent": "111iridescence.org",
+        "X-GitHub-Api-Version": "2022-11-28",
+      }),
+    });
+    if (!response.ok) return releaseJson(request, unavailableRelease(app));
+    return releaseJson(request, normalizeRelease(app, await response.json()));
+  } catch {
+    return releaseJson(request, unavailableRelease(app));
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname.startsWith(`${RELEASE_API_PREFIX}/`)) {
+      return handleReleaseRequest(request);
+    }
     if (url.pathname === `${ADMIN_PREFIX}/client.js`) {
       return env.ASSETS.fetch(request);
     }

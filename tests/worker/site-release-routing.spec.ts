@@ -19,3 +19,30 @@ test('site worker keeps admin standalone and legacy roots removed', async ({ req
   expect(moved.status()).toBe(308);
   expect(moved.headers().location).toBe('https://portail.111iridescence.org/vault?folder=work');
 });
+
+test('site worker exposes the current public Mass Print DMG release', async ({ request }) => {
+  const response = await request.get('/api/releases/mass-print');
+  const release = await response.json();
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()['cache-control']).toBe('public, max-age=300, s-maxage=300');
+  expect(release).toMatchObject({
+    available: true,
+    format: 'DMG universel',
+    architecture: 'Apple Silicon et Intel',
+    compatibility: 'macOS 12.3 ou version ultérieure',
+  });
+  expect(release.version).toMatch(/^\d+\.\d+\.\d+/);
+  expect(release.downloadUrl).toMatch(/^https:\/\/github\.com\/gobelet69\/Mass-Print\/releases\/download\//);
+});
+
+test('site worker keeps PDF Reader launch-ready while no public release exists', async ({ request }) => {
+  const response = await request.get('/api/releases/iridescence-pdf-reader');
+
+  expect(response.status()).toBe(200);
+  expect(await response.json()).toEqual({
+    available: false,
+    compatibility: 'macOS 14 ou version ultérieure',
+    architecture: 'Apple Silicon',
+  });
+});
