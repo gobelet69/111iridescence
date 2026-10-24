@@ -18,7 +18,7 @@ describe('macOS app catalog', () => {
       repository: 'gobelet69/iridecence-pdf-reader',
       compatibility: 'macOS 14 ou version ultérieure',
       architecture: 'Apple Silicon',
-      publicationStatus: 'coming-soon',
+      publicationStatus: 'available',
       releasePolicy: {
         acceptedAssets: ['dmg', 'macos-zip'],
       },

@@ -36,13 +36,17 @@ test('site worker exposes the current public Mass Print DMG release', async ({ r
   expect(release.downloadUrl).toMatch(/^https:\/\/github\.com\/gobelet69\/Mass-Print\/releases\/download\//);
 });
 
-test('site worker keeps PDF Reader launch-ready while no public release exists', async ({ request }) => {
+test('site worker exposes the current public PDF Reader release', async ({ request }) => {
   const response = await request.get('/api/releases/iridescence-pdf-reader');
+  const release = await response.json();
 
   expect(response.status()).toBe(200);
-  expect(await response.json()).toEqual({
-    available: false,
+  expect(release).toMatchObject({
+    available: true,
     compatibility: 'macOS 14 ou version ultérieure',
     architecture: 'Apple Silicon',
   });
+  expect(release.version).toMatch(/^\d+\.\d+\.\d+/);
+  expect(release.downloadUrl).toMatch(/^https:\/\/github\.com\/gobelet69\/iridecence-pdf-reader\/releases\/download\//);
+  expect(['DMG', 'ZIP macOS']).toContain(release.format);
 });

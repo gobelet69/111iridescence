@@ -65,7 +65,7 @@ export const apps: AppDefinition[] = [
     platform: 'macOS',
     compatibility: 'macOS 14 ou version ultérieure',
     architecture: 'Apple Silicon',
-    publicationStatus: 'coming-soon',
+    publicationStatus: 'available',
     repository: 'gobelet69/iridecence-pdf-reader',
     releasePolicy: { acceptedAssets: ['dmg', 'macos-zip'] },
     primaryScreenshot: {

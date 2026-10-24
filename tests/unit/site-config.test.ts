@@ -7,12 +7,11 @@ describe('public site contract', () => {
       origin: 'https://111iridescence.org',
       title: '111iridescence',
       heroTitle: '111iridescence.',
-      heroDescription: 'Développement web, outils personnels et sécurité informatique.',
-      profile: "Je développe mes propres outils et je documente ce que j'apprends sur le web et la sécurité.",
+      heroDescription: 'Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.',
+      profile: 'Des logiciels macOS ciblés, natifs et respectueux de vos données.',
     });
     expect(PUBLIC_NAV).toEqual([
-      { href: '/blog', label: 'Blog' },
-      { href: '/projets', label: 'Projets' },
+      { href: '/apps', label: 'Mes apps' },
       { href: '/a-propos', label: 'À propos' },
     ]);
     expect(PORTAL_ORIGIN).toBe('https://portail.111iridescence.org');

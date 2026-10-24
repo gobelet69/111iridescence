@@ -1,28 +1,23 @@
 {
   "eyebrow": "Derrière le site",
   "title": "À propos",
-  "description": "Ce que je construis, les sujets qui m'intéressent et la raison d'être de 111iridescence.",
-  "intro": "Je construis des outils que j'utilise moi-même et je garde ici une trace publique des projets, essais et choix techniques qui méritent d'être documentés.",
+  "description": "111iridescence est une identité de création dédiée à des applications macOS simples, rapides et respectueuses de vos données.",
+  "intro": "Je conçois sous le nom 111iridescence des applications macOS centrées sur une tâche précise, avec une interface claire et le moins de friction possible.",
   "sections": [
     {
       "id": "work",
       "title": "Ce que je fais",
-      "body": "Je développe surtout des outils personnels. Vault, par exemple, réunit fichiers, notes et métadonnées dans une application que je fais évoluer selon mes propres usages."
+      "body": "Je développe des applications macOS que j'ai envie d'utiliser au quotidien. Iridescence PDF Reader se concentre sur une lecture fluide ; Mass Print transforme une pile de documents en une file d'impression maîtrisée."
     },
     {
       "id": "interests",
       "title": "Ce qui m'intéresse",
-      "body": "L'architecture web, les systèmes, la sécurité informatique et les détails d'interface qui rendent un outil plus clair. Je travaille notamment avec Astro, TypeScript et l'écosystème Cloudflare."
+      "body": "Les interfaces natives, la rapidité, l'accessibilité et les détails qui rendent un outil plus calme. Le traitement local et le contrôle laissé à l'utilisateur guident chaque produit."
     },
     {
       "id": "site",
       "title": "Pourquoi ce site",
-      "body": "111iridescence me sert à publier sans transformer chaque expérience en produit. Le blog accueille les notes ; la page projets présente les dépôts qui ont encore quelque chose à raconter."
-    },
-    {
-      "id": "test",
-      "title": "test",
-      "body": "test"
+      "body": "Ce site rassemble les applications 111iridescence, explique ce qu'elles font réellement et fournit leur dernière version publique sans détour."
     }
   ],
   "contact": {
