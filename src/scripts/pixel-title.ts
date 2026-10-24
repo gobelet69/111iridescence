@@ -14,6 +14,34 @@ type AmbientPixel = {
   tempo: number;
 };
 
+export type GlyphCell = {
+  column: number;
+  row: number;
+};
+
+export type ComposedGlyphCell = GlyphCell & {
+  characterIndex: number;
+};
+
+export function composeGlyphLine(
+  line: string,
+  glyphMasks: ReadonlyMap<string, readonly GlyphCell[]>,
+  layout: { startColumn: number; topRow: number; advanceColumns: number },
+): ComposedGlyphCell[] {
+  const pixels: ComposedGlyphCell[] = [];
+  for (const [characterIndex, character] of [...line].entries()) {
+    const mask = glyphMasks.get(character) ?? [];
+    for (const pixel of mask) {
+      pixels.push({
+        column: layout.startColumn + characterIndex * layout.advanceColumns + pixel.column,
+        row: layout.topRow + pixel.row,
+        characterIndex,
+      });
+    }
+  }
+  return pixels;
+}
+
 const TITLE = '111iridescence.';
 
 const hashPixel = (column: number, row: number) => (
@@ -214,41 +242,68 @@ export async function mountPixelTitle(root: HTMLElement) {
     titlePixelSize = Math.max(3, gap * 0.62);
     paintMatrix();
 
-    const sample = document.createElement('canvas');
-    sample.width = width;
-    sample.height = height;
-    const sampleContext = sample.getContext('2d', { willReadFrequently: true });
-    if (!sampleContext) return;
-
     const lines = width < 560 ? ['111', 'iridescence.'] : [TITLE];
     let fontSize = height * (lines.length > 1 ? 0.18 : 0.24);
-    sampleContext.font = `700 ${fontSize}px "0xProto NF", monospace`;
-    const measuredWidth = Math.max(...lines.map((line) => sampleContext.measureText(line).width));
+    const measureCanvas = document.createElement('canvas');
+    const measureContext = measureCanvas.getContext('2d');
+    if (!measureContext) return;
+    measureContext.font = `700 ${fontSize}px "0xProto NF", monospace`;
+    const measuredWidth = Math.max(...lines.map((line) => measureContext.measureText(line).width));
     if (measuredWidth > width * 0.9) fontSize *= (width * 0.9) / measuredWidth;
+    measureContext.font = `700 ${fontSize}px "0xProto NF", monospace`;
 
-    sampleContext.font = `700 ${fontSize}px "0xProto NF", monospace`;
-    sampleContext.fillStyle = '#000';
-    sampleContext.textAlign = 'center';
-    sampleContext.textBaseline = 'middle';
-    const lineHeight = fontSize * (lines.length > 1 ? 1.14 : 0.88);
-    const firstLineY = height / 2 - ((lines.length - 1) * lineHeight) / 2;
-    lines.forEach((line, index) => {
-      sampleContext.fillText(line, width / 2, firstLineY + index * lineHeight);
-    });
+    const advanceColumns = Math.max(1, Math.round(measureContext.measureText('M').width / gap));
+    const glyphRows = Math.max(1, Math.ceil(fontSize * 1.4 / gap));
+    const glyphWidth = advanceColumns * gap;
+    const glyphHeight = glyphRows * gap;
+    const glyphMasks = new Map<string, GlyphCell[]>();
 
-    const sampledPixels = sampleContext.getImageData(0, 0, width, height).data;
+    for (const character of new Set(lines.join(''))) {
+      const glyphCanvas = document.createElement('canvas');
+      glyphCanvas.width = glyphWidth;
+      glyphCanvas.height = glyphHeight;
+      const glyphContext = glyphCanvas.getContext('2d', { willReadFrequently: true });
+      if (!glyphContext) return;
+      glyphContext.font = `700 ${fontSize}px "0xProto NF", monospace`;
+      glyphContext.fillStyle = '#000';
+      glyphContext.textAlign = 'center';
+      glyphContext.textBaseline = 'middle';
+      glyphContext.fillText(character, glyphWidth / 2, glyphHeight / 2);
+
+      const sampledGlyph = glyphContext.getImageData(0, 0, glyphWidth, glyphHeight).data;
+      const mask: GlyphCell[] = [];
+      for (let row = 0; row < glyphRows; row += 1) {
+        for (let column = 0; column < advanceColumns; column += 1) {
+          const x = Math.floor(column * gap + gap / 2);
+          const y = Math.floor(row * gap + gap / 2);
+          const alpha = sampledGlyph[(y * glyphWidth + x) * 4 + 3];
+          if (alpha >= 96) mask.push({ column, row });
+        }
+      }
+      glyphMasks.set(character, mask);
+    }
+
+    const matrixColumns = Math.ceil((width - gap / 2) / gap);
+    const matrixRows = Math.ceil((height - gap / 2) / gap);
+    const lineAdvanceRows = Math.max(1, Math.round(fontSize * (lines.length > 1 ? 1.14 : 0.88) / gap));
+    const firstLineCenterRow = (matrixRows - 1) / 2 - ((lines.length - 1) * lineAdvanceRows) / 2;
     const nextTitlePixels: TitlePixel[] = [];
     const nextCoordinates = new Set<string>();
 
-    for (let row = 0, y = gap / 2; y < height; row += 1, y += gap) {
-      for (let column = 0, x = gap / 2; x < width; column += 1, x += gap) {
-        const alpha = sampledPixels[(Math.floor(y) * width + Math.floor(x)) * 4 + 3];
-        if (alpha < 96) continue;
+    lines.forEach((line, lineIndex) => {
+      const startColumn = Math.floor((matrixColumns - line.length * advanceColumns) / 2);
+      const centerRow = firstLineCenterRow + lineIndex * lineAdvanceRows;
+      const topRow = Math.round(centerRow - (glyphRows - 1) / 2);
+      const composed = composeGlyphLine(line, glyphMasks, { startColumn, topRow, advanceColumns });
+      for (const { column, row } of composed) {
+        if (column < 0 || column >= matrixColumns || row < 0 || row >= matrixRows) continue;
+        const x = column * gap + gap / 2;
+        const y = row * gap + gap / 2;
         const colorIndex = hashPixel(column, row) % colors.length;
         nextTitlePixels.push({ x, y, column, row, color: colors[colorIndex] });
         nextCoordinates.add(coordinateKey(column, row));
       }
-    }
+    });
 
     titlePixels = nextTitlePixels;
     titleCoordinates = nextCoordinates;
