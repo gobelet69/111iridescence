@@ -1,0 +1,33 @@
+---
+import type { AppDefinition } from '../../data/apps';
+import { SITE } from '../../config/site';
+
+interface Props {
+  app: AppDefinition;
+}
+
+const { app } = Astro.props;
+const data = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: app.name,
+  description: app.seo.description,
+  applicationCategory: app.slug === 'mass-print' ? 'UtilitiesApplication' : 'BusinessApplication',
+  operatingSystem: app.compatibility,
+  url: `${SITE.origin}/apps/${app.slug}`,
+  image: new URL(app.seo.image, SITE.origin).href,
+  author: {
+    '@type': 'Organization',
+    name: SITE.title,
+    url: SITE.origin,
+  },
+  offers: {
+    '@type': 'Offer',
+    availability: app.publicationStatus === 'available'
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/PreOrder',
+  },
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(data)} />

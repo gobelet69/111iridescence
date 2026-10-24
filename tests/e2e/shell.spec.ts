@@ -69,3 +69,12 @@ test('shows a focus indicator with at least 3:1 contrast', async ({ page }) => {
   expect(colors.focusVisible).toBe(true);
   expect(contrastRatio(colors.outline, colors.background)).toBeGreaterThanOrEqual(3);
 });
+
+test('uses product-ready social metadata without advertising an RSS feed', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.locator('link[rel="alternate"][type="application/rss+xml"]')).toHaveCount(0);
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary');
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', '111iridescence');
+  await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute('content', /.+/);
+});

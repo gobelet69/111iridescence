@@ -1,0 +1,30 @@
+---
+import type { AppScreenshot } from '../../data/apps';
+
+interface Props {
+  screenshot: AppScreenshot;
+  eager?: boolean;
+  framed?: boolean;
+  class?: string;
+}
+
+const {
+  screenshot,
+  eager = false,
+  framed = true,
+  class: className,
+} = Astro.props;
+---
+
+<figure class:list={['app-shot', framed && 'app-window', className]}>
+  <img
+    src={screenshot.src}
+    alt={screenshot.alt}
+    width={screenshot.width}
+    height={screenshot.height}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : 'auto'}
+    decoding="async"
+  />
+  {screenshot.caption && <figcaption>{screenshot.caption}</figcaption>}
+</figure>

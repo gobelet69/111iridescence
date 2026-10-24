@@ -1,0 +1,23 @@
+---
+import type { AppFeature } from '../../data/apps';
+
+interface Props {
+  features: AppFeature[];
+}
+
+const { features } = Astro.props;
+---
+
+<ul class="product-features" role="list">
+  {features.map((feature, index) => (
+    <li>
+      <span class="product-features__index type-metadata" aria-hidden="true">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <div>
+        <h3>{feature.title}</h3>
+        <p>{feature.description}</p>
+      </div>
+    </li>
+  ))}
+</ul>

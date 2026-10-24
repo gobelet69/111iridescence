@@ -28,6 +28,7 @@ function targets(root: ParentNode, slug: string, role: string): HTMLElement[] {
 function applyAvailableRelease(root: ParentNode, slug: string, release: AvailableRelease) {
   for (const link of targets(root, slug, 'link')) {
     link.setAttribute('href', release.downloadUrl);
+    link.setAttribute('aria-disabled', 'false');
     link.setAttribute('data-release-state', 'available');
     link.textContent = 'Télécharger pour macOS';
   }

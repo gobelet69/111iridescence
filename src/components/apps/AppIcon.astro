@@ -1,0 +1,21 @@
+---
+import type { AppDefinition } from '../../data/apps';
+
+interface Props {
+  app: AppDefinition;
+  size?: 'small' | 'large';
+}
+
+const { app, size = 'large' } = Astro.props;
+const dimension = app.slug === 'mass-print' ? 512 : 1024;
+---
+
+<img
+  class:list={['app-icon', `app-icon--${size}`]}
+  src={app.icon}
+  alt=""
+  width={dimension}
+  height={dimension}
+  loading="eager"
+  decoding="async"
+/>

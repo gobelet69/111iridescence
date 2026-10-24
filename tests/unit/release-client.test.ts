@@ -77,6 +77,8 @@ describe('release download enhancement', () => {
     expect(fetchRelease).toHaveBeenCalledWith('/api/releases/mass-print', expect.any(Object));
     expect(heroLink.attributes.get('href')).toBe(availableRelease.downloadUrl);
     expect(footerLink.attributes.get('href')).toBe(availableRelease.downloadUrl);
+    expect(heroLink.attributes.get('aria-disabled')).toBe('false');
+    expect(footerLink.attributes.get('aria-disabled')).toBe('false');
     expect(heroLink.textContent).toBe('Télécharger pour macOS');
     expect(version.textContent).toBe('Version 0.1.3');
     expect(format.textContent).toBe('DMG universel');
