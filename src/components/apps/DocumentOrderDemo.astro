@@ -1,0 +1,80 @@
+<div class="order-demo" aria-label="Exemple d’ordre d’impression">
+  <div class="order-demo__toolbar type-metadata">
+    <h3>Ordre d’impression</h3>
+    <span>4 documents</span>
+  </div>
+  <ol>
+    <li><span>01</span><strong>Couverture.pdf</strong><small>1 page</small></li>
+    <li><span>02</span><strong>Rapport annuel.pdf</strong><small>24 pages</small></li>
+    <li><span>03</span><strong>Annexes.pdf</strong><small>8 pages</small></li>
+    <li><span>04</span><strong>Notes finales.txt</strong><small>2 pages</small></li>
+  </ol>
+  <p>Glissez pour réordonner · l’impression suit exactement cette file.</p>
+</div>
+
+<style>
+  .order-demo {
+    overflow: hidden;
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius-large);
+    background: var(--glass);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .order-demo__toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--glass-line);
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .order-demo__toolbar h3 {
+    margin: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  ol {
+    margin: 0;
+    padding: var(--space-3);
+    list-style: none;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--glass-line);
+  }
+
+  li:last-child {
+    border-bottom: 0;
+  }
+
+  li span,
+  li small {
+    color: var(--muted);
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+  }
+
+  li strong {
+    min-width: 0;
+    overflow: hidden;
+    font-size: var(--step--1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .order-demo > p {
+    margin: 0;
+    padding: var(--space-4) var(--space-5);
+    border-top: 1px solid var(--glass-line);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

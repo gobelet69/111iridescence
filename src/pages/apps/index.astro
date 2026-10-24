@@ -1,0 +1,52 @@
+---
+import AppIcon from '../../components/apps/AppIcon.astro';
+import AppScreenshot from '../../components/apps/AppScreenshot.astro';
+import { apps } from '../../data/apps';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Apps pour macOS" description="Découvrez les applications macOS de 111iridescence : Iridescence PDF Reader et Mass Print.">
+  <header class="catalog-hero container">
+    <p class="type-metadata">111iridescence · logiciel macOS</p>
+    <h1>Apps pour macOS</h1>
+    <p>Des outils concentrés sur une tâche, dessinés pour disparaître derrière ce que vous voulez accomplir.</p>
+  </header>
+  <section class="catalog container" aria-label="Toutes les apps">
+    {apps.map((app, index) => (
+      <article class:list={['catalog-card', `catalog-card--${app.accent}`]}>
+        <div class="catalog-card__copy">
+          <AppIcon app={app} size="small" />
+          <p class="type-metadata">{String(index + 1).padStart(2, '0')} · {app.platform}</p>
+          <h2>{app.name}</h2>
+          <p>{app.description}</p>
+          <a class="button button--secondary" href={`/apps/${app.slug}`}>Découvrir {app.name}</a>
+        </div>
+        <AppScreenshot screenshot={app.primaryScreenshot} />
+      </article>
+    ))}
+  </section>
+  <aside class="catalog-future container">
+    <p class="type-metadata">À suivre</p>
+    <h2>D’autres applications suivront.</h2>
+    <p>La même exigence : une idée nette, une interface native et vos données sous votre contrôle.</p>
+  </aside>
+</BaseLayout>
+
+<style>
+  .catalog-hero { padding-block: var(--space-8); }
+  .catalog-hero .type-metadata { color: var(--violet); font-size: .75rem; text-transform: uppercase; letter-spacing: .09em; }
+  .catalog-hero h1 { margin-bottom: var(--space-4); font-size: clamp(3rem, 9vw, 7rem); letter-spacing: -.065em; }
+  .catalog-hero > p:last-child { max-width: 48ch; margin: 0; color: var(--muted); font-size: var(--step-1); }
+  .catalog { display: grid; gap: var(--space-7); padding-bottom: var(--space-8); }
+  .catalog-card { --card-accent: var(--violet); display: grid; min-width: 0; align-items: center; gap: var(--space-6); padding: clamp(1.25rem, 4vw, 3rem); border: 1px solid var(--glass-line); border-radius: var(--radius-large); background: linear-gradient(135deg, var(--glass), color-mix(in srgb, var(--card-accent) 8%, var(--glass))); overflow: hidden; }
+  .catalog-card--blue { --card-accent: var(--blue); }
+  .catalog-card__copy > .type-metadata { margin: var(--space-3) 0; color: var(--card-accent); font-size: .75rem; }
+  .catalog-card h2 { margin-bottom: var(--space-3); }
+  .catalog-card__copy > p:not(.type-metadata) { color: var(--muted); }
+  .catalog-card .button { margin-top: var(--space-3); }
+  .catalog-future { padding-block: var(--space-8); border-top: 1px solid var(--line); text-align: center; }
+  .catalog-future .type-metadata { color: var(--violet); font-size: .75rem; text-transform: uppercase; letter-spacing: .09em; }
+  .catalog-future h2 { margin-bottom: var(--space-3); }
+  .catalog-future > p:last-child { max-width: 50ch; margin-inline: auto; color: var(--muted); }
+  @media (min-width: 58rem) { .catalog-card { grid-template-columns: .72fr 1.28fr; } .catalog-card:nth-child(even) { grid-template-columns: 1.28fr .72fr; } .catalog-card:nth-child(even) .catalog-card__copy { grid-column: 2; } .catalog-card:nth-child(even) :global(.app-shot) { grid-row: 1; grid-column: 1; } }
+</style>

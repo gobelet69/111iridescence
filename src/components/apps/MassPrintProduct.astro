@@ -1,0 +1,63 @@
+---
+import type { AppDefinition } from '../../data/apps';
+import AppIcon from './AppIcon.astro';
+import AppScreenshot from './AppScreenshot.astro';
+import DocumentOrderDemo from './DocumentOrderDemo.astro';
+import ProductFeatureList from './ProductFeatureList.astro';
+import ReleaseDownload from './ReleaseDownload.astro';
+
+interface Props { app: AppDefinition }
+const { app } = Astro.props;
+---
+
+<div class="product-page product-page--blue">
+  <a class="product-back type-navigation" href="/apps">← Toutes les apps</a>
+  <section id="overview" class="product-hero container" aria-labelledby="product-title">
+    <div class="product-hero__copy">
+      <AppIcon app={app} />
+      <p class="product-eyebrow type-metadata">Impression ordonnée · {app.platform}</p>
+      <h1 id="product-title">{app.name}</h1>
+      <p class="product-tagline type-identity">{app.tagline}</p>
+      <p class="product-lead">{app.description}</p>
+      <ReleaseDownload app={app} />
+    </div>
+    <AppScreenshot screenshot={app.primaryScreenshot} eager />
+  </section>
+
+  <section id="features" class="product-section container" aria-labelledby="features-title">
+    <header><p class="type-metadata">Tout sous contrôle</p><h2 id="features-title">Une file claire avant de lancer quoi que ce soit.</h2></header>
+    <p class="product-section__lead">{app.longDescription}</p>
+    <ProductFeatureList features={app.features} />
+  </section>
+
+  <section id="gallery" class="product-section product-gallery container" aria-labelledby="mass-gallery-title">
+    <header><p class="type-metadata">Vue principale</p><h2 id="mass-gallery-title">Documents, ordre et réglages dans une seule fenêtre.</h2></header>
+    <AppScreenshot screenshot={app.primaryScreenshot} />
+  </section>
+
+  <section id="ordering" class="product-story" aria-labelledby="ordering-title">
+    <div class="container product-story__inner">
+      <div class="product-story__copy"><p class="type-metadata">01</p><h2 id="ordering-title">L’ordre visible est l’ordre imprimé.</h2><p>{app.sections[0].description}</p></div>
+      <DocumentOrderDemo />
+    </div>
+  </section>
+
+  <section id="finder" class="product-story product-story--reverse" aria-labelledby="finder-title">
+    <div class="container product-story__inner">
+      <div class="product-story__copy"><p class="type-metadata">02</p><h2 id="finder-title">Depuis Finder, sans détour.</h2><p>{app.sections[1].description}</p><p class="product-note">Sélectionnez vos fichiers, puis utilisez l’action rapide Mass Print. Vous gardez toujours la validation finale.</p></div>
+      <AppScreenshot screenshot={app.primaryScreenshot} />
+    </div>
+  </section>
+
+  <section id="privacy" class="product-section product-privacy container" aria-labelledby="privacy-title">
+    <header><p class="type-metadata">Local par conception</p><h2 id="privacy-title">Vos documents restent sur votre Mac</h2></header>
+    <p>{app.sections[2].description}</p>
+    <ul role="list"><li>Sans compte</li><li>Sans analytics</li><li>Originaux intacts</li></ul>
+  </section>
+
+  <section id="download" class="product-download container" aria-labelledby="mass-download-title">
+    <AppIcon app={app} size="small" />
+    <div><p class="type-metadata">Version publique</p><h2 id="mass-download-title">Télécharger Mass Print</h2><p>DMG universel pour Apple Silicon et Intel. La dernière release GitHub est détectée automatiquement.</p></div>
+    <ReleaseDownload app={app} />
+  </section>
+</div>
