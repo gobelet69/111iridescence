@@ -3,7 +3,6 @@ export const SITE = {
   title: '111iridescence',
   description: '111iridescence conçoit des applications macOS natives, simples et rapides : Iridescence PDF Reader et Mass Print.',
   heroTitle: '111iridescence.',
-  heroDescription: 'Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.',
   profile: 'Des logiciels macOS ciblés, natifs et respectueux de vos données.',
 } as const;
 

@@ -7,17 +7,17 @@ test('pixel title remains readable without JavaScript', async ({ browser }) => {
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('111iridescence.');
-  await expect(page.getByText('Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.', { exact: true })).toBeVisible();
+  await expect(page.locator('[data-pixel-hero]')).not.toContainText('Des applications macOS pensées');
 
   await context.close();
 });
 
-test('hero keeps only the quiet signal cue around the pixel title', async ({ page }) => {
+test('hero keeps the pixel title free from supporting copy', async ({ page }) => {
   await page.goto('/');
 
   const hero = page.locator('[data-pixel-hero]');
   await expect(hero).not.toContainText('surface publique · en ligne');
-  await expect(hero.getByText('le signal n’est jamais fixe.', { exact: true })).toHaveText('le signal n’est jamais fixe.');
+  await expect(hero).not.toContainText('le signal n’est jamais fixe.');
   await expect(hero).not.toContainText('survolez pour brouiller');
 });
 
@@ -45,9 +45,6 @@ for (const viewport of [
     expect(Math.abs(canvasBox!.width - heroBox!.width)).toBeLessThanOrEqual(1);
     expect(headingBox!.x).toBeGreaterThanOrEqual(0);
     expect(headingBox!.x + headingBox!.width).toBeLessThanOrEqual(viewport.width);
-    if (viewport.width >= 768) {
-      await expect(hero.getByText('le signal n’est jamais fixe.', { exact: true })).toBeVisible();
-    }
   });
 }
 

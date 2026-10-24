@@ -7,7 +7,6 @@ describe('public site contract', () => {
       origin: 'https://111iridescence.org',
       title: '111iridescence',
       heroTitle: '111iridescence.',
-      heroDescription: 'Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.',
       profile: 'Des logiciels macOS ciblés, natifs et respectueux de vos données.',
     });
     expect(PUBLIC_NAV).toEqual([

@@ -8,11 +8,6 @@ import { SITE } from '../config/site';
     <div class="pixel-stage" data-pixel-stage>
       <h1 id="pixel-title">{SITE.heroTitle}</h1>
     </div>
-
-    <div class="hero-meta">
-      <p>{SITE.heroDescription}</p>
-      <p class="interaction-hint type-metadata" aria-hidden="true">le signal n’est jamais fixe.</p>
-    </div>
   </div>
 </section>
 
@@ -44,7 +39,7 @@ import { SITE } from '../config/site';
     min-height: inherit;
     margin-inline: auto;
     padding-block: clamp(1.5rem, 4vw, 3.5rem);
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr;
   }
 
   .pixel-stage {
@@ -86,29 +81,6 @@ import { SITE } from '../config/site';
     opacity: 1;
   }
 
-  .hero-meta {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-5);
-  }
-
-  .hero-meta p {
-    margin: 0;
-  }
-
-  .hero-meta > p:first-child {
-    max-width: 40ch;
-    color: var(--muted);
-    font-size: var(--step-1);
-    line-height: 1.5;
-  }
-
-  .interaction-hint {
-    color: var(--muted);
-    font-size: var(--step--1);
-  }
-
   @media (max-width: 40rem) {
     .pixel-hero {
       min-height: min(42rem, calc(100svh - 7.5rem));
@@ -123,13 +95,6 @@ import { SITE } from '../config/site';
       letter-spacing: -0.08em;
     }
 
-    .hero-meta {
-      display: grid;
-    }
-
-    .interaction-hint {
-      display: none;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -138,8 +103,5 @@ import { SITE } from '../config/site';
       transition: none;
     }
 
-    .interaction-hint {
-      display: none;
-    }
   }
 </style>

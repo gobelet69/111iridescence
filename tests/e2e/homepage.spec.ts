@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-const heroDescription = 'Des applications macOS pensées pour la simplicité, la rapidité et le plaisir d’utilisation.';
-
 test('homepage preserves the identity hero and makes the two macOS apps the focus', async ({ page }) => {
   await page.goto('/');
   const main = page.getByRole('main');
@@ -9,8 +7,8 @@ test('homepage preserves the identity hero and makes the two macOS apps the focu
   const apps = main.getByRole('region', { name: 'Mes apps' });
 
   await expect(hero.getByRole('heading', { level: 1 })).toHaveText('111iridescence.');
-  await expect(hero).toContainText(heroDescription);
-  await expect(hero).toContainText('le signal n’est jamais fixe.');
+  await expect(hero).not.toContainText('Des applications macOS pensées');
+  await expect(hero).not.toContainText('le signal n’est jamais fixe.');
   await expect(apps.getByRole('article')).toHaveCount(2);
 
   const chapters = apps.getByRole('article');
