@@ -71,6 +71,7 @@ describe('release download enhancement', () => {
     await mountReleaseDownloads(
       fixture([heroLink, footerLink, version, format, notes]) as unknown as ParentNode,
       fetchRelease,
+      'fr',
     );
 
     expect(fetchRelease).toHaveBeenCalledTimes(1);
@@ -84,6 +85,42 @@ describe('release download enhancement', () => {
     expect(format.textContent).toBe('DMG universel');
     expect(notes.textContent).toBe('Universal macOS build.');
     expect(notes.hidden).toBe(false);
+  });
+
+  it('localizes an available release for English pages', async () => {
+    const link = element('mass-print', 'link', 'Coming soon');
+    const version = element('mass-print', 'version');
+    const format = element('mass-print', 'format');
+
+    await mountReleaseDownloads(
+      fixture([link, version, format]) as unknown as ParentNode,
+      async () => Response.json(availableRelease),
+      'en',
+    );
+
+    expect(link.textContent).toBe('Download for macOS');
+    expect(version.textContent).toBe('Version 0.1.3');
+    expect(format.textContent).toBe('Universal DMG');
+  });
+
+  it('localizes the macOS ZIP format in both languages', async () => {
+    const englishFormat = element('iridescence-pdf-reader', 'format');
+    const frenchFormat = element('iridescence-pdf-reader', 'format');
+    const zipRelease = { ...availableRelease, format: 'ZIP macOS' };
+
+    await mountReleaseDownloads(
+      fixture([englishFormat]) as unknown as ParentNode,
+      async () => Response.json(zipRelease),
+      'en',
+    );
+    await mountReleaseDownloads(
+      fixture([frenchFormat]) as unknown as ParentNode,
+      async () => Response.json(zipRelease),
+      'fr',
+    );
+
+    expect(englishFormat.textContent).toBe('macOS ZIP');
+    expect(frenchFormat.textContent).toBe('ZIP macOS');
   });
 
   it('leaves content intact when release discovery fails', async () => {

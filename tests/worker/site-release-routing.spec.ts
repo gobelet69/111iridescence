@@ -18,6 +18,10 @@ test('site worker keeps admin standalone and legacy roots removed', async ({ req
   const moved = await request.get('/portail/vault?folder=work', { maxRedirects: 0 });
   expect(moved.status()).toBe(308);
   expect(moved.headers().location).toBe('https://portail.111iridescence.org/vault?folder=work');
+
+  const about = await request.get('/a-propos?source=legacy', { maxRedirects: 0 });
+  expect(about.status()).toBe(308);
+  expect(about.headers().location).toBe('https://111iridescence.org/fr/a-propos?source=legacy');
 });
 
 test('site worker exposes the current public Mass Print DMG release', async ({ request }) => {

@@ -14,11 +14,11 @@ function executionContext() {
 
 describe('public asset delegation', () => {
   it.each([
-    ['/blog', '/apps'],
-    ['/blog/ancienne-note?source=archive', '/apps?source=archive'],
-    ['/tags/rust', '/apps'],
-    ['/projets/mass-print?from=old', '/apps?from=old'],
-    ['/rss.xml?reader=legacy', '/apps?reader=legacy'],
+    ['/blog', '/fr/apps'],
+    ['/blog/ancienne-note?source=archive', '/fr/apps?source=archive'],
+    ['/tags/rust', '/fr/apps'],
+    ['/projets/mass-print?from=old', '/fr/apps?from=old'],
+    ['/rss.xml?reader=legacy', '/fr/apps?reader=legacy'],
   ])('redirects retired editorial routes permanently: %s', async (path, location) => {
     const response = await worker.fetch(new Request(`${origin}${path}`), {
       ASSETS: { fetch: async () => new Response('must not reach assets') },
@@ -26,6 +26,27 @@ describe('public asset delegation', () => {
 
     expect(response.status).toBe(308);
     expect(response.headers.get('location')).toBe(`${origin}${location}`);
+  });
+
+  it.each([
+    ['/a-propos', '/fr/a-propos'],
+    ['/a-propos/?source=legacy', '/fr/a-propos?source=legacy'],
+  ])('redirects the historical French about route permanently: %s', async (path, location) => {
+    const response = await worker.fetch(new Request(`${origin}${path}`), {
+      ASSETS: { fetch: async () => new Response('must not reach assets') },
+    }, executionContext());
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe(`${origin}${location}`);
+  });
+
+  it.each(['/a-propos-old', '/fr/a-propos'])('does not redirect near-prefix or canonical about routes: %s', async (path) => {
+    const response = await worker.fetch(new Request(`${origin}${path}`), {
+      ASSETS: { fetch: async () => new Response('Astro route') },
+    }, executionContext());
+
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe('Astro route');
   });
 
   it.each(['/blogue', '/tags-old', '/projets-archive', '/rss.xml.bak'])('delegates near-prefix editorial paths: %s', async (path) => {
@@ -95,6 +116,25 @@ describe('public asset delegation', () => {
 
     expect(response.status).toBe(404);
     expect(await response.text()).toBe('Not found');
+  });
+
+  it('serves the localized French 404 document for unknown French routes', async () => {
+    const requestedPaths: string[] = [];
+    const response = await worker.fetch(new Request(`${origin}/fr/inconnue`), {
+      ASSETS: {
+        fetch: async (assetRequest: Request) => {
+          const pathname = new URL(assetRequest.url).pathname;
+          requestedPaths.push(pathname);
+          return pathname === '/fr/404/'
+            ? new Response('<h1>Page introuvable</h1>', { headers: { 'content-type': 'text/html; charset=utf-8' } })
+            : new Response('Not found', { status: 404 });
+        },
+      },
+    }, executionContext());
+
+    expect(response.status).toBe(404);
+    expect(requestedPaths).toEqual(['/fr/inconnue', '/fr/404/']);
+    expect(await response.text()).toContain('Page introuvable');
   });
 
   it.each([

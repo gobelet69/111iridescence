@@ -6,5 +6,10 @@ export default defineConfig({
   site: 'https://111iridescence.org',
   output: 'static',
   devToolbar: { enabled: false },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !/\/(?:fr\/)?404\/?$/.test(page),
+    }),
+  ],
 });

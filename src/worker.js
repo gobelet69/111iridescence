@@ -132,8 +132,8 @@ function isRemovedLegacyPath(pathname) {
   return LEGACY_ROOTS.some((prefix) => hasPathPrefix(pathname, prefix));
 }
 
-async function publicNotFound(request, env) {
-  const notFoundUrl = new URL("/404.html", request.url);
+async function publicNotFound(request, env, pathname = "/404.html") {
+  const notFoundUrl = new URL(pathname, request.url);
   const headers = new Headers();
   for (const name of ["accept", "accept-language"]) {
     const value = request.headers.get(name);
@@ -169,7 +169,21 @@ function isRetiredPublicPath(pathname) {
 
 function redirectRetiredPublicRoute(request) {
   const source = new URL(request.url);
-  const target = new URL("/apps", source.origin);
+  const target = new URL("/fr/apps", source.origin);
+  target.search = source.search;
+  return new Response(null, {
+    status: 308,
+    headers: { Location: target.href },
+  });
+}
+
+function isHistoricalFrenchAboutPath(pathname) {
+  return pathname === "/a-propos" || pathname === "/a-propos/";
+}
+
+function redirectHistoricalFrenchAbout(request) {
+  const source = new URL(request.url);
+  const target = new URL("/fr/a-propos", source.origin);
   target.search = source.search;
   return new Response(null, {
     status: 308,
@@ -282,9 +296,16 @@ export default {
     if (url.pathname === '/portail' || url.pathname.startsWith('/portail/')) {
       return redirectLegacyPortal(request);
     }
+    if (isHistoricalFrenchAboutPath(url.pathname)) {
+      return redirectHistoricalFrenchAbout(request);
+    }
     if (isRetiredPublicPath(url.pathname)) {
       return redirectRetiredPublicRoute(request);
     }
-    return env.ASSETS.fetch(request);
+    const response = await env.ASSETS.fetch(request);
+    if (response.status === 404 && hasPathPrefix(url.pathname, '/fr')) {
+      return publicNotFound(request, env, '/fr/404/');
+    }
+    return response;
   },
 };

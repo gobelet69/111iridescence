@@ -27,9 +27,9 @@ function contrastRatio(foreground: string, background: string) {
 test('renders the anonymous public identity and discreet portal link', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('link', { name: '111iridescence.' })).toHaveAttribute('href', '/');
-  await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('Mes apps');
-  await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toContainText('À propos');
-  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portail' })).toHaveAttribute('href', 'https://portail.111iridescence.org/');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).toContainText('Apps');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).toContainText('About');
+  await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Portal' })).toHaveAttribute('href', 'https://portail.111iridescence.org/');
   await expect(page.locator('body')).not.toContainText(/Théo|Deville/i);
 });
 
@@ -38,8 +38,8 @@ test('uses the identity typeface for headings, navigation, and factual metadata'
 
   const displayElements = [
     page.getByRole('heading', { level: 3, name: 'Iridescence PDF Reader', exact: true }),
-    page.getByRole('navigation', { name: 'Navigation principale' }).getByRole('link', { name: 'Mes apps' }),
-    page.getByText('Application macOS · 01', { exact: true }),
+    page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Apps' }),
+    page.getByText('macOS application · 01', { exact: true }),
     page.getByRole('contentinfo').getByRole('link', { name: 'GitHub' }),
   ];
 
@@ -80,14 +80,58 @@ test('uses product-ready social metadata without advertising an RSS feed', async
 });
 
 test('about metadata presents the anonymous creator without exposing civil identity', async ({ page }) => {
-  await page.goto('/a-propos');
+  await page.goto('/about');
 
-  await expect(page).toHaveTitle('À propos — 111iridescence');
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://111iridescence.org/a-propos');
+  await expect(page).toHaveTitle('About — 111iridescence');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://111iridescence.org/about');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    'À propos de 111iridescence : développement d’applications macOS, cybersécurité, systèmes et création avec l’intelligence artificielle.',
+    'About 111iridescence: macOS app development, cybersecurity, systems, and building with artificial intelligence.',
   );
-  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'À propos — 111iridescence');
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'About — 111iridescence');
   await expect(page.locator('html')).not.toContainText(/Théo|Theo|Deville/i);
+});
+
+test('publishes self-canonical bilingual metadata with English as x-default', async ({ page }) => {
+  for (const route of [
+    {
+      path: '/about',
+      lang: 'en',
+      canonical: 'https://111iridescence.org/about',
+      en: 'https://111iridescence.org/about',
+      fr: 'https://111iridescence.org/fr/a-propos',
+    },
+    {
+      path: '/fr/a-propos',
+      lang: 'fr',
+      canonical: 'https://111iridescence.org/fr/a-propos',
+      en: 'https://111iridescence.org/about',
+      fr: 'https://111iridescence.org/fr/a-propos',
+    },
+  ]) {
+    await page.goto(route.path);
+    await expect(page.locator('html')).toHaveAttribute('lang', route.lang);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', route.canonical);
+    await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', route.en);
+    await expect(page.locator('link[rel="alternate"][hreflang="fr"]')).toHaveAttribute('href', route.fr);
+    await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute('href', route.en);
+  }
+});
+
+test('localizes SoftwareApplication URLs for both product trees', async ({ page }) => {
+  for (const [path, expectedUrl] of [
+    ['/apps/mass-print', 'https://111iridescence.org/apps/mass-print'],
+    ['/fr/apps/mass-print', 'https://111iridescence.org/fr/apps/mass-print'],
+  ]) {
+    await page.goto(path);
+    const source = await page.locator('script[type="application/ld+json"]').textContent();
+    const data = JSON.parse(source ?? '{}');
+    expect(data['@type']).toBe('SoftwareApplication');
+    expect(data.url).toBe(expectedUrl);
+    expect(data.author).toEqual({
+      '@type': 'Organization',
+      name: '111iridescence',
+      url: 'https://111iridescence.org',
+    });
+  }
 });
