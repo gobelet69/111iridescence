@@ -26,6 +26,24 @@ describe('about page data', () => {
     const checkedIn = JSON.parse(await readFile('src/data/pages/about.json', 'utf8'));
 
     expect((aboutModule as any).validateAboutPage(checkedIn)).toEqual(checkedIn);
+    expect(checkedIn.sections.map((item: { id: string }) => item.id)).toEqual([
+      'origin',
+      'development',
+      'cybersecurity',
+      'systems',
+      'design',
+      'ai',
+      'identity',
+      'principles',
+      'beyond',
+      'closing',
+    ]);
+    const publicCopy = JSON.stringify(checkedIn);
+    expect(publicCopy).toMatch(/Master en cybersécurité/);
+    expect(publicCopy).toMatch(/intelligence artificielle/);
+    expect(publicCopy).toMatch(/ski/);
+    expect(publicCopy).toMatch(/escalade/);
+    expect(publicCopy).not.toMatch(/Théo|Theo|Deville/i);
   });
 
   it('rejects duplicate anchors and insecure contact URLs', () => {
