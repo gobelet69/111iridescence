@@ -60,7 +60,7 @@ test('the personal story remains complete without JavaScript', async ({ browser 
   await page.goto('/a-propos');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Curieux de nature.');
-  for (const id of ['origin', 'explorations', 'ai-process', 'identity', 'principles', 'beyond', 'closing']) {
+  for (const id of ['explorations', 'ai-process', 'identity', 'closing']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
   await expect(page.getByRole('link', { name: 'Découvrir mes applications' })).toHaveAttribute('href', '/apps');

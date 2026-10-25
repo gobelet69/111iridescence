@@ -86,7 +86,7 @@ test('about metadata presents the anonymous creator without exposing civil ident
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://111iridescence.org/a-propos');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    'Découvrez la personne derrière 111iridescence : un parcours en cybersécurité, une curiosité pour les systèmes et une manière honnête de créer avec l’IA.',
+    'À propos de 111iridescence : développement d’applications macOS, cybersécurité, systèmes et création avec l’intelligence artificielle.',
   );
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'À propos — 111iridescence');
   await expect(page.locator('html')).not.toContainText(/Théo|Theo|Deville/i);

@@ -14,20 +14,11 @@ const section = (id: string): AboutSection => {
   return item;
 };
 
-const origin = section('origin');
-const explorations = ['development', 'cybersecurity', 'systems', 'design'].map(section);
+const explorations = ['development', 'cybersecurity', 'systems'].map(section);
 const ai = section('ai');
 const identity = section('identity');
-const principlesIntro = section('principles');
-const beyond = section('beyond');
 const closing = section('closing');
 const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorations'];
-const principles = [
-  ['Curiosité', 'Comprendre, explorer et ne jamais cesser d’apprendre.'],
-  ['Simplicité', 'Créer des outils qui ne compliquent pas inutilement les choses.'],
-  ['Performance', 'Privilégier des applications réactives, fluides et efficaces.'],
-  ['Expérimentation', 'Essayer une technologie ou une approche différente, puis observer ce qu’elle apporte.'],
-] as const;
 ---
 
 <BaseLayout title="À propos" description={about.description}>
@@ -37,27 +28,15 @@ const principles = [
         <p class="about-eyebrow type-metadata">{about.eyebrow}</p>
         <h1>{about.title}</h1>
         <p class="about-intro">{about.intro}</p>
-        <p class="about-status type-metadata"><span aria-hidden="true"></span> J’apprends en construisant.</p>
       </div>
       <AboutSignal />
     </header>
 
-    <section id="origin" class="story-section" aria-labelledby="origin-title">
-      <div class="container story-grid">
-        <div class="section-index type-metadata" aria-hidden="true">origine / curiosité</div>
-        <div class="story-copy">
-          <h2 id="origin-title">{origin.title}</h2>
-          <p>{origin.body}</p>
-        </div>
-        <p class="side-thought type-identity">Comprendre.<br />Essayer.<br />Recommencer.</p>
-      </div>
-    </section>
-
     <section id="explorations" class="explorations-section container" aria-labelledby="explorations-title">
       <header class="section-heading">
-        <p class="type-metadata">Terrains d’apprentissage</p>
-        <h2 id="explorations-title">Ce que j’explore</h2>
-        <p>Des sujets différents, reliés par la même envie : aller voir ce qui se passe sous la surface.</p>
+        <p class="type-metadata">Ce que je fais</p>
+        <h2 id="explorations-title">Trois domaines.</h2>
+        <p>Développement, cybersécurité et systèmes.</p>
       </header>
       <div class="exploration-list">
         {explorations.map((item, index) => (
@@ -108,40 +87,10 @@ const principles = [
       </div>
     </section>
 
-    <section id="principles" class="principles-section" aria-labelledby="principles-title">
-      <div class="container principles-inner">
-        <header>
-          <p class="type-metadata">Repères personnels</p>
-          <h2 id="principles-title">{principlesIntro.title}</h2>
-          <p>{principlesIntro.body}</p>
-        </header>
-        <dl class="principles-list">
-          {principles.map(([title, description], index) => (
-            <div>
-              <span class="type-metadata" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              <dt>{title}</dt>
-              <dd>{description}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
-
-    <section id="beyond" class="beyond-section container" aria-labelledby="beyond-title">
-      <div class="beyond-landscape" aria-hidden="true">
-        <span>ski</span><i></i><span>escalade</span>
-      </div>
-      <div class="beyond-copy">
-        <p class="type-metadata">Changer de perspective</p>
-        <h2 id="beyond-title">{beyond.title}</h2>
-        <p>{beyond.body}</p>
-      </div>
-    </section>
-
     <section id="closing" class="closing-section" aria-labelledby="closing-title">
       <div class="container closing-inner">
         <div>
-          <p class="type-metadata">La suite reste ouverte</p>
+          <p class="type-metadata">Pour continuer</p>
           <h2 id="closing-title">{closing.title}</h2>
           <p>{closing.body}</p>
         </div>
@@ -165,7 +114,7 @@ const principles = [
 
   .about-hero {
     display: grid;
-    min-height: min(50rem, calc(100svh - 4.75rem));
+    min-height: min(42rem, calc(100svh - 4.75rem));
     align-items: center;
     gap: clamp(3rem, 8vw, 7rem);
     padding-block: clamp(4rem, 9vw, 8rem);
@@ -177,8 +126,6 @@ const principles = [
   .section-heading > .type-metadata,
   .ai-heading > .type-metadata,
   .identity-heading > .type-metadata,
-  .principles-inner header > .type-metadata,
-  .beyond-copy > .type-metadata,
   .closing-inner .type-metadata {
     margin-bottom: var(--space-4);
     color: var(--violet);
@@ -189,37 +136,21 @@ const principles = [
 
   .about-hero h1 { max-width: 8ch; margin-bottom: var(--space-6); font-size: clamp(3.6rem, 9vw, 8.6rem); letter-spacing: -0.075em; line-height: 0.9; }
   .about-intro { max-width: 59ch; margin-bottom: var(--space-6); color: var(--muted); font-size: var(--step-1); line-height: 1.6; }
-  .about-status { display: flex; margin: 0; align-items: center; gap: var(--space-3); color: var(--muted); font-size: var(--step--1); }
-  .about-status span { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--presence); box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--presence) 13%, transparent); }
-
-  .story-section { position: relative; border-block: 1px solid var(--line); background: color-mix(in srgb, var(--paper-strong) 58%, transparent); }
-  .story-grid { display: grid; gap: var(--space-6); padding-block: var(--space-8); }
-  .section-index { color: var(--blue); font-size: 0.74rem; letter-spacing: 0.07em; }
-
-  .story-copy h2,
   .section-heading h2,
   .ai-heading h2,
   .identity-heading h2,
-  .principles-inner h2,
-  .beyond-copy h2,
   .closing-inner h2 { margin-bottom: var(--space-5); letter-spacing: -0.052em; }
 
-  .story-copy p,
   .section-heading > p:last-child,
   .identity-heading > p:last-child,
-  .principles-inner header > p:last-child,
-  .beyond-copy > p:last-child,
   .closing-inner > div:first-child > p:last-child { max-width: 60ch; margin: 0; color: var(--muted); }
 
-  .side-thought { margin: 0; align-self: end; color: color-mix(in srgb, var(--ink) 54%, transparent); font-size: var(--step-1); line-height: 1.7; }
   .explorations-section { padding-block: var(--space-8); }
   .section-heading { display: grid; margin-bottom: clamp(3rem, 8vw, 6rem); }
 
   .section-heading h2,
   .ai-heading h2,
   .identity-heading h2,
-  .principles-inner h2,
-  .beyond-copy h2,
   .closing-inner h2 { max-width: 13ch; font-size: clamp(2.5rem, 6vw, 5.2rem); line-height: 0.98; }
 
   .exploration-list { border-top: 1px solid var(--line); }
@@ -257,20 +188,6 @@ const principles = [
   .about-app p { max-width: 50ch; margin-bottom: var(--space-3); color: var(--muted); }
   .about-app a { font-family: var(--font-display); font-size: var(--step--1); font-weight: 700; text-underline-offset: 0.3em; }
 
-  .principles-section { border-block: 1px solid var(--line); background: color-mix(in srgb, var(--paper-strong) 58%, transparent); }
-  .principles-inner { display: grid; gap: clamp(3rem, 8vw, 7rem); padding-block: var(--space-8); }
-  .principles-list { margin: 0; border-top: 1px solid var(--line); }
-  .principles-list > div { display: grid; gap: var(--space-2); padding-block: var(--space-5); border-bottom: 1px solid var(--line); }
-  .principles-list span { color: var(--coral); font-size: 0.68rem; }
-  .principles-list dt { color: var(--ink); font-family: var(--font-display); font-size: var(--step-1); font-weight: 700; }
-  .principles-list dd { max-width: 43ch; margin: 0; color: var(--muted); }
-
-  .beyond-section { display: grid; align-items: center; gap: clamp(3rem, 9vw, 8rem); padding-block: var(--space-8); }
-  .beyond-landscape { position: relative; display: grid; min-height: 18rem; place-content: center; border: 1px solid var(--glass-line); border-radius: var(--radius-large); background: linear-gradient(145deg, transparent 46%, color-mix(in srgb, var(--blue) 25%, transparent) 46.2%, transparent 46.6%), linear-gradient(35deg, transparent 48%, color-mix(in srgb, var(--violet) 24%, transparent) 48.2%, transparent 48.6%), var(--glass); color: var(--muted); font-family: var(--font-display); overflow: hidden; }
-  .beyond-landscape span:first-child { transform: translate(-4.5rem, -2rem); }
-  .beyond-landscape span:last-child { transform: translate(4rem, 2.4rem); }
-  .beyond-landscape i { position: absolute; inset: 17% 50%; width: 1px; transform: rotate(31deg); background: var(--line); }
-
   .closing-section { border-top: 1px solid var(--line); background: radial-gradient(circle at 82% 38%, color-mix(in srgb, var(--violet) 14%, transparent), transparent 28rem), var(--paper-strong); }
   .closing-inner { display: grid; gap: var(--space-7); padding-block: clamp(5rem, 12vw, 10rem); }
   .closing-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-3); }
@@ -282,8 +199,6 @@ const principles = [
 
   @media (min-width: 48rem) {
     .about-hero { grid-template-columns: 1.12fr 0.88fr; }
-    .story-grid { grid-template-columns: 0.45fr 1.3fr 0.55fr; }
-    .story-copy { grid-column: 2; }
     .section-heading { grid-template-columns: 0.72fr 1.28fr; }
     .section-heading > .type-metadata { grid-column: 1; }
     .section-heading h2, .section-heading > p:last-child { grid-column: 2; }
@@ -294,9 +209,7 @@ const principles = [
     .process-line li { padding-inline: var(--space-4); border-right: 1px solid rgb(255 255 255 / 0.14); }
     .process-line li:nth-child(2n) { border-right: 0; }
     .process-line li:last-child { grid-column: 1 / -1; border-right: 0; border-bottom: 0; }
-    .identity-section, .principles-inner { grid-template-columns: 0.9fr 1.1fr; }
-    .principles-list > div { grid-template-columns: 2.5rem 0.65fr 1.35fr; align-items: start; }
-    .beyond-section { grid-template-columns: 1fr 0.85fr; }
+    .identity-section { grid-template-columns: 0.9fr 1.1fr; }
     .closing-inner { grid-template-columns: 1.2fr 0.8fr; align-items: end; }
     .closing-actions { justify-content: flex-end; }
   }

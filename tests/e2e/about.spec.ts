@@ -5,19 +5,14 @@ test('about page presents an anonymous first-person profile', async ({ page }) =
 
   expect(response?.status()).toBe(200);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Curieux de nature.');
-  await expect(page.getByRole('heading', { name: 'Tout commence par la curiosité.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'De l’idée au logiciel.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Comprendre avant de sécuriser.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Apprendre en manipulant.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Soigner ce que l’on ressent.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Développement macOS.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Cybersécurité.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Systèmes et homelab.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'L’IA fait partie du processus.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Des idées qui deviennent des applications.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Les détails comptent.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Au-delà de l’écran.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Toujours quelque chose à explorer.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Mes applications.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'La suite.' })).toBeVisible();
   await expect(page.getByRole('main')).toContainText('Master en cybersécurité');
-  await expect(page.getByRole('main')).toContainText('ski');
-  await expect(page.getByRole('main')).toContainText('escalade');
+  await expect(page.getByRole('main')).not.toContainText(/ski|escalade/i);
   await expect(page.getByRole('main').getByRole('link', { name: /GitHub/ })).toHaveAttribute('href', 'https://github.com/gobelet69');
   await expect(page.locator('body')).not.toContainText(/Théo|Theo|Deville/i);
 });
@@ -32,7 +27,7 @@ test('public navigation exposes the about page', async ({ page }) => {
 test('about page follows an editorial journey with a transparent creation process', async ({ page }) => {
   await page.goto('/a-propos');
 
-  for (const id of ['origin', 'explorations', 'ai-process', 'identity', 'principles', 'beyond', 'closing']) {
+  for (const id of ['explorations', 'ai-process', 'identity', 'closing']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
 
@@ -82,7 +77,7 @@ test('about page keeps all content visible with reduced motion', async ({ page }
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/a-propos');
   await expect(page.locator('#ai-process')).toContainText('L’IA fait partie du processus.');
-  await expect(page.locator('#closing')).toContainText('Toujours quelque chose à explorer.');
+  await expect(page.locator('#closing')).toContainText('La suite.');
 });
 
 test('creation process labels never overlap at tablet width', async ({ page }) => {

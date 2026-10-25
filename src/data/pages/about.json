@@ -1,62 +1,42 @@
 {
   "eyebrow": "Derrière 111iridescence",
   "title": "Curieux de nature.",
-  "description": "Découvrez la personne derrière 111iridescence : un parcours en cybersécurité, une curiosité pour les systèmes et une manière honnête de créer avec l’IA.",
-  "intro": "Passionné d’informatique depuis l’enfance, j’aime comprendre comment les choses fonctionnent, explorer de nouvelles technologies et transformer mes idées en projets concrets. Après un diplôme de l’enseignement supérieur en informatique, spécialisé en cybersécurité, je poursuis aujourd’hui un Master en cybersécurité — avec toujours quelque chose à apprendre, démonter ou construire.",
+  "description": "À propos de 111iridescence : développement d’applications macOS, cybersécurité, systèmes et création avec l’intelligence artificielle.",
+  "intro": "Je m’intéresse à l’informatique depuis l’enfance. Après des études supérieures en informatique avec une spécialisation en cybersécurité, je poursuis aujourd’hui un Master en cybersécurité. En dehors des cours, je développe des applications macOS et j’expérimente avec les systèmes, les réseaux et mes propres serveurs.",
   "sections": [
     {
-      "id": "origin",
-      "title": "Tout commence par la curiosité.",
-      "body": "Depuis aussi longtemps que je m’en souvienne, l’informatique m’intéresse autant pour ce qu’elle permet de faire que pour ce qui se passe derrière l’écran. Cette curiosité m’a naturellement conduit du fonctionnement des ordinateurs au développement, puis aux systèmes, aux réseaux et à la cybersécurité. Mes études donnent un cadre à cet apprentissage ; mes projets personnels me permettent de le mettre à l’épreuve."
-    },
-    {
       "id": "development",
-      "title": "De l’idée au logiciel.",
-      "body": "J’aime construire des outils qui répondent à un besoin concret, puis revenir sur les détails jusqu’à ce que leur utilisation paraisse naturelle. Les applications macOS, Rust, les interfaces natives, les performances, les automatisations et les prototypes rapides sont autant de façons d’explorer une idée et de voir jusqu’où elle peut aller."
+      "title": "Développement macOS.",
+      "body": "Je crée des outils qui répondent à des besoins concrets. Je travaille notamment avec Rust et les technologies natives de macOS, avec une attention particulière portée à la simplicité, aux performances et à l’interface."
     },
     {
       "id": "cybersecurity",
-      "title": "Comprendre avant de sécuriser.",
-      "body": "La cybersécurité occupe une place importante dans mon parcours et dans mon Master. Je m’intéresse à la cryptographie et à la cryptanalyse, à la sécurité des systèmes et des réseaux, aux protocoles, aux objets connectés, à l’analyse de trafic et à l’investigation numérique. J’aime comprendre comment un système fonctionne, où il peut échouer et comment le rendre plus robuste."
+      "title": "Cybersécurité.",
+      "body": "Mon Master prolonge mon intérêt pour la cryptographie, les systèmes, les réseaux, les protocoles, l’IoT, l’analyse de trafic et l’investigation numérique. J’aime comprendre comment un système fonctionne, comment il peut échouer et comment mieux le protéger."
     },
     {
       "id": "systems",
-      "title": "Apprendre en manipulant.",
-      "body": "Linux, macOS, Windows, Docker, la virtualisation et les infrastructures réseau font partie de mon terrain d’expérimentation. Mon homelab est un espace où je peux installer, configurer, casser, réparer et automatiser des services auto-hébergés. Cette pratique directe m’aide à comprendre les outils que j’utilise plutôt qu’à simplement les empiler."
-    },
-    {
-      "id": "design",
-      "title": "Soigner ce que l’on ressent.",
-      "body": "Je suis particulièrement attentif à la qualité visuelle et au rythme d’une interface. J’apprécie les applications macOS natives, le minimalisme, les animations fluides, une typographie cohérente et les espacements qui rendent chaque action évidente. Je préfère un outil simple, rapide et bien organisé à une accumulation de fonctions mal présentées."
+      "title": "Systèmes et homelab.",
+      "body": "J’utilise Linux, macOS, Windows, Docker et la virtualisation. Mon homelab me sert à tester des services auto-hébergés, des configurations réseau et des automatisations."
     },
     {
       "id": "ai",
       "title": "L’IA fait partie du processus.",
-      "body": "J’utilise l’intelligence artificielle pour développer mes projets, et je n’ai aucune raison de le cacher. C’est un véritable partenaire de travail pour transformer une idée en prototype, générer du code, comprendre une technologie, explorer plusieurs solutions, repérer des problèmes et améliorer ce qui existe. Je ne prétends pas écrire chaque ligne moi-même : ce qui m’intéresse, c’est d’imaginer un outil, de comprendre son fonctionnement, de tester le résultat et de recommencer jusqu’à ce qu’il devienne cohérent. L’IA me permet d’aller plus loin dans mes projets et d’apprendre énormément en chemin."
+      "body": "J’utilise beaucoup l’intelligence artificielle pour développer mes projets. Elle m’aide à prototyper, générer du code, comprendre de nouvelles technologies, comparer des solutions et corriger des problèmes. Je ne prétends pas écrire chaque ligne moi-même : mon rôle est d’avoir l’idée, de définir le résultat attendu, de tester ce qui est produit et de l’améliorer jusqu’à ce que l’ensemble fonctionne correctement."
     },
     {
       "id": "identity",
-      "title": "Des idées qui deviennent des applications.",
-      "body": "Il m’arrive souvent de vouloir changer quelque chose dans un logiciel : une fonction manque, une interaction pourrait être plus directe ou l’ensemble simplement plus agréable. Plutôt que de laisser ces idées de côté, j’essaie de les concrétiser. 111iridescence est l’identité sous laquelle je rassemble certains de ces projets lorsqu’ils deviennent des applications que j’ai envie de partager."
-    },
-    {
-      "id": "principles",
-      "title": "Les détails comptent.",
-      "body": "Je reviens toujours à quelques principes très simples : rester curieux, ne pas compliquer inutilement un outil, préserver sa réactivité et garder assez de liberté pour essayer une technologie ou une approche différente. Ce ne sont pas les valeurs d’une entreprise ; ce sont les repères qui m’aident à décider ce que je veux construire et comment l’améliorer."
-    },
-    {
-      "id": "beyond",
-      "title": "Au-delà de l’écran.",
-      "body": "L’informatique occupe une grande place dans ma vie, mais j’apprécie aussi le ski et l’escalade. Changer de terrain, chercher une trajectoire et progresser geste après geste offrent une respiration différente — loin des écrans, mais avec la même envie d’apprendre."
+      "title": "Mes applications.",
+      "body": "111iridescence est le nom sous lequel je publie les applications et les outils que j’ai envie de partager."
     },
     {
       "id": "closing",
-      "title": "Toujours quelque chose à explorer.",
-      "body": "Je ne sais pas encore exactement où toutes ces idées me mèneront, et c’est aussi ce qui rend les choses intéressantes. Il reste toujours une technologie à découvrir, un problème à résoudre ou un projet à essayer. 111iridescence continuera d’évoluer au fil de ces expérimentations."
+      "title": "La suite.",
+      "body": "Je continue d’apprendre et de faire évoluer mes projets. Vous pouvez découvrir mes applications ici ou suivre leur développement sur GitHub."
     }
   ],
   "contact": {
-    "label": "Code et expérimentations",
+    "label": "Projets publics",
     "text": "Voir mes projets sur GitHub",
     "href": "https://github.com/gobelet69"
   }
