@@ -41,6 +41,18 @@ describe('about page data', () => {
     expect(publicCopy).not.toMatch(/Théo|Theo|Deville/i);
   });
 
+  it('keeps an equivalent anonymous English source', async () => {
+    const english = JSON.parse(await readFile('src/data/pages/about.en.json', 'utf8'));
+
+    expect((aboutModule as any).validateAboutPage(english)).toEqual(english);
+    expect(english.sections.map((item: { id: string }) => item.id)).toEqual([
+      'development', 'cybersecurity', 'systems', 'ai', 'identity', 'closing',
+    ]);
+    expect(JSON.stringify(english)).toMatch(/Master.*cybersecurity/i);
+    expect(JSON.stringify(english)).toMatch(/artificial intelligence/i);
+    expect(JSON.stringify(english)).not.toMatch(/Théo|Theo|Deville/i);
+  });
+
   it('rejects duplicate anchors and insecure contact URLs', () => {
     const validate = (aboutModule as any).validateAboutPage;
 

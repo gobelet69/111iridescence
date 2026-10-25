@@ -1,0 +1,43 @@
+{
+  "eyebrow": "Behind 111iridescence",
+  "title": "Curious by nature.",
+  "description": "About 111iridescence: macOS app development, cybersecurity, systems, and building with artificial intelligence.",
+  "intro": "I have been interested in computers since childhood. After earning a higher-education degree in computer science with a cybersecurity specialization, I am now pursuing a Master’s degree in cybersecurity. Outside my studies, I build macOS applications and experiment with systems, networks, and my own servers.",
+  "sections": [
+    {
+      "id": "development",
+      "title": "macOS development.",
+      "body": "I build tools that solve concrete problems. I work mainly with Rust and native macOS technologies, with particular attention to simplicity, performance, and interface design."
+    },
+    {
+      "id": "cybersecurity",
+      "title": "Cybersecurity.",
+      "body": "My Master’s degree extends my interest in cryptography, systems, networks, protocols, IoT, traffic analysis, and digital forensics. I like understanding how a system works, how it can fail, and how it can be better protected."
+    },
+    {
+      "id": "systems",
+      "title": "Systems and homelab.",
+      "body": "I use Linux, macOS, Windows, Docker, and virtualization. My homelab is where I test self-hosted services, network configurations, and automations."
+    },
+    {
+      "id": "ai",
+      "title": "AI is part of the process.",
+      "body": "I rely heavily on artificial intelligence when developing my projects. It helps me prototype, generate code, understand new technologies, compare solutions, and fix problems. I do not claim to write every line myself: my role is to shape the idea, define the expected result, test what is produced, and improve it until the whole thing works properly."
+    },
+    {
+      "id": "identity",
+      "title": "My applications.",
+      "body": "111iridescence is the name under which I publish the applications and tools I want to share."
+    },
+    {
+      "id": "closing",
+      "title": "What comes next.",
+      "body": "I keep learning and improving my projects. You can explore my applications here or follow their development on GitHub."
+    }
+  ],
+  "contact": {
+    "label": "Public projects",
+    "text": "View my projects on GitHub",
+    "href": "https://github.com/gobelet69"
+  }
+}

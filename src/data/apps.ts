@@ -1,4 +1,6 @@
 export type AppSlug = 'iridescence-pdf-reader' | 'mass-print';
+import type { Locale } from '../i18n';
+import { englishAppContent } from './app-locales';
 export type PublicationStatus = 'available' | 'coming-soon';
 export type AcceptedAsset = 'dmg' | 'macos-zip' | 'universal-dmg';
 
@@ -52,7 +54,7 @@ export interface AppDefinition {
   };
 }
 
-export const apps: AppDefinition[] = [
+const frenchApps: AppDefinition[] = [
   {
     slug: 'iridescence-pdf-reader',
     name: 'Iridescence PDF Reader',
@@ -189,8 +191,15 @@ export const apps: AppDefinition[] = [
   },
 ];
 
-export function getApp(slug: string): AppDefinition {
-  const app = apps.find((candidate) => candidate.slug === slug);
+export function getApps(locale: Locale = 'en'): AppDefinition[] {
+  if (locale === 'fr') return frenchApps;
+  return frenchApps.map((app) => ({ ...app, ...englishAppContent[app.slug] }));
+}
+
+export const apps = getApps('en');
+
+export function getApp(slug: string, locale: Locale = 'fr'): AppDefinition {
+  const app = getApps(locale).find((candidate) => candidate.slug === slug);
   if (!app) throw new Error(`Unknown app slug: ${slug}`);
   return app;
 }

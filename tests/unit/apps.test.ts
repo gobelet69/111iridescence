@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apps, getApp } from '../../src/data/apps';
+import { apps, getApp, getApps } from '../../src/data/apps';
 
 describe('macOS app catalog', () => {
   it('keeps a unique, deliberate product order', () => {
@@ -8,6 +8,18 @@ describe('macOS app catalog', () => {
       'mass-print',
     ]);
     expect(new Set(apps.map((app) => app.slug)).size).toBe(2);
+  });
+
+  it('shares product facts while localizing every editorial field', () => {
+    const english = getApp('mass-print', 'en');
+    const french = getApp('mass-print', 'fr');
+
+    expect(english.repository).toBe(french.repository);
+    expect(english.icon).toBe(french.icon);
+    expect(english.tagline).toBe('All your documents. The right order. One print run.');
+    expect(french.tagline).toBe('Tous vos documents. Le bon ordre. Une seule impression.');
+    expect(getApps('en')).toHaveLength(getApps('fr').length);
+    expect(getApps('en').every((app) => app.description && app.features.every((feature) => feature.description))).toBe(true);
   });
 
   it('describes PDF Reader from its verified repository contract', () => {
