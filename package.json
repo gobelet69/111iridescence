@@ -14,6 +14,7 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test:worker": "playwright test --config playwright.worker.config.ts",
+    "qa:i18n": "node scripts/capture-i18n-site.mjs",
     "test": "npm run check && npm run test:unit && npm run build && npm run test:e2e && npm run test:worker",
     "deploy": "npm run build && wrangler deploy",
     "sync:github": "node scripts/sync-github-projects.mjs",
