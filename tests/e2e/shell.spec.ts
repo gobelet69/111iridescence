@@ -78,3 +78,16 @@ test('uses product-ready social metadata without advertising an RSS feed', async
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', '111iridescence');
   await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute('content', /.+/);
 });
+
+test('about metadata presents the anonymous creator without exposing civil identity', async ({ page }) => {
+  await page.goto('/a-propos');
+
+  await expect(page).toHaveTitle('À propos — 111iridescence');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://111iridescence.org/a-propos');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    'Découvrez la personne derrière 111iridescence : un parcours en cybersécurité, une curiosité pour les systèmes et une manière honnête de créer avec l’IA.',
+  );
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'À propos — 111iridescence');
+  await expect(page.locator('html')).not.toContainText(/Théo|Theo|Deville/i);
+});

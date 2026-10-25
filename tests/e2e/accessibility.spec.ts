@@ -54,6 +54,21 @@ test('all internal links exposed by current public pages resolve', async ({ page
   }
 });
 
+test('the personal story remains complete without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('/a-propos');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Curieux de nature.');
+  for (const id of ['origin', 'explorations', 'ai-process', 'identity', 'principles', 'beyond', 'closing']) {
+    await expect(page.locator(`#${id}`)).toBeVisible();
+  }
+  await expect(page.getByRole('link', { name: 'Découvrir mes applications' })).toHaveAttribute('href', '/apps');
+  await expect(page.getByRole('link', { name: 'Voir mes projets sur GitHub' }))
+    .toHaveAttribute('href', 'https://github.com/gobelet69');
+  await context.close();
+});
+
 for (const viewport of [
   { width: 1440, height: 900 },
   { width: 1280, height: 800 },
