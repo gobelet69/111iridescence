@@ -2,8 +2,8 @@
 import { getRoute, type Locale, ui } from '../i18n';
 import BrandMark from './BrandMark.astro';
 
-interface Props { locale: Locale; alternatePath: string }
-const { locale, alternatePath } = Astro.props;
+interface Props { locale: Locale; currentPath: string; alternatePath: string }
+const { locale, currentPath, alternatePath } = Astro.props;
 const copy = ui(locale);
 const nav = [
   { href: getRoute(locale, 'apps'), label: copy.nav.apps },
@@ -20,9 +20,9 @@ const nav = [
           <li><a href={item.href}>{item.label}</a></li>
         ))}
         <li class="language-switch" aria-label={copy.language.label}>
-          <a data-language-link href={locale === 'en' ? Astro.url.pathname + Astro.url.search : alternatePath} lang="en" hreflang="en" aria-current={locale === 'en' ? 'page' : undefined} aria-label={copy.language.en}>EN</a>
+          <a data-language-link href={locale === 'en' ? currentPath + Astro.url.search : alternatePath} lang="en" hreflang="en" aria-current={locale === 'en' ? 'page' : undefined} aria-label={copy.language.en}>EN</a>
           <span aria-hidden="true">/</span>
-          <a data-language-link href={locale === 'fr' ? Astro.url.pathname + Astro.url.search : alternatePath} lang="fr" hreflang="fr" aria-current={locale === 'fr' ? 'page' : undefined} aria-label={copy.language.fr}>FR</a>
+          <a data-language-link href={locale === 'fr' ? currentPath + Astro.url.search : alternatePath} lang="fr" hreflang="fr" aria-current={locale === 'fr' ? 'page' : undefined} aria-label={copy.language.fr}>FR</a>
         </li>
       </ul>
     </nav>

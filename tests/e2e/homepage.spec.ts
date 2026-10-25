@@ -43,6 +43,8 @@ test('custom 404 offers the current public routes', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
   await expect(page.getByRole('main').getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
   await expect(page.getByRole('main').getByRole('link', { name: /About/ })).toHaveAttribute('href', '/about');
+  await expect(page.getByRole('link', { name: 'English' })).toHaveAttribute('href', '/404');
+  await expect(page.getByRole('link', { name: 'Français' })).toHaveAttribute('href', '/fr/404');
   await expect(page.getByRole('main')).not.toContainText('Blog');
 });
 

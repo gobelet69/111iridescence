@@ -12,11 +12,20 @@ interface Props {
   image?: string;
   locale?: Locale;
   alternatePath?: string;
+  canonicalPath?: string;
 }
 
-const { title, description, type = 'website', image, locale = 'en', alternatePath = getAlternatePath(Astro.url.pathname) } = Astro.props;
+const {
+  title,
+  description,
+  type = 'website',
+  image,
+  locale = 'en',
+  alternatePath = getAlternatePath(Astro.url.pathname),
+  canonicalPath = Astro.url.pathname,
+} = Astro.props;
 const documentTitle = title === SITE.title ? SITE.title : `${title} — ${SITE.title}`;
-const canonicalUrl = new URL(Astro.url.pathname, SITE.origin);
+const canonicalUrl = new URL(canonicalPath, SITE.origin);
 const alternateUrl = new URL(alternatePath, SITE.origin);
 if (!alternateUrl.search) alternateUrl.search = Astro.url.search;
 const englishUrl = locale === 'en' ? canonicalUrl : alternateUrl;
@@ -67,7 +76,7 @@ const shell = ui(locale);
   <body>
     <a class="skip-link" href="#contenu">{shell.skipToContent}</a>
     <div class="site-frame">
-      <SiteHeader locale={locale} alternatePath={`${alternateUrl.pathname}${alternateUrl.search}${alternateUrl.hash}`} />
+      <SiteHeader locale={locale} currentPath={canonicalPath} alternatePath={`${alternateUrl.pathname}${alternateUrl.search}${alternateUrl.hash}`} />
       <main id="contenu"><slot /></main>
       <SiteFooter locale={locale} />
     </div>

@@ -11,6 +11,7 @@ const copy = pageCopy(locale).notFound;
   title={copy.title}
   description={copy.description}
   locale={locale}
+  canonicalPath={getRoute(locale, 'notFound')}
   alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'notFound')}
 >
   <section class="not-found container">
