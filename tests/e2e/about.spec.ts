@@ -84,3 +84,23 @@ test('about page keeps all content visible with reduced motion', async ({ page }
   await expect(page.locator('#ai-process')).toContainText('L’IA fait partie du processus.');
   await expect(page.locator('#closing')).toContainText('Toujours quelque chose à explorer.');
 });
+
+test('creation process labels never overlap at tablet width', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto('/a-propos');
+
+  const labels = await page.locator('.process-label').evaluateAll((elements) => elements.map((element) => {
+    const { left, right, top, bottom } = element.getBoundingClientRect();
+    return { left, right, top, bottom };
+  }));
+
+  for (let first = 0; first < labels.length; first += 1) {
+    for (let second = first + 1; second < labels.length; second += 1) {
+      const a = labels[first];
+      const b = labels[second];
+      const overlapWidth = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+      const overlapHeight = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+      expect(overlapWidth > 0 && overlapHeight > 0).toBe(false);
+    }
+  }
+});
