@@ -1,0 +1,86 @@
+---
+const rows = [
+  '....11111...',
+  '..11.....11.',
+  '.11.......11',
+  '.........11.',
+  '.......111..',
+  '......11....',
+  '.....11.....',
+  '............',
+  '.....11.....',
+  '.....11.....',
+];
+
+const pixels = rows.flatMap((row, y) => [...row].flatMap((cell, x) => (
+  cell === '1' ? [{ x, y, tone: (x * 7 + y * 11) % 4 }] : []
+)));
+---
+
+<div class="about-signal" data-about-signal aria-hidden="true">
+  <div class="about-signal__field">
+    {pixels.map((pixel, index) => (
+      <span
+        class={`about-signal__pixel about-signal__pixel--${pixel.tone}`}
+        style={`--x:${pixel.x};--y:${pixel.y};--delay:${index % 9}`}
+      ></span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .about-signal {
+    position: relative;
+    width: min(100%, 30rem);
+    aspect-ratio: 1.08;
+    justify-self: end;
+    border: 1px solid var(--glass-line);
+    border-radius: clamp(1.5rem, 4vw, 3rem);
+    background:
+      radial-gradient(circle at 68% 28%, color-mix(in srgb, var(--coral) 16%, transparent), transparent 38%),
+      radial-gradient(circle at 24% 72%, color-mix(in srgb, var(--blue) 18%, transparent), transparent 42%),
+      color-mix(in srgb, var(--paper-strong) 74%, transparent);
+    box-shadow: 0 2rem 5rem color-mix(in srgb, var(--ink) 10%, transparent);
+    overflow: hidden;
+  }
+
+  .about-signal::before {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--ink) 18%, transparent) 1px, transparent 1.3px);
+    background-size: 12px 12px;
+    content: '';
+    mask-image: linear-gradient(to bottom right, black, transparent 88%);
+  }
+
+  .about-signal__field { position: absolute; inset: 13%; }
+
+  .about-signal__pixel {
+    --pixel-color: var(--ink);
+    position: absolute;
+    top: calc((var(--y) + 0.5) / 10 * 100%);
+    left: calc((var(--x) + 0.5) / 12 * 100%);
+    width: clamp(0.45rem, 1.1vw, 0.75rem);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 1px;
+    background: var(--pixel-color);
+    box-shadow: 0 0 1.4rem color-mix(in srgb, var(--pixel-color) 24%, transparent);
+    animation: signal-breathe 4.8s ease-in-out infinite;
+    animation-delay: calc(var(--delay) * -310ms);
+  }
+
+  .about-signal__pixel--1 { --pixel-color: var(--blue); }
+  .about-signal__pixel--2 { --pixel-color: var(--violet); }
+  .about-signal__pixel--3 { --pixel-color: var(--coral); }
+
+  @keyframes signal-breathe {
+    0%, 100% { opacity: 0.56; }
+    45% { opacity: 1; }
+    55% { opacity: 0.82; }
+  }
+
+  @media (max-width: 48rem) {
+    .about-signal { width: min(88vw, 25rem); justify-self: start; }
+  }
+</style>
