@@ -21,7 +21,7 @@ test('site worker keeps admin standalone and legacy roots removed', async ({ req
 
   const about = await request.get('/a-propos?source=legacy', { maxRedirects: 0 });
   expect(about.status()).toBe(308);
-  expect(about.headers().location).toBe('https://111iridescence.org/fr/a-propos?source=legacy');
+  expect(about.headers().location).toBe('http://127.0.0.1:8787/fr/a-propos?source=legacy');
 });
 
 test('site worker exposes the current public Mass Print DMG release', async ({ request }) => {
