@@ -1,5 +1,7 @@
 ---
 import type { AppDefinition } from '../../data/apps';
+import { getRoute, type Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
 import AppIcon from './AppIcon.astro';
 import AppScreenshot from './AppScreenshot.astro';
 import ReleaseDownload from './ReleaseDownload.astro';
@@ -7,16 +9,18 @@ import ReleaseDownload from './ReleaseDownload.astro';
 interface Props {
   app: AppDefinition;
   index: number;
+  locale: Locale;
 }
 
-const { app, index } = Astro.props;
+const { app, index, locale } = Astro.props;
+const copy = pageCopy(locale).product;
 ---
 
 <article class:list={['product-chapter', `product-chapter--${app.accent}`, index % 2 === 1 && 'product-chapter--reverse']}>
   <div class="product-chapter__copy">
     <div class="product-chapter__identity">
       <AppIcon app={app} size="small" />
-      <p class="type-metadata">Application macOS · {String(index + 1).padStart(2, '0')}</p>
+      <p class="type-metadata">{copy.macApp} · {String(index + 1).padStart(2, '0')}</p>
     </div>
     <h3>{app.name}</h3>
     <p class="product-chapter__tagline type-identity">{app.tagline}</p>
@@ -25,8 +29,8 @@ const { app, index } = Astro.props;
       {app.features.slice(0, 3).map((feature) => <li>{feature.title}</li>)}
     </ul>
     <div class="product-chapter__actions">
-      <a class="button button--secondary" href={`/apps/${app.slug}`}>Découvrir</a>
-      <ReleaseDownload app={app} compact />
+      <a class="button button--secondary" href={getRoute(locale, 'product', app.slug)}>{copy.discover}</a>
+      <ReleaseDownload app={app} locale={locale} compact />
     </div>
   </div>
   <div class="product-chapter__visual">

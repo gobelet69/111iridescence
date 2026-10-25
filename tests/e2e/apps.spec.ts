@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 
 test('apps catalog presents current products and future growth', async ({ page }) => {
   await page.goto('/apps');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Apps pour macOS');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Apps for macOS');
   await expect(page.getByRole('article')).toHaveCount(2);
   await expect(page.getByRole('link', { name: /Iridescence PDF Reader/ })).toHaveAttribute('href', '/apps/iridescence-pdf-reader');
   await expect(page.getByRole('link', { name: /Mass Print/ })).toHaveAttribute('href', '/apps/mass-print');
-  await expect(page.getByRole('main')).toContainText('D’autres applications suivront');
+  await expect(page.getByRole('main')).toContainText('More applications will follow');
 });
 
 test('PDF Reader page exposes authentic chapters, metadata, and launch fallback', async ({ page }) => {
@@ -15,12 +15,12 @@ test('PDF Reader page exposes authentic chapters, metadata, and launch fallback'
   for (const id of ['overview', 'gallery', 'workspaces', 'reading', 'command-palette', 'ocr', 'download']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
-  await expect(page.getByRole('img', { name: /Fenêtre principale/ })).toHaveAttribute('src', /reader-workspace-light\.png$/);
-  await expect(page.getByText('macOS 14 ou version ultérieure', { exact: true }).first()).toBeVisible();
-  await expect(page.locator('[data-release-role="link"]').last()).toHaveText('Bientôt disponible');
+  await expect(page.getByRole('img', { name: /main window/ })).toHaveAttribute('src', /reader-workspace-light\.png$/);
+  await expect(page.getByText('macOS 14 or later', { exact: true }).first()).toBeVisible();
+  await expect(page.locator('[data-release-role="link"]').last()).toHaveText('Coming soon');
   const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
   expect(jsonLd).toContain('SoftwareApplication');
-  await expect(page.getByRole('link', { name: /Toutes les apps/ })).toHaveAttribute('href', '/apps');
+  await expect(page.getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
 });
 
 test('Mass Print page activates the real-shaped DMG download experience', async ({ page }) => {
@@ -39,11 +39,11 @@ test('Mass Print page activates the real-shaped DMG download experience', async 
   for (const id of ['overview', 'features', 'gallery', 'ordering', 'finder', 'privacy', 'download']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
-  await expect(page.getByRole('heading', { name: 'Ordre d’impression' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Print order', exact: true })).toBeVisible();
   const download = page.locator('[data-release-role="link"]').last();
-  await expect(download).toHaveText('Télécharger pour macOS');
+  await expect(download).toHaveText('Download for macOS');
   await expect(download).toHaveAttribute('href', /Mass\.Print_0\.1\.3_universal\.dmg$/);
-  await expect(page.getByText('Vos documents restent sur votre Mac')).toBeVisible();
+  await expect(page.getByText('Your documents stay on your Mac')).toBeVisible();
 });
 
 for (const slug of ['iridescence-pdf-reader', 'mass-print']) {

@@ -1,12 +1,19 @@
 ---
-import AboutSignal from '../components/about/AboutSignal.astro';
-import AppIcon from '../components/apps/AppIcon.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import aboutData from '../data/pages/about.json';
-import { apps } from '../data/apps';
-import { validateAboutPage, type AboutSection } from '../lib/about';
+import AboutSignal from '../about/AboutSignal.astro';
+import AppIcon from '../apps/AppIcon.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import aboutEn from '../../data/pages/about.en.json';
+import aboutFr from '../../data/pages/about.json';
+import { getApps } from '../../data/apps';
+import { getRoute, type Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
+import { validateAboutPage, type AboutSection } from '../../lib/about';
 
-const about = validateAboutPage(aboutData);
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const about = validateAboutPage(locale === 'fr' ? aboutFr : aboutEn);
+const copy = pageCopy(locale).about;
+const apps = getApps(locale);
 const sectionMap = new Map(about.sections.map((item) => [item.id, item]));
 const section = (id: string): AboutSection => {
   const item = sectionMap.get(id);
@@ -18,10 +25,12 @@ const explorations = ['development', 'cybersecurity', 'systems'].map(section);
 const ai = section('ai');
 const identity = section('identity');
 const closing = section('closing');
-const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorations'];
+const process = locale === 'fr'
+  ? ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorations']
+  : ['Idea', 'Experimentation', 'Prototype', 'Testing', 'Improvements'];
 ---
 
-<BaseLayout title="À propos" description={about.description}>
+<BaseLayout title={locale === 'fr' ? 'À propos' : 'About'} description={about.description} locale={locale} alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'about')}>
   <div class="about-page">
     <header class="about-hero container">
       <div class="about-hero__copy">
@@ -34,9 +43,9 @@ const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorati
 
     <section id="explorations" class="explorations-section container" aria-labelledby="explorations-title">
       <header class="section-heading">
-        <p class="type-metadata">Ce que je fais</p>
-        <h2 id="explorations-title">Trois domaines.</h2>
-        <p>Développement, cybersécurité et systèmes.</p>
+        <p class="type-metadata">{copy.domainsEyebrow}</p>
+        <h2 id="explorations-title">{copy.domainsTitle}</h2>
+        <p>{copy.domainsLead}</p>
       </header>
       <div class="exploration-list">
         {explorations.map((item, index) => (
@@ -52,11 +61,11 @@ const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorati
     <section id="ai-process" class="ai-section" aria-labelledby="ai-title">
       <div class="container ai-inner">
         <header class="ai-heading">
-          <p class="type-metadata">Créer avec l’intelligence artificielle</p>
+          <p class="type-metadata">{copy.aiEyebrow}</p>
           <h2 id="ai-title">{ai.title}</h2>
         </header>
         <div class="ai-copy"><p>{ai.body}</p></div>
-        <ol class="process-line" aria-label="Processus de création">
+        <ol class="process-line" aria-label={locale === 'fr' ? 'Processus de création' : 'Creation process'}>
           {process.map((step, index) => (
             <li>
               <span class="process-index type-metadata" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
@@ -69,7 +78,7 @@ const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorati
 
     <section id="identity" class="identity-section container" aria-labelledby="identity-title">
       <header class="identity-heading">
-        <p class="type-metadata">Pourquoi 111iridescence ?</p>
+        <p class="type-metadata">{copy.appsEyebrow}</p>
         <h2 id="identity-title">{identity.title}</h2>
         <p>{identity.body}</p>
       </header>
@@ -80,7 +89,7 @@ const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorati
             <div>
               <h3>{app.name}</h3>
               <p>{app.description}</p>
-              <a href={`/apps/${app.slug}`}>Découvrir {app.name}</a>
+              <a href={getRoute(locale, 'product', app.slug)}>{locale === 'fr' ? 'Découvrir' : 'Discover'} {app.name}</a>
             </div>
           </article>
         ))}
@@ -90,12 +99,12 @@ const process = ['Idée', 'Expérimentation', 'Prototype', 'Tests', 'Améliorati
     <section id="closing" class="closing-section" aria-labelledby="closing-title">
       <div class="container closing-inner">
         <div>
-          <p class="type-metadata">Pour continuer</p>
+          <p class="type-metadata">{copy.closingEyebrow}</p>
           <h2 id="closing-title">{closing.title}</h2>
           <p>{closing.body}</p>
         </div>
         <div class="closing-actions">
-          <a class="button button--primary" href="/apps">Découvrir mes applications</a>
+          <a class="button button--primary" href={getRoute(locale, 'apps')}>{copy.appsCta}</a>
           <a class="button button--secondary" href={about.contact.href} rel="me">{about.contact.text}</a>
         </div>
       </div>

@@ -1,14 +1,19 @@
 ---
 import { PORTAL_LINK } from '../config/site';
+import { type Locale, ui } from '../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = ui(locale);
 ---
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <span class="signature type-identity">111iridescence.</span>
-    <nav class="type-navigation" aria-label="Liens secondaires">
+    <nav class="type-navigation" aria-label={copy.footerNavigation}>
       <ul>
         <li><a href="https://github.com/gobelet69" rel="me">GitHub</a></li>
-        <li class="portal-link"><a href={PORTAL_LINK.href}>{PORTAL_LINK.label}</a></li>
+        <li class="portal-link"><a href={PORTAL_LINK.href}>{copy.portal}</a></li>
       </ul>
     </nav>
   </div>

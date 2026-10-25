@@ -1,20 +1,42 @@
 ---
-import { PUBLIC_NAV } from '../config/site';
+import { getRoute, type Locale, ui } from '../i18n';
 import BrandMark from './BrandMark.astro';
+
+interface Props { locale: Locale; alternatePath: string }
+const { locale, alternatePath } = Astro.props;
+const copy = ui(locale);
+const nav = [
+  { href: getRoute(locale, 'apps'), label: copy.nav.apps },
+  { href: getRoute(locale, 'about'), label: copy.nav.about },
+];
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <BrandMark />
-    <nav class="type-navigation" aria-label="Navigation principale">
+    <BrandMark href={getRoute(locale, 'home')} />
+    <nav class="type-navigation" aria-label={locale === 'fr' ? 'Navigation principale' : 'Main navigation'}>
       <ul>
-        {PUBLIC_NAV.map((item) => (
+        {nav.map((item) => (
           <li><a href={item.href}>{item.label}</a></li>
         ))}
+        <li class="language-switch" aria-label={copy.language.label}>
+          <a data-language-link href={locale === 'en' ? Astro.url.pathname + Astro.url.search : alternatePath} lang="en" hreflang="en" aria-current={locale === 'en' ? 'page' : undefined} aria-label={copy.language.en}>EN</a>
+          <span aria-hidden="true">/</span>
+          <a data-language-link href={locale === 'fr' ? Astro.url.pathname + Astro.url.search : alternatePath} lang="fr" hreflang="fr" aria-current={locale === 'fr' ? 'page' : undefined} aria-label={copy.language.fr}>FR</a>
+        </li>
       </ul>
     </nav>
   </div>
 </header>
+
+<script is:inline>
+  for (const link of document.querySelectorAll('[data-language-link]')) {
+    const target = new URL(link.href);
+    target.search = window.location.search;
+    target.hash = window.location.hash;
+    link.href = `${target.pathname}${target.search}${target.hash}`;
+  }
+</script>
 
 <style>
   .site-header {
@@ -40,6 +62,10 @@ import BrandMark from './BrandMark.astro';
     gap: clamp(1rem, 3vw, 2rem);
     list-style: none;
   }
+
+  .language-switch { display: inline-flex; align-items: center; gap: 0.45rem; padding-inline-start: clamp(0.25rem, 1vw, 0.8rem); border-inline-start: 1px solid var(--line); color: var(--muted); }
+  .language-switch a { text-decoration: none; }
+  .language-switch a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-underline-offset: 0.35em; }
 
   a {
     color: var(--muted);

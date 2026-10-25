@@ -1,17 +1,24 @@
 ---
 import AppIcon from '../../components/apps/AppIcon.astro';
 import AppScreenshot from '../../components/apps/AppScreenshot.astro';
-import { apps } from '../../data/apps';
+import { getApps } from '../../data/apps';
+import { getRoute, type Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const copy = pageCopy(locale).catalog;
+const apps = getApps(locale);
 ---
 
-<BaseLayout title="Apps pour macOS" description="Découvrez les applications macOS de 111iridescence : Iridescence PDF Reader et Mass Print.">
+<BaseLayout title={copy.title} description={copy.description} locale={locale} alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'apps')}>
   <header class="catalog-hero container">
-    <p class="type-metadata">111iridescence · logiciel macOS</p>
-    <h1>Apps pour macOS</h1>
-    <p>Des outils concentrés sur une tâche, dessinés pour disparaître derrière ce que vous voulez accomplir.</p>
+    <p class="type-metadata">{copy.eyebrow}</p>
+    <h1>{copy.title}</h1>
+    <p>{copy.lead}</p>
   </header>
-  <section class="catalog container" aria-label="Toutes les apps">
+  <section class="catalog container" aria-label={copy.label}>
     {apps.map((app, index) => (
       <article class:list={['catalog-card', `catalog-card--${app.accent}`]}>
         <div class="catalog-card__copy">
@@ -19,16 +26,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <p class="type-metadata">{String(index + 1).padStart(2, '0')} · {app.platform}</p>
           <h2>{app.name}</h2>
           <p>{app.description}</p>
-          <a class="button button--secondary" href={`/apps/${app.slug}`}>Découvrir {app.name}</a>
+          <a class="button button--secondary" href={getRoute(locale, 'product', app.slug)}>{copy.discover} {app.name}</a>
         </div>
         <AppScreenshot screenshot={app.primaryScreenshot} />
       </article>
     ))}
   </section>
   <aside class="catalog-future container">
-    <p class="type-metadata">À suivre</p>
-    <h2>D’autres applications suivront.</h2>
-    <p>La même exigence : une idée nette, une interface native et vos données sous votre contrôle.</p>
+    <p class="type-metadata">{copy.futureEyebrow}</p>
+    <h2>{copy.futureTitle}</h2>
+    <p>{copy.future}</p>
   </aside>
 </BaseLayout>
 

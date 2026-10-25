@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('about page presents an anonymous first-person profile', async ({ page }) => {
-  const response = await page.goto('/a-propos');
+  const response = await page.goto('/fr/a-propos');
 
   expect(response?.status()).toBe(200);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Curieux de nature.');
@@ -18,14 +18,14 @@ test('about page presents an anonymous first-person profile', async ({ page }) =
 });
 
 test('public navigation exposes the about page', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/fr/');
 
   await expect(page.getByRole('navigation', { name: 'Navigation principale' }).getByRole('link', { name: 'À propos' }))
-    .toHaveAttribute('href', '/a-propos');
+    .toHaveAttribute('href', '/fr/a-propos');
 });
 
 test('about page follows an editorial journey with a transparent creation process', async ({ page }) => {
-  await page.goto('/a-propos');
+  await page.goto('/fr/a-propos');
 
   for (const id of ['explorations', 'ai-process', 'identity', 'closing']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
@@ -46,11 +46,11 @@ test('about page follows an editorial journey with a transparent creation proces
   }
 
   await expect(page.getByRole('link', { name: 'Découvrir Iridescence PDF Reader' }))
-    .toHaveAttribute('href', '/apps/iridescence-pdf-reader');
+    .toHaveAttribute('href', '/fr/apps/iridescence-pdf-reader');
   await expect(page.getByRole('link', { name: 'Découvrir Mass Print' }))
-    .toHaveAttribute('href', '/apps/mass-print');
+    .toHaveAttribute('href', '/fr/apps/mass-print');
   await expect(page.getByRole('link', { name: 'Découvrir mes applications' }))
-    .toHaveAttribute('href', '/apps');
+    .toHaveAttribute('href', '/fr/apps');
   await expect(page.locator('[data-about-signal]')).toHaveAttribute('aria-hidden', 'true');
 });
 
@@ -63,7 +63,7 @@ for (const viewport of [
 ]) {
   test(`about page remains readable without horizontal overflow at ${viewport.width} px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/a-propos');
+    await page.goto('/fr/a-propos');
     const dimensions = await page.evaluate(() => ({
       clientWidth: document.documentElement.clientWidth,
       scrollWidth: document.documentElement.scrollWidth,
@@ -75,14 +75,14 @@ for (const viewport of [
 
 test('about page keeps all content visible with reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/a-propos');
+  await page.goto('/fr/a-propos');
   await expect(page.locator('#ai-process')).toContainText('L’IA fait partie du processus.');
   await expect(page.locator('#closing')).toContainText('La suite.');
 });
 
 test('creation process labels never overlap at tablet width', async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 1024 });
-  await page.goto('/a-propos');
+  await page.goto('/fr/a-propos');
 
   const labels = await page.locator('.process-label').evaluateAll((elements) => elements.map((element) => {
     const { left, right, top, bottom } = element.getBoundingClientRect();

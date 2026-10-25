@@ -1,15 +1,22 @@
-<div class="order-demo" aria-label="Exemple d’ordre d’impression">
+---
+import type { Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = pageCopy(locale).product;
+---
+<div class="order-demo" aria-label={copy.orderLabel}>
   <div class="order-demo__toolbar type-metadata">
-    <h3>Ordre d’impression</h3>
-    <span>4 documents</span>
+    <h3>{copy.orderLabel}</h3>
+    <span>{copy.documents}</span>
   </div>
   <ol>
-    <li><span>01</span><strong>Couverture.pdf</strong><small>1 page</small></li>
-    <li><span>02</span><strong>Rapport annuel.pdf</strong><small>24 pages</small></li>
-    <li><span>03</span><strong>Annexes.pdf</strong><small>8 pages</small></li>
-    <li><span>04</span><strong>Notes finales.txt</strong><small>2 pages</small></li>
+    <li><span>01</span><strong>{copy.cover}</strong><small>1 {copy.page}</small></li>
+    <li><span>02</span><strong>{copy.report}</strong><small>24 {copy.pages}</small></li>
+    <li><span>03</span><strong>{copy.appendices}</strong><small>8 {copy.pages}</small></li>
+    <li><span>04</span><strong>{copy.notes}</strong><small>2 {copy.pages}</small></li>
   </ol>
-  <p>Glissez pour réordonner · l’impression suit exactement cette file.</p>
+  <p>{copy.orderHelp}</p>
 </div>
 
 <style>

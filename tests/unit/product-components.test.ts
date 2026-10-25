@@ -24,7 +24,7 @@ describe('product presentation primitives', () => {
   it('keeps an unavailable release semantic until runtime discovery succeeds', async () => {
     const app = getApp('iridescence-pdf-reader');
     const container = await AstroContainer.create();
-    const html = await container.renderToString(ReleaseDownload, { props: { app } });
+    const html = await container.renderToString(ReleaseDownload, { props: { app, locale: 'fr' } });
 
     expect(html).toContain('Bientôt disponible');
     expect(html).toContain('aria-disabled="true"');
@@ -37,7 +37,7 @@ describe('product presentation primitives', () => {
   it('emits SoftwareApplication JSON-LD from the catalog', async () => {
     const app = getApp('mass-print');
     const container = await AstroContainer.create();
-    const html = await container.renderToString(ProductJsonLd, { props: { app } });
+    const html = await container.renderToString(ProductJsonLd, { props: { app, locale: 'fr' } });
     const script = html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)?.[1];
 
     expect(script).toBeTruthy();
@@ -49,6 +49,6 @@ describe('product presentation primitives', () => {
       operatingSystem: 'macOS 12.3 ou version ultérieure',
       applicationCategory: 'UtilitiesApplication',
     });
-    expect(data.url).toBe('https://111iridescence.org/apps/mass-print');
+    expect(data.url).toBe('https://111iridescence.org/fr/apps/mass-print');
   });
 });

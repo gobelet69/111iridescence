@@ -8,7 +8,7 @@ describe('product page compositions', () => {
   it('renders every required PDF Reader chapter from verified product data', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(PdfReaderProduct, {
-      props: { app: getApp('iridescence-pdf-reader') },
+      props: { app: getApp('iridescence-pdf-reader', 'fr'), locale: 'fr' },
     });
 
     expect(html.match(/<h1/g)).toHaveLength(1);
@@ -17,13 +17,13 @@ describe('product page compositions', () => {
     }
     expect(html).toContain('Apple Vision');
     expect(html).toContain('data-release-slug="iridescence-pdf-reader"');
-    expect(html).toContain('href="/apps"');
+    expect(html).toContain('href="/fr/apps"');
   });
 
   it('renders ordering, Finder, privacy and download for Mass Print', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(MassPrintProduct, {
-      props: { app: getApp('mass-print') },
+      props: { app: getApp('mass-print', 'fr'), locale: 'fr' },
     });
 
     expect(html.match(/<h1/g)).toHaveLength(1);
@@ -32,7 +32,7 @@ describe('product page compositions', () => {
     }
     expect(html).toContain('Ordre d’impression');
     expect(html).toContain('data-release-slug="mass-print"');
-    expect(html).toContain('href="/apps"');
+    expect(html).toContain('href="/fr/apps"');
   });
 
   it('keeps catalog slugs unique and route-ready', () => {

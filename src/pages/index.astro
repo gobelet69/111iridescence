@@ -2,26 +2,33 @@
 import PixelHero from '../components/PixelHero.astro';
 import ProductShowcase from '../components/apps/ProductShowcase.astro';
 import { SITE } from '../config/site';
-import { apps } from '../data/apps';
+import { getApps } from '../data/apps';
+import { getRoute, type Locale } from '../i18n';
+import { pageCopy } from '../i18n/pages';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const copy = pageCopy(locale).home;
+const apps = getApps(locale);
 ---
 
-<BaseLayout title={SITE.title} description={SITE.description}>
+<BaseLayout title={SITE.title} description={copy.description} locale={locale} alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'home')}>
   <PixelHero />
 
   <section id="apps" class="apps-section" aria-labelledby="apps-title">
     <div class="apps-transition" aria-hidden="true"></div>
     <div class="container">
       <header class="apps-heading">
-        <p class="type-metadata">Logiciels conçus ici</p>
-        <h2 id="apps-title">Mes apps</h2>
-        <p>Des outils macOS ciblés, natifs et respectueux de vos données.</p>
+        <p class="type-metadata">{copy.eyebrow}</p>
+        <h2 id="apps-title">{copy.title}</h2>
+        <p>{copy.lead}</p>
       </header>
-      {apps.map((app, index) => <ProductShowcase app={app} index={index} />)}
+      {apps.map((app, index) => <ProductShowcase app={app} index={index} locale={locale} />)}
       <div class="future-apps">
-        <p class="type-metadata">Le signal continue.</p>
-        <p>D’autres applications sont en préparation.</p>
-        <a href="/apps">Voir toutes les apps <span aria-hidden="true">→</span></a>
+        <p class="type-metadata">{copy.futureEyebrow}</p>
+        <p>{copy.future}</p>
+        <a href={getRoute(locale, 'apps')}>{copy.allApps} <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>

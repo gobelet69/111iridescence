@@ -2,6 +2,7 @@
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { SITE } from '../config/site';
+import { getAlternatePath, type Locale, ui } from '../i18n';
 import '../styles/global.css';
 
 interface Props {
@@ -9,16 +10,23 @@ interface Props {
   description: string;
   type?: 'website' | 'article';
   image?: string;
+  locale?: Locale;
+  alternatePath?: string;
 }
 
-const { title, description, type = 'website', image } = Astro.props;
+const { title, description, type = 'website', image, locale = 'en', alternatePath = getAlternatePath(Astro.url.pathname) } = Astro.props;
 const documentTitle = title === SITE.title ? SITE.title : `${title} — ${SITE.title}`;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.origin);
+const alternateUrl = new URL(alternatePath, SITE.origin);
+if (!alternateUrl.search) alternateUrl.search = Astro.url.search;
+const englishUrl = locale === 'en' ? canonicalUrl : alternateUrl;
+const frenchUrl = locale === 'fr' ? canonicalUrl : alternateUrl;
 const socialImage = image ? new URL(image, SITE.origin) : undefined;
+const shell = ui(locale);
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -26,6 +34,9 @@ const socialImage = image ? new URL(image, SITE.origin) : undefined;
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={englishUrl} />
+    <link rel="alternate" hreflang="fr" href={frenchUrl} />
+    <link rel="alternate" hreflang="x-default" href={englishUrl} />
     <link
       rel="preload"
       href="/fonts/0xProtoNerdFont-Regular.woff2"
@@ -41,7 +52,8 @@ const socialImage = image ? new URL(image, SITE.origin) : undefined;
       crossorigin="anonymous"
     />
     <meta property="og:type" content={type} />
-    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale" content={locale === 'fr' ? 'fr_FR' : 'en_US'} />
+    <meta property="og:locale:alternate" content={locale === 'fr' ? 'en_US' : 'fr_FR'} />
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
@@ -53,11 +65,11 @@ const socialImage = image ? new URL(image, SITE.origin) : undefined;
     <title>{documentTitle}</title>
   </head>
   <body>
-    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <a class="skip-link" href="#contenu">{shell.skipToContent}</a>
     <div class="site-frame">
-      <SiteHeader />
+      <SiteHeader locale={locale} alternatePath={`${alternateUrl.pathname}${alternateUrl.search}${alternateUrl.hash}`} />
       <main id="contenu"><slot /></main>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </div>
   </body>
 </html>

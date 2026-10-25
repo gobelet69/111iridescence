@@ -1,12 +1,16 @@
 ---
 import type { AppDefinition } from '../../data/apps';
+import type { Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
 
 interface Props {
   app: AppDefinition;
   compact?: boolean;
+  locale: Locale;
 }
 
-const { app, compact = false } = Astro.props;
+const { app, locale, compact = false } = Astro.props;
+const copy = pageCopy(locale).product;
 ---
 
 <div class:list={['release-download', compact && 'release-download--compact']} data-release-panel={app.slug}>
@@ -15,9 +19,9 @@ const { app, compact = false } = Astro.props;
     aria-disabled="true"
     data-release-slug={app.slug}
     data-release-role="link"
-  >Bientôt disponible</a>
+  >{copy.comingSoon}</a>
   <div class="release-download__details type-metadata" aria-live="polite">
-    <span data-release-slug={app.slug} data-release-role="version">Version détectée automatiquement</span>
+    <span data-release-slug={app.slug} data-release-role="version">{copy.autoVersion}</span>
     <span aria-hidden="true">·</span>
     <span data-release-slug={app.slug} data-release-role="format">{app.architecture}</span>
     <span aria-hidden="true">·</span>

@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-const routes = ['/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/a-propos'];
+const routes = [
+  '/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/about',
+  '/fr/', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/a-propos',
+];
 
 test('current public pages have landmarks, ordered headings, intrinsic images, and no runtime errors', async ({ page }) => {
   const errors: string[] = [];
@@ -33,7 +36,7 @@ test('current public pages have landmarks, ordered headings, intrinsic images, a
 
 test('keyboard entry exposes a high-visibility skip link', async ({ page }, testInfo) => {
   await page.goto('/');
-  const skip = page.getByRole('link', { name: 'Aller au contenu' });
+  const skip = page.getByRole('link', { name: 'Skip to content' });
   if (testInfo.project.name === 'desktop') await page.keyboard.press('Tab');
   else await skip.focus();
   await expect(skip).toBeFocused();
@@ -57,13 +60,13 @@ test('all internal links exposed by current public pages resolve', async ({ page
 test('the personal story remains complete without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('/a-propos');
+  await page.goto('/fr/a-propos');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Curieux de nature.');
   for (const id of ['explorations', 'ai-process', 'identity', 'closing']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
-  await expect(page.getByRole('link', { name: 'Découvrir mes applications' })).toHaveAttribute('href', '/apps');
+  await expect(page.getByRole('link', { name: 'Découvrir mes applications' })).toHaveAttribute('href', '/fr/apps');
   await expect(page.getByRole('link', { name: 'Voir mes projets sur GitHub' }))
     .toHaveAttribute('href', 'https://github.com/gobelet69');
   await context.close();
