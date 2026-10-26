@@ -18,6 +18,26 @@ test('homepage preserves the identity hero and makes the two macOS apps the focu
   await expect(chapters.nth(1).getByRole('img')).toHaveAttribute('src', /mass-print-main\.png$/);
   await expect(chapters.nth(0).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/iridescence-pdf-reader');
   await expect(chapters.nth(1).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/mass-print');
+  await expect(apps.getByText('Focused macOS tools that respect your data.')).toBeVisible();
+
+  const presentation = await chapters.evaluateAll((items) => items.map((item) => {
+    const iconFrame = item.querySelector<HTMLElement>('.product-chapter__icon-frame');
+    const title = item.querySelector<HTMLElement>('h3');
+    if (!iconFrame || !title) return null;
+    const frame = iconFrame.getBoundingClientRect();
+    return {
+      iconWidth: frame.width,
+      iconHeight: frame.height,
+      titleMinBlockSize: Number.parseFloat(getComputedStyle(title).minBlockSize),
+    };
+  }));
+  expect(presentation).toHaveLength(2);
+  expect(presentation.every((item) => item && item.iconWidth === item.iconHeight && item.iconWidth >= 64)).toBe(true);
+  if ((page.viewportSize()?.width ?? 0) >= 928) {
+    expect(presentation.every((item) => item && item.titleMinBlockSize > 0)).toBe(true);
+    expect(presentation[0]?.titleMinBlockSize).toBe(presentation[1]?.titleMinBlockSize);
+  }
+
   await expect(main).not.toContainText('À lire et à explorer');
   await expect(main).not.toContainText('PwdGen');
   await expect(main).not.toContainText('Blog');

@@ -39,7 +39,7 @@ test('uses the identity typeface for headings, navigation, and factual metadata'
   const displayElements = [
     page.getByRole('heading', { level: 3, name: 'Iridescence PDF Reader', exact: true }),
     page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Apps' }),
-    page.getByText('macOS application · 01', { exact: true }),
+    page.locator('.product-chapter__identity-copy').first(),
     page.getByRole('contentinfo').getByRole('link', { name: 'GitHub' }),
   ];
 

@@ -19,8 +19,13 @@ const copy = pageCopy(locale).product;
 <article class:list={['product-chapter', `product-chapter--${app.accent}`, index % 2 === 1 && 'product-chapter--reverse']}>
   <div class="product-chapter__copy">
     <div class="product-chapter__identity">
-      <AppIcon app={app} size="small" />
-      <p class="type-metadata">{copy.macApp} · {String(index + 1).padStart(2, '0')}</p>
+      <span class="product-chapter__icon-frame" aria-hidden="true">
+        <AppIcon app={app} size="small" />
+      </span>
+      <div class="product-chapter__identity-copy type-metadata">
+        <span>{String(index + 1).padStart(2, '0')}</span>
+        <p>{copy.macApp}</p>
+      </div>
     </div>
     <h3>{app.name}</h3>
     <p class="product-chapter__tagline type-identity">{app.tagline}</p>
@@ -61,16 +66,44 @@ const copy = pageCopy(locale).product;
   .product-chapter__identity {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     margin-bottom: var(--space-5);
   }
 
-  .product-chapter__identity p {
+  .product-chapter__icon-frame {
+    display: grid;
+    width: 4rem;
+    height: 4rem;
+    flex: none;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--chapter-accent) 18%, var(--glass-line));
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--paper-strong) 88%, var(--chapter-accent) 12%);
+    box-shadow: 0 0.9rem 2rem color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+
+  .product-chapter__icon-frame :global(.app-icon) {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.92rem;
+    filter: none;
+  }
+
+  .product-chapter__identity-copy {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .product-chapter__identity-copy span {
+    color: var(--chapter-accent);
+    font-size: 0.68rem;
+  }
+
+  .product-chapter__identity-copy p {
     margin: 0;
     color: var(--muted);
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
   }
 
   h3 {
@@ -78,6 +111,7 @@ const copy = pageCopy(locale).product;
     margin-bottom: var(--space-3);
     font-size: var(--step-3);
     letter-spacing: -0.055em;
+    line-height: 0.95;
   }
 
   .product-chapter__tagline {
@@ -158,6 +192,12 @@ const copy = pageCopy(locale).product;
     .product-chapter--reverse .product-chapter__visual {
       grid-row: 1;
       grid-column: 1;
+    }
+
+    h3 {
+      min-block-size: 1.9em;
+      display: flex;
+      align-items: flex-end;
     }
   }
 

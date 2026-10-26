@@ -27,7 +27,7 @@ const copy = pageCopy(locale).product;
     <span aria-hidden="true">·</span>
     <span>{app.compatibility}</span>
   </div>
-  <p hidden data-release-slug={app.slug} data-release-role="notes"></p>
+  {!compact && <p hidden data-release-slug={app.slug} data-release-role="notes"></p>}
 </div>
 
 <script>

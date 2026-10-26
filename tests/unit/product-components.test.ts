@@ -34,6 +34,17 @@ describe('product presentation primitives', () => {
     expect(html).not.toMatch(/data-release-role="link"[^>]+href=/);
   });
 
+  it('keeps release notes out of compact homepage controls', async () => {
+    const app = getApp('mass-print');
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(ReleaseDownload, {
+      props: { app, locale: 'en', compact: true },
+    });
+
+    expect(html).toContain('release-download--compact');
+    expect(html).not.toContain('data-release-role="notes"');
+  });
+
   it('emits SoftwareApplication JSON-LD from the catalog', async () => {
     const app = getApp('mass-print');
     const container = await AstroContainer.create();

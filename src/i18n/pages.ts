@@ -3,8 +3,8 @@ import type { Locale } from './index';
 const copy = {
   en: {
     home: {
-      description: '111iridescence builds focused, native macOS applications: Iridescence PDF Reader and Mass Print.',
-      eyebrow: 'Software designed here', title: 'My apps', lead: 'Focused, native macOS tools that respect your data.',
+      description: '111iridescence builds focused macOS applications: Iridescence PDF Reader and Mass Print.',
+      eyebrow: 'Software designed here', title: 'My apps', lead: 'Focused macOS tools that respect your data.',
       futureEyebrow: 'The signal continues.', future: 'More applications are in development.', allApps: 'View all apps',
     },
     catalog: {
@@ -24,8 +24,8 @@ const copy = {
   },
   fr: {
     home: {
-      description: '111iridescence conçoit des applications macOS natives, simples et rapides : Iridescence PDF Reader et Mass Print.',
-      eyebrow: 'Logiciels conçus ici', title: 'Mes apps', lead: 'Des outils macOS ciblés, natifs et respectueux de vos données.',
+      description: '111iridescence conçoit des applications macOS ciblées, simples et rapides : Iridescence PDF Reader et Mass Print.',
+      eyebrow: 'Logiciels conçus ici', title: 'Mes apps', lead: 'Des outils macOS ciblés qui respectent vos données.',
       futureEyebrow: 'Le signal continue.', future: 'D’autres applications sont en préparation.', allApps: 'Voir toutes les apps',
     },
     catalog: {
