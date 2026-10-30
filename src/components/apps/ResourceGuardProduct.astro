@@ -1,0 +1,246 @@
+---
+import type { AppDefinition } from '../../data/apps';
+import AppIcon from './AppIcon.astro';
+import AppScreenshot from './AppScreenshot.astro';
+import ProductFeatureList from './ProductFeatureList.astro';
+import ReleaseDownload from './ReleaseDownload.astro';
+import { getRoute, type Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
+
+interface Props { app: AppDefinition; locale: Locale }
+const { app, locale } = Astro.props;
+const copy = pageCopy(locale).product;
+const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, shot]));
+---
+
+<div class="product-page product-page--blue">
+  <a class="product-back type-navigation" href={getRoute(locale, 'apps')}>← {copy.allApps}</a>
+  <section id="overview" class="product-hero container" aria-labelledby="product-title">
+    <div class="product-hero__copy">
+      <AppIcon app={app} />
+      <p class="product-eyebrow type-metadata">{locale === 'fr' ? 'Utilitaire de barre des menus' : 'Menu bar utility'} · {app.platform}</p>
+      <h1 id="product-title">{app.name}</h1>
+      <p class="product-tagline type-identity">{app.tagline}</p>
+      <p class="product-lead">{app.description}</p>
+      <ReleaseDownload app={app} locale={locale} />
+    </div>
+    <AppScreenshot screenshot={app.primaryScreenshot} eager />
+  </section>
+
+  <section id="features" class="product-section container" aria-labelledby="features-title">
+    <header><p class="type-metadata">{copy.controlEyebrow}</p><h2 id="features-title">{copy.controlTitle}</h2></header>
+    <p class="product-section__lead">{app.longDescription}</p>
+    <ProductFeatureList features={app.features} />
+  </section>
+
+  <section id="gallery" class="product-section product-gallery container" aria-labelledby="gallery-title">
+    <header><p class="type-metadata">{copy.galleryEyebrow}</p><h2 id="gallery-title">{copy.galleryTitle}</h2></header>
+    <div class="product-gallery__grid">
+      {app.screenshots.map((screenshot) => <AppScreenshot screenshot={screenshot} />)}
+    </div>
+  </section>
+
+  {app.sections.map((section, index) => (
+    <section id={section.id} class:list={['product-story', index % 2 === 1 && 'product-story--reverse']} aria-labelledby={`${section.id}-title`}>
+      <div class="container product-story__inner">
+        <div class="product-story__copy">
+          <p class="type-metadata">{String(index + 1).padStart(2, '0')}</p>
+          <h2 id={`${section.id}-title`}>{section.title}</h2>
+          <p>{section.description}</p>
+        </div>
+        {section.screenshot && screenshots[section.screenshot] && <AppScreenshot screenshot={screenshots[section.screenshot]} />}
+      </div>
+    </section>
+  ))}
+
+  <section id="download" class="product-download container" aria-labelledby="download-title">
+    <AppIcon app={app} size="small" />
+    <div>
+      <p class="type-metadata">{copy.latest}</p>
+      <h2 id="download-title">{locale === 'fr' ? 'Télécharger Resource Guard' : 'Download Resource Guard'}</h2>
+      <p>{copy.detected}</p>
+    </div>
+    <ReleaseDownload app={app} locale={locale} />
+  </section>
+</div>
+
+<style>
+  .product-page {
+    --product-accent: var(--blue);
+    padding-top: var(--space-6);
+  }
+
+  .product-back {
+    display: inline-flex;
+    margin: 0 var(--space-4) var(--space-6);
+    color: var(--muted);
+    font-size: 0.82rem;
+    transition: color var(--transition-fast);
+  }
+
+  .product-back:hover {
+    color: var(--ink);
+  }
+
+  .product-hero {
+    display: grid;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
+
+  .product-hero__copy {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .product-hero__copy :global(.app-icon) {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 1.1rem;
+    box-shadow: 0 1rem 2.2rem color-mix(in srgb, var(--ink) 18%, transparent);
+  }
+
+  .product-eyebrow {
+    color: var(--product-accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    line-height: 1.05;
+  }
+
+  .product-tagline {
+    color: var(--muted);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+  }
+
+  .product-lead {
+    max-width: 48ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--step-0);
+  }
+
+  .product-section {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+    border-top: 1px solid var(--glass-line);
+  }
+
+  .product-section header {
+    margin-bottom: var(--space-5);
+  }
+
+  .product-section header .type-metadata {
+    color: var(--product-accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-section header h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  .product-section__lead {
+    max-width: 58ch;
+    margin: 0 0 var(--space-6);
+    color: var(--muted);
+    font-size: var(--step-0);
+  }
+
+  .product-gallery__grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  }
+
+  .product-story {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+    border-top: 1px solid var(--glass-line);
+  }
+
+  .product-story__inner {
+    display: grid;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .product-story__copy {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .product-story__copy .type-metadata {
+    color: var(--product-accent);
+    font-size: 0.75rem;
+  }
+
+  .product-story__copy h2 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+  }
+
+  .product-story__copy p:last-child {
+    max-width: 48ch;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .product-download {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-block: clamp(3rem, 7vw, 5rem);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius-large);
+    background: linear-gradient(135deg, var(--glass), color-mix(in srgb, var(--product-accent) 8%, var(--glass)));
+  }
+
+  .product-download :global(.app-icon) {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 0.8rem;
+  }
+
+  .product-download > div {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .product-download .type-metadata {
+    color: var(--product-accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-download h2 {
+    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+  }
+
+  .product-download p:last-child {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 54rem) {
+    .product-hero {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .product-story__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .product-story--reverse .product-story__copy {
+      order: 2;
+    }
+  }
+</style>

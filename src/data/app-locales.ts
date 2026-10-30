@@ -59,4 +59,30 @@ export const englishAppContent: Record<AppSlug, AppEditorial> = {
     ],
     seo: { title: 'Mass Print for macOS', description: 'Arrange and print multiple documents in a precise order with Finder drag and drop, sorting, and local sequential printing.', image: '/apps/mass-print/og.png' },
   },
+  'resource-guard': {
+    tagline: 'Monitor your Mac. Without draining your Mac.',
+    description: 'An ultra-lightweight menu bar utility crafted for Apple Silicon, alerting you without false alarms.',
+    longDescription: 'Keep an eye on CPU utilization, true memory pressure, and swap activity with low-level Mach/Darwin kernel APIs—zero Electron, zero background overhead.',
+    compatibility: 'macOS 13 or later',
+    architecture: 'Apple Silicon',
+    primaryScreenshot: { src: '/apps/resource-guard/resource-guard-main.png', alt: 'Resource Guard popover showing CPU usage, memory pressure, and active applications.', width: 848, height: 952 },
+    screenshots: [
+      { src: '/apps/resource-guard/resource-guard-main.png', alt: 'Resource Guard popover with metrics and process list.', width: 848, height: 952, caption: 'Granular monitoring without heavy background polling.' },
+      { src: '/apps/resource-guard/resource-guard-background.png', alt: 'Resource Guard quiet background mode.', width: 848, height: 952, caption: 'Adaptive intervals: only two Mach traps every 10 seconds.' },
+    ],
+    features: [
+      { title: '100% Native AppKit', description: 'Built in Swift using Mach/Darwin kernel APIs. Zero Electron, zero web views, zero bloat.' },
+      { title: 'Adaptive Monitoring', description: 'Low-frequency 10-second idle sampling, ramping up to detailed inspection only under sustained load.' },
+      { title: 'Intelligent Memory Pressure', description: 'Distinguishes reclaimable file cache from true RAM starvation to eliminate false alerts.' },
+      { title: 'Process Grouping', description: 'Aggregates multi-process apps like Chrome, Safari, and VS Code with zero double-counting.' },
+      { title: 'Safe Termination', description: 'Favors graceful standard termination with save dialogs and blocks killing critical macOS daemons.' },
+      { title: 'Local & Private', description: 'Zero telemetry, zero network calls, running completely self-contained on your Mac.' },
+    ],
+    sections: [
+      { id: 'adaptive', title: 'Monitoring that never bogs down your Mac', description: 'Only two lightweight Mach traps every ten seconds keep watch over your system without interrupting your flow.', screenshot: '/apps/resource-guard/resource-guard-background.png' },
+      { id: 'memory', title: 'Understand true memory pressure', description: 'macOS routinely fills RAM with reclaimable file cache. Resource Guard interprets kernel pressure events to alert you only when RAM is actually starved.', screenshot: '/apps/resource-guard/resource-guard-main.png' },
+      { id: 'safety', title: 'Manage runaway apps safely', description: 'Helper processes are grouped under their parent app. Terminate apps cleanly with standard save confirmations while essential system components stay protected.', screenshot: '/apps/resource-guard/resource-guard-main.png' },
+    ],
+    seo: { title: 'Resource Guard for macOS', description: 'Ultra-lightweight menu bar utility for macOS Apple Silicon: CPU, memory pressure, and safe app termination.', image: '/apps/resource-guard/og.png' },
+  },
 };

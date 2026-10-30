@@ -1,6 +1,7 @@
 ---
 import MassPrintProduct from '../../../components/apps/MassPrintProduct.astro';
 import PdfReaderProduct from '../../../components/apps/PdfReaderProduct.astro';
+import ResourceGuardProduct from '../../../components/apps/ResourceGuardProduct.astro';
 import ProductJsonLd from '../../../components/apps/ProductJsonLd.astro';
 import { getApps, type AppDefinition } from '../../../data/apps';
 import { getRoute } from '../../../i18n';
@@ -12,7 +13,11 @@ export function getStaticPaths() {
 
 interface Props { app: AppDefinition }
 const { app } = Astro.props;
-const Product = app.slug === 'mass-print' ? MassPrintProduct : PdfReaderProduct;
+const Product = app.slug === 'mass-print'
+  ? MassPrintProduct
+  : app.slug === 'resource-guard'
+    ? ResourceGuardProduct
+    : PdfReaderProduct;
 ---
 
 <BaseLayout title={app.seo.title} description={app.seo.description} image={app.seo.image} locale="fr" alternatePath={getRoute('en', 'product', app.slug)}>

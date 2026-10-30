@@ -2,6 +2,7 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, it } from 'vitest';
 import MassPrintProduct from '../../src/components/apps/MassPrintProduct.astro';
 import PdfReaderProduct from '../../src/components/apps/PdfReaderProduct.astro';
+import ResourceGuardProduct from '../../src/components/apps/ResourceGuardProduct.astro';
 import { apps, getApp } from '../../src/data/apps';
 
 describe('product page compositions', () => {
@@ -35,8 +36,22 @@ describe('product page compositions', () => {
     expect(html).toContain('href="/fr/apps"');
   });
 
+  it('renders overview, features, gallery and download for Resource Guard', async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(ResourceGuardProduct, {
+      props: { app: getApp('resource-guard', 'fr'), locale: 'fr' },
+    });
+
+    expect(html.match(/<h1/g)).toHaveLength(1);
+    for (const id of ['overview', 'features', 'gallery', 'adaptive', 'memory', 'safety', 'download']) {
+      expect(html).toContain(`id="${id}"`);
+    }
+    expect(html).toContain('data-release-slug="resource-guard"');
+    expect(html).toContain('href="/fr/apps"');
+  });
+
   it('keeps catalog slugs unique and route-ready', () => {
-    expect(apps.map((app) => app.slug)).toEqual(['iridescence-pdf-reader', 'mass-print']);
+    expect(apps.map((app) => app.slug)).toEqual(['iridescence-pdf-reader', 'mass-print', 'resource-guard']);
     expect(new Set(apps.map((app) => app.slug)).size).toBe(apps.length);
   });
 });

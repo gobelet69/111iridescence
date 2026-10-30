@@ -1,4 +1,4 @@
-export type AppSlug = 'iridescence-pdf-reader' | 'mass-print';
+export type AppSlug = 'iridescence-pdf-reader' | 'mass-print' | 'resource-guard';
 import type { Locale } from '../i18n';
 import { englishAppContent } from './app-locales';
 export type PublicationStatus = 'available' | 'coming-soon';
@@ -187,6 +187,62 @@ const frenchApps: AppDefinition[] = [
       title: 'Mass Print pour macOS',
       description: 'Organisez et imprimez plusieurs documents dans un ordre précis avec glisser-déposer Finder, tris et impression séquentielle locale.',
       image: '/apps/mass-print/og.png',
+    },
+  },
+  {
+    slug: 'resource-guard',
+    name: 'Resource Guard',
+    shortName: 'Resource Guard',
+    tagline: 'Surveillez votre Mac. Sans consommer votre Mac.',
+    description: 'Un utilitaire de barre des menus ultra-léger pour Apple Silicon, alertant sans faire de faux positifs.',
+    longDescription: 'Gardez un œil sur l’occupation CPU, la pression mémoire réelle et le swap avec des métriques Mach/Darwin pures, sans Electron ni surcharge en arrière-plan.',
+    icon: '/apps/resource-guard/icon.png',
+    accent: 'blue',
+    platform: 'macOS',
+    compatibility: 'macOS 13 ou version ultérieure',
+    architecture: 'Apple Silicon',
+    publicationStatus: 'available',
+    repository: 'gobelet69/mac-resource-guard',
+    releasePolicy: { acceptedAssets: ['dmg'] },
+    primaryScreenshot: {
+      src: '/apps/resource-guard/resource-guard-main.png',
+      alt: 'Menu déroulant de Resource Guard affichant l’utilisation CPU, la pression mémoire et les applications actives.',
+      width: 848,
+      height: 952,
+    },
+    screenshots: [
+      {
+        src: '/apps/resource-guard/resource-guard-main.png',
+        alt: 'Menu déroulant de Resource Guard avec métriques et processus.',
+        width: 848,
+        height: 952,
+        caption: 'Surveillance granulaire sans aucun polling lourd en arrière-plan.',
+      },
+      {
+        src: '/apps/resource-guard/resource-guard-background.png',
+        alt: 'Resource Guard en mode arrière-plan discret.',
+        width: 848,
+        height: 952,
+        caption: 'Intervalles adaptatifs : seulement deux Mach traps toutes les 10 secondes.',
+      },
+    ],
+    features: [
+      { title: 'AppKit 100% natif', description: 'Écrit en Swift avec les API noyau Mach/Darwin. Zéro Electron, zéro web view, zéro surcharge.' },
+      { title: 'Surveillance adaptative', description: 'Vérification légère toutes les 10 secondes en veille, analyse fine uniquement en cas de charge soutenue.' },
+      { title: 'Pression mémoire intelligente', description: 'Distingue le cache fichier légitime de la vraie saturation mémoire pour éviter les fausses alertes.' },
+      { title: 'Regroupement multi-processus', description: 'Agrège les processus de Chrome, Safari ou VS Code sans jamais compter deux fois leur mémoire.' },
+      { title: 'Arrêt sécurisé d’applications', description: 'Privilégie la fermeture standard avec confirmation d’enregistrement et bloque l’arrêt des composants système essentiels.' },
+      { title: 'Respect total de la vie privée', description: 'Aucune donnée collectée, aucun appel réseau, fonctionnement 100% local sur votre machine.' },
+    ],
+    sections: [
+      { id: 'adaptive', title: 'Une surveillance qui ne fatigue pas votre processeur', description: 'Deux appels noyau légers toutes les dix secondes suffisent pour veiller sur le système sans perturber vos tâches.', screenshot: '/apps/resource-guard/resource-guard-background.png' },
+      { id: 'memory', title: 'Comprendre la vraie pression mémoire', description: 'macOS utilise souvent toute la mémoire disponible pour le cache. Resource Guard analyse les signaux du kernel pour n’alerter qu’en cas de réel besoin.', screenshot: '/apps/resource-guard/resource-guard-main.png' },
+      { id: 'safety', title: 'Fermer une application en toute confiance', description: 'Les processus enfants sont regroupés automatiquement. Vous quittez l’application proprement sans risque d’interrompre un service critique de macOS.', screenshot: '/apps/resource-guard/resource-guard-main.png' },
+    ],
+    seo: {
+      title: 'Resource Guard pour macOS',
+      description: 'Utilitaire de barre des menus léger pour macOS Apple Silicon : surveillance CPU, pression mémoire et arrêt sécurisé.',
+      image: '/apps/resource-guard/og.png',
     },
   },
 ];

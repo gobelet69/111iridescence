@@ -6,8 +6,9 @@ describe('macOS app catalog', () => {
     expect(apps.map((app) => app.slug)).toEqual([
       'iridescence-pdf-reader',
       'mass-print',
+      'resource-guard',
     ]);
-    expect(new Set(apps.map((app) => app.slug)).size).toBe(2);
+    expect(new Set(apps.map((app) => app.slug)).size).toBe(3);
   });
 
   it('shares product facts while localizing every editorial field', () => {
@@ -67,6 +68,26 @@ describe('macOS app catalog', () => {
       'Ordre maîtrisé',
       'Action rapide Finder',
       'Traitement local',
+    ]));
+  });
+
+  it('describes Resource Guard as an Apple Silicon menu bar utility', () => {
+    const app = getApp('resource-guard');
+
+    expect(app).toMatchObject({
+      name: 'Resource Guard',
+      repository: 'gobelet69/mac-resource-guard',
+      compatibility: 'macOS 13 ou version ultérieure',
+      architecture: 'Apple Silicon',
+      publicationStatus: 'available',
+      releasePolicy: {
+        acceptedAssets: ['dmg'],
+      },
+    });
+    expect(app.features.map((feature) => feature.title)).toEqual(expect.arrayContaining([
+      'AppKit 100% natif',
+      'Surveillance adaptative',
+      'Pression mémoire intelligente',
     ]));
   });
 

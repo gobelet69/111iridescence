@@ -71,10 +71,14 @@ function matchesPolicy(name: string, policy: AcceptedAsset): boolean {
   if (policy === 'universal-dmg') return normalized.endsWith('.dmg') && normalized.includes('universal');
   if (policy === 'dmg') {
     return normalized.endsWith('.dmg')
-      && normalized.includes('macos')
-      && (normalized.includes('arm64')
-        || normalized.includes('apple-silicon')
-        || normalized.includes('universal'));
+      && (
+        (normalized.includes('macos')
+          && (normalized.includes('arm64')
+            || normalized.includes('apple-silicon')
+            || normalized.includes('universal')))
+        || normalized.includes('resourceguard')
+        || normalized.includes('resource-guard')
+      );
   }
   return normalized.endsWith('.zip')
     && normalized.includes('macos')

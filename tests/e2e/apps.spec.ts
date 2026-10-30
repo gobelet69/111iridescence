@@ -3,9 +3,10 @@ import { expect, test } from '@playwright/test';
 test('apps catalog presents current products and future growth', async ({ page }) => {
   await page.goto('/apps');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Apps for macOS');
-  await expect(page.getByRole('article')).toHaveCount(2);
+  await expect(page.getByRole('article')).toHaveCount(3);
   await expect(page.getByRole('link', { name: /Iridescence PDF Reader/ })).toHaveAttribute('href', '/apps/iridescence-pdf-reader');
   await expect(page.getByRole('link', { name: /Mass Print/ })).toHaveAttribute('href', '/apps/mass-print');
+  await expect(page.getByRole('link', { name: /Resource Guard/ })).toHaveAttribute('href', '/apps/resource-guard');
   await expect(page.getByRole('main')).toContainText('More applications will follow');
 });
 
@@ -46,7 +47,18 @@ test('Mass Print page activates the real-shaped DMG download experience', async 
   await expect(page.getByText('Your documents stay on your Mac')).toBeVisible();
 });
 
-for (const slug of ['iridescence-pdf-reader', 'mass-print']) {
+test('Resource Guard page exposes authentic chapters, metadata, and launch fallback', async ({ page }) => {
+  await page.goto('/apps/resource-guard');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Resource Guard');
+  for (const id of ['overview', 'features', 'gallery', 'adaptive', 'memory', 'safety', 'download']) {
+    await expect(page.locator(`#${id}`)).toBeVisible();
+  }
+  await expect(page.getByRole('img', { name: /Menu déroulant|Resource Guard/i }).first()).toBeVisible();
+  await expect(page.getByText('macOS 13 or later', { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
+});
+
+for (const slug of ['iridescence-pdf-reader', 'mass-print', 'resource-guard']) {
   test(`${slug} remains within the viewport and exposes one H1`, async ({ page }) => {
     await page.goto(`/apps/${slug}`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);

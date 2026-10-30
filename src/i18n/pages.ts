@@ -3,12 +3,12 @@ import type { Locale } from './index';
 const copy = {
   en: {
     home: {
-      description: '111iridescence builds focused macOS applications: Iridescence PDF Reader and Mass Print.',
+      description: '111iridescence builds focused macOS applications: Iridescence PDF Reader, Mass Print, and Resource Guard.',
       eyebrow: 'Software designed here', title: 'My apps', lead: 'Focused macOS tools that respect your data.',
       futureEyebrow: 'The signal continues.', future: 'More applications are in development.', allApps: 'View all apps',
     },
     catalog: {
-      title: 'Apps for macOS', description: 'Discover 111iridescence macOS applications: Iridescence PDF Reader and Mass Print.',
+      title: 'Apps for macOS', description: 'Discover 111iridescence macOS applications: Iridescence PDF Reader, Mass Print, and Resource Guard.',
       eyebrow: '111iridescence · macOS software', lead: 'Focused tools designed to disappear behind what you want to accomplish.',
       label: 'All apps', discover: 'Discover', futureEyebrow: 'Coming next', futureTitle: 'More applications will follow.',
       future: 'The same standard: a clear idea, a native interface, and your data under your control.',
@@ -24,12 +24,12 @@ const copy = {
   },
   fr: {
     home: {
-      description: '111iridescence conçoit des applications macOS ciblées, simples et rapides : Iridescence PDF Reader et Mass Print.',
+      description: '111iridescence conçoit des applications macOS ciblées, simples et rapides : Iridescence PDF Reader, Mass Print et Resource Guard.',
       eyebrow: 'Logiciels conçus ici', title: 'Mes apps', lead: 'Des outils macOS ciblés qui respectent vos données.',
       futureEyebrow: 'Le signal continue.', future: 'D’autres applications sont en préparation.', allApps: 'Voir toutes les apps',
     },
     catalog: {
-      title: 'Apps pour macOS', description: 'Découvrez les applications macOS de 111iridescence : Iridescence PDF Reader et Mass Print.',
+      title: 'Apps pour macOS', description: 'Découvrez les applications macOS de 111iridescence : Iridescence PDF Reader, Mass Print et Resource Guard.',
       eyebrow: '111iridescence · logiciel macOS', lead: 'Des outils concentrés sur une tâche, dessinés pour disparaître derrière ce que vous voulez accomplir.',
       label: 'Toutes les apps', discover: 'Découvrir', futureEyebrow: 'À suivre', futureTitle: 'D’autres applications suivront.',
       future: 'La même exigence : une idée nette, une interface native et vos données sous votre contrôle.',
