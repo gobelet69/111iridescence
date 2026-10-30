@@ -192,8 +192,11 @@ function redirectHistoricalFrenchAbout(request) {
 }
 
 function releaseJson(request, payload, status = 200) {
+  const cacheControl = payload?.available === false
+    ? "public, max-age=10, s-maxage=10"
+    : "public, max-age=300, s-maxage=300";
   const headers = new Headers({
-    "Cache-Control": "public, max-age=300, s-maxage=300",
+    "Cache-Control": cacheControl,
     "Content-Type": "application/json; charset=utf-8",
     "X-Content-Type-Options": "nosniff",
   });
@@ -203,7 +206,7 @@ function releaseJson(request, payload, status = 200) {
   });
 }
 
-export async function handleReleaseRequest(request, githubFetch = fetch) {
+export async function handleReleaseRequest(request, githubFetch = fetch, env = {}) {
   if (request.method !== "GET" && request.method !== "HEAD") {
     return releaseJson(request, { error: "Method not allowed" }, 405);
   }
@@ -220,12 +223,17 @@ export async function handleReleaseRequest(request, githubFetch = fetch) {
   }
 
   try {
+    const headers = new Headers({
+      Accept: "application/vnd.github+json",
+      "User-Agent": "111iridescence.org",
+      "X-GitHub-Api-Version": "2022-11-28",
+    });
+    const token = env?.GITHUB_CONTENT_TOKEN || env?.GITHUB_TOKEN;
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
     const response = await githubFetch(`https://api.github.com/repos/${app.repository}/releases/latest`, {
-      headers: new Headers({
-        Accept: "application/vnd.github+json",
-        "User-Agent": "111iridescence.org",
-        "X-GitHub-Api-Version": "2022-11-28",
-      }),
+      headers,
     });
     if (!response.ok) return releaseJson(request, unavailableRelease(app));
     return releaseJson(request, normalizeRelease(app, await response.json()));
@@ -246,9 +254,10 @@ function responseForMethod(request, response) {
 export async function handleCachedReleaseRequest(request, options = {}) {
   const githubFetch = options.githubFetch ?? fetch;
   const cache = options.cache ?? globalThis.caches?.default;
+  const env = options.env ?? {};
 
   if (request.method !== "GET" && request.method !== "HEAD") {
-    return handleReleaseRequest(request, githubFetch);
+    return handleReleaseRequest(request, githubFetch, env);
   }
 
   const cacheUrl = new URL(request.url);
@@ -256,16 +265,25 @@ export async function handleCachedReleaseRequest(request, options = {}) {
   cacheUrl.hash = "";
   const cacheKey = new Request(cacheUrl, { method: "GET" });
 
-  if (cache) {
+  const bypassCache = request.headers.get("cache-control") === "no-cache"
+    || request.headers.get("pragma") === "no-cache";
+
+  if (cache && !bypassCache) {
     try {
       const cached = await cache.match(cacheKey);
-      if (cached) return responseForMethod(request, cached);
+      if (cached) {
+        const dateHeader = cached.headers.get("date");
+        const ageMs = dateHeader ? Date.now() - new Date(dateHeader).getTime() : 0;
+        if (!dateHeader || ageMs < 300_000) {
+          return responseForMethod(request, cached);
+        }
+      }
     } catch {
       // Release discovery must remain available if the edge cache is degraded.
     }
   }
 
-  const response = await handleReleaseRequest(new Request(request, { method: "GET" }), githubFetch);
+  const response = await handleReleaseRequest(new Request(request, { method: "GET" }), githubFetch, env);
   if (cache && response.status === 200) {
     const cacheWrite = cache.put(cacheKey, response.clone()).catch(() => undefined);
     if (typeof options.waitUntil === "function") options.waitUntil(cacheWrite);
@@ -282,6 +300,7 @@ export default {
       return handleCachedReleaseRequest(request, {
         cache: globalThis.caches?.default,
         waitUntil: (promise) => ctx.waitUntil(promise),
+        env,
       });
     }
     if (url.pathname === `${ADMIN_PREFIX}/client.js`) {
