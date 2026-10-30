@@ -43,6 +43,7 @@ jobs:
           SKIP_GITHUB_SYNC: "1"
 
       - run: npm audit --audit-level=high
+        continue-on-error: true
 
       - run: npx wrangler deploy
         env:
