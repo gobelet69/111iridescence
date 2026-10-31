@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 const routes = [
-  '/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/about',
-  '/fr/', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/a-propos',
+  '/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/about',
+  '/fr/', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/a-propos',
 ];
 
 test('current public pages have landmarks, ordered headings, intrinsic images, and no runtime errors', async ({ page }) => {
@@ -73,17 +73,23 @@ test('the personal story remains complete without JavaScript', async ({ browser 
 });
 
 for (const viewport of [
+  { width: 2560, height: 1440 },
+  { width: 1920, height: 1080 },
   { width: 1440, height: 900 },
   { width: 1280, height: 800 },
+  { width: 1024, height: 768 },
   { width: 768, height: 1024 },
+  { width: 430, height: 932 },
   { width: 390, height: 844 },
+  { width: 375, height: 667 },
+  { width: 320, height: 568 },
 ]) {
   test(`public layouts stay inside ${viewport.width}×${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     for (const route of routes) {
       await page.goto(route);
       const widths = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
-      expect(widths.scroll, route).toBeLessThanOrEqual(widths.client);
+      expect(widths.scroll, `${route} at ${viewport.width}px`).toBeLessThanOrEqual(widths.client);
     }
   });
 }

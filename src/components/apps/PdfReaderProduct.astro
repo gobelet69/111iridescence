@@ -18,23 +18,22 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   <section id="overview" class="product-hero container" aria-labelledby="product-title">
     <div class="product-hero__copy">
       <AppIcon app={app} />
-      <p class="product-eyebrow type-metadata">{copy.pdfEyebrow} · {app.platform}</p>
       <h1 id="product-title">{app.name}</h1>
-      <p class="product-tagline type-identity">{app.tagline}</p>
+      <p class="product-tagline">{app.tagline}</p>
       <p class="product-lead">{app.description}</p>
       <ReleaseDownload app={app} locale={locale} />
     </div>
     <AppScreenshot screenshot={app.primaryScreenshot} eager />
   </section>
 
-  <section class="product-section container" aria-labelledby="pdf-overview-title">
-    <header><p class="type-metadata">{copy.overviewEyebrow}</p><h2 id="pdf-overview-title">{copy.overviewTitle}</h2></header>
+  <section id="features" class="product-section container" aria-labelledby="pdf-overview-title">
+    <header><h2 id="pdf-overview-title">{copy.overviewTitle}</h2></header>
     <p class="product-section__lead">{app.longDescription}</p>
     <ProductFeatureList features={app.features} />
   </section>
 
   <section id="gallery" class="product-section product-gallery container" aria-labelledby="gallery-title">
-    <header><p class="type-metadata">{copy.galleryEyebrow}</p><h2 id="gallery-title">{copy.galleryTitle}</h2></header>
+    <header><h2 id="gallery-title">{copy.galleryTitle}</h2></header>
     <div class="product-gallery__grid">
       {app.screenshots.slice(1, 3).map((screenshot) => <AppScreenshot screenshot={screenshot} />)}
     </div>
@@ -44,7 +43,6 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
     <section id={section.id} class:list={['product-story', index % 2 === 1 && 'product-story--reverse']} aria-labelledby={`${section.id}-title`}>
       <div class="container product-story__inner">
         <div class="product-story__copy">
-          <p class="type-metadata">{String(index + 1).padStart(2, '0')}</p>
           <h2 id={`${section.id}-title`}>{section.title}</h2>
           <p>{section.description}</p>
           {section.id === 'ocr' && <p class="product-note">{copy.ocrNote}</p>}
@@ -56,7 +54,7 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
 
   <section id="download" class="product-download container" aria-labelledby="download-title">
     <AppIcon app={app} size="small" />
-    <div><p class="type-metadata">{copy.latest}</p><h2 id="download-title">{copy.downloadPdf}</h2><p>{copy.detected}</p></div>
+    <div><h2 id="download-title">{copy.downloadPdf}</h2><p>{copy.detected}</p></div>
     <ReleaseDownload app={app} locale={locale} />
   </section>
 </div>

@@ -13,7 +13,7 @@ test('apps catalog presents current products and future growth', async ({ page }
 test('PDF Reader page exposes authentic chapters, metadata, and launch fallback', async ({ page }) => {
   await page.goto('/apps/iridescence-pdf-reader');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Iridescence PDF Reader');
-  for (const id of ['overview', 'gallery', 'workspaces', 'reading', 'command-palette', 'ocr', 'download']) {
+  for (const id of ['overview', 'features', 'gallery', 'workspaces', 'reading', 'command-palette', 'ocr', 'download']) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
   await expect(page.getByRole('img', { name: /main window/ })).toHaveAttribute('src', /reader-workspace-light\.png$/);
@@ -55,6 +55,8 @@ test('Resource Guard page exposes authentic chapters, metadata, and launch fallb
   }
   await expect(page.getByRole('img', { name: /Menu déroulant|Resource Guard/i }).first()).toBeVisible();
   await expect(page.getByText('macOS 13 or later', { exact: true }).first()).toBeVisible();
+  const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
+  expect(jsonLd).toContain('SoftwareApplication');
   await expect(page.getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
 });
 

@@ -12,3 +12,7 @@ test-results/
 .superpowers/
 src/generated/*.tmp
 .worktrees/
+screenshots/
+frontend-design-pro
+.github/skills/impeccable/scripts/bin/
+

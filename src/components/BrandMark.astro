@@ -7,7 +7,28 @@ const { href = '/' } = Astro.props;
 ---
 
 <a class="brand-mark type-identity" href={href} aria-label="111iridescence.">
-  <span class="presence-dot" aria-hidden="true"></span><span>111iridescence.</span>
+  <svg class="brand-symbol" viewBox="0 0 128 128" width="22" height="22" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="bm-c1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#38BDF8"/>
+        <stop offset="100%" stop-color="#0284C7"/>
+      </linearGradient>
+      <linearGradient id="bm-c2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#818CF8"/>
+        <stop offset="100%" stop-color="#4F46E5"/>
+      </linearGradient>
+      <linearGradient id="bm-c3" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FB923C"/>
+        <stop offset="100%" stop-color="#EA580C"/>
+      </linearGradient>
+    </defs>
+    <g transform="translate(4, 2)">
+      <rect x="26" y="34" width="16" height="60" rx="6" fill="url(#bm-c1)"/>
+      <rect x="52" y="26" width="16" height="76" rx="6" fill="url(#bm-c2)"/>
+      <rect x="78" y="34" width="16" height="60" rx="6" fill="url(#bm-c3)"/>
+    </g>
+  </svg>
+  <span>111iridescence.</span>
 </a>
 
 <style>
@@ -20,13 +41,20 @@ const { href = '/' } = Astro.props;
     font-weight: 700;
     line-height: 1;
     text-decoration: none;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
   }
 
-  .presence-dot {
-    width: 0.625rem;
-    height: 0.625rem;
+  .brand-mark:hover {
+    opacity: 0.85;
+  }
+
+  .brand-symbol {
     flex: 0 0 auto;
-    border-radius: 50%;
-    background: var(--presence);
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
+    transition: transform var(--transition-fast);
+  }
+
+  .brand-mark:hover .brand-symbol {
+    transform: scale(1.08);
   }
 </style>

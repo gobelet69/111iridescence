@@ -13,14 +13,13 @@ const copy = pageCopy(locale).product;
 const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, shot]));
 ---
 
-<div class="product-page product-page--blue">
+<div class="product-page product-page--presence">
   <a class="product-back type-navigation" href={getRoute(locale, 'apps')}>← {copy.allApps}</a>
   <section id="overview" class="product-hero container" aria-labelledby="product-title">
     <div class="product-hero__copy">
       <AppIcon app={app} />
-      <p class="product-eyebrow type-metadata">{locale === 'fr' ? 'Utilitaire de barre des menus' : 'Menu bar utility'} · {app.platform}</p>
       <h1 id="product-title">{app.name}</h1>
-      <p class="product-tagline type-identity">{app.tagline}</p>
+      <p class="product-tagline">{app.tagline}</p>
       <p class="product-lead">{app.description}</p>
       <ReleaseDownload app={app} locale={locale} />
     </div>
@@ -28,13 +27,13 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   </section>
 
   <section id="features" class="product-section container" aria-labelledby="features-title">
-    <header><p class="type-metadata">{copy.controlEyebrow}</p><h2 id="features-title">{copy.controlTitle}</h2></header>
+    <header><h2 id="features-title">{copy.guardOverviewTitle}</h2></header>
     <p class="product-section__lead">{app.longDescription}</p>
     <ProductFeatureList features={app.features} />
   </section>
 
   <section id="gallery" class="product-section product-gallery container" aria-labelledby="gallery-title">
-    <header><p class="type-metadata">{copy.galleryEyebrow}</p><h2 id="gallery-title">{copy.galleryTitle}</h2></header>
+    <header><h2 id="gallery-title">{copy.guardGalleryTitle}</h2></header>
     <div class="product-gallery__grid">
       {app.screenshots.map((screenshot) => <AppScreenshot screenshot={screenshot} />)}
     </div>
@@ -44,7 +43,6 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
     <section id={section.id} class:list={['product-story', index % 2 === 1 && 'product-story--reverse']} aria-labelledby={`${section.id}-title`}>
       <div class="container product-story__inner">
         <div class="product-story__copy">
-          <p class="type-metadata">{String(index + 1).padStart(2, '0')}</p>
           <h2 id={`${section.id}-title`}>{section.title}</h2>
           <p>{section.description}</p>
         </div>
@@ -56,8 +54,7 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   <section id="download" class="product-download container" aria-labelledby="download-title">
     <AppIcon app={app} size="small" />
     <div>
-      <p class="type-metadata">{copy.latest}</p>
-      <h2 id="download-title">{locale === 'fr' ? 'Télécharger Resource Guard' : 'Download Resource Guard'}</h2>
+      <h2 id="download-title">{copy.downloadGuard}</h2>
       <p>{copy.detected}</p>
     </div>
     <ReleaseDownload app={app} locale={locale} />
@@ -66,7 +63,8 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
 
 <style>
   .product-page {
-    --product-accent: var(--blue);
+    --product-accent: var(--presence);
+    --product-accent-text: var(--presence-text);
     padding-top: var(--space-6);
   }
 
@@ -102,14 +100,15 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   }
 
   .product-eyebrow {
-    color: var(--product-accent);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    color: var(--product-accent-text);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   .product-hero h1 {
     font-size: clamp(2.4rem, 6vw, 4.4rem);
+    letter-spacing: -0.035em;
     line-height: 1.05;
   }
 
@@ -123,6 +122,7 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
     margin: 0;
     color: var(--muted);
     font-size: var(--step-0);
+    text-wrap: pretty;
   }
 
   .product-section {
@@ -135,14 +135,15 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   }
 
   .product-section header .type-metadata {
-    color: var(--product-accent);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    color: var(--product-accent-text);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   .product-section header h2 {
     font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    letter-spacing: -0.035em;
   }
 
   .product-section__lead {
@@ -150,6 +151,7 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
     margin: 0 0 var(--space-6);
     color: var(--muted);
     font-size: var(--step-0);
+    text-wrap: pretty;
   }
 
   .product-gallery__grid {
@@ -175,18 +177,20 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   }
 
   .product-story__copy .type-metadata {
-    color: var(--product-accent);
-    font-size: 0.75rem;
+    color: var(--product-accent-text);
+    font-size: 0.78rem;
   }
 
   .product-story__copy h2 {
     font-size: clamp(1.5rem, 3vw, 2.1rem);
+    letter-spacing: -0.035em;
   }
 
   .product-story__copy p:last-child {
     max-width: 48ch;
     margin: 0;
     color: var(--muted);
+    text-wrap: pretty;
   }
 
   .product-download {
@@ -214,14 +218,15 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
   }
 
   .product-download .type-metadata {
-    color: var(--product-accent);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
+    color: var(--product-accent-text);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
   .product-download h2 {
     font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+    letter-spacing: -0.035em;
   }
 
   .product-download p:last-child {

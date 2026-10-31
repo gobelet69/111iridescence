@@ -23,7 +23,9 @@ test('language selector preserves home, catalog, about and product pages', async
     ['/', '/fr/'],
     ['/apps', '/fr/apps'],
     ['/about', '/fr/a-propos'],
+    ['/apps/iridescence-pdf-reader', '/fr/apps/iridescence-pdf-reader'],
     ['/apps/mass-print', '/fr/apps/mass-print'],
+    ['/apps/resource-guard', '/fr/apps/resource-guard'],
   ]) {
     await page.goto(`${english}?source=switch`);
     const frenchLink = page.getByRole('link', { name: 'Français' });
@@ -50,7 +52,10 @@ test('product content and assistive labels are translated', async ({ page }) => 
 test('both language trees remain complete without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  for (const path of ['/', '/about', '/apps/mass-print', '/fr/', '/fr/a-propos', '/fr/apps/mass-print']) {
+  for (const path of [
+    '/', '/about', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard',
+    '/fr/', '/fr/a-propos', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard',
+  ]) {
     const response = await page.goto(path);
     expect(response?.status(), path).toBe(200);
     await expect(page.getByRole('main')).toBeVisible();

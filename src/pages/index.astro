@@ -14,21 +14,58 @@ const apps = getApps(locale);
 ---
 
 <BaseLayout title={SITE.title} description={copy.description} locale={locale} alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'home')}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${SITE.origin}/#organization`,
+        name: '111iridescence',
+        url: SITE.origin,
+        logo: `${SITE.origin}/favicon.png`,
+        description: copy.lead,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE.origin}/#website`,
+        url: SITE.origin,
+        name: '111iridescence',
+        publisher: {
+          '@id': `${SITE.origin}/#organization`,
+        },
+        inLanguage: ['en', 'fr'],
+      },
+    ],
+  })} />
   <PixelHero />
 
   <section id="apps" class="apps-section" aria-labelledby="apps-title">
     <div class="apps-transition" aria-hidden="true"></div>
     <div class="container">
       <header class="apps-heading">
-        <p class="type-metadata">{copy.eyebrow}</p>
+        <div class="studio-badge type-metadata">
+          <span class="presence-indicator" aria-hidden="true"></span>
+          <span>111iridescence Studio · Native macOS</span>
+        </div>
         <h2 id="apps-title">{copy.title}</h2>
-        <p>{copy.lead}</p>
+        <p class="apps-lead">{copy.lead}</p>
+        <nav class="app-dock-preview" aria-label={locale === 'fr' ? 'Accès direct aux applications' : 'Direct app access'}>
+          {apps.map((app) => (
+            <a href={getRoute(locale, 'product', app.slug)} class="dock-item">
+              <span class="dock-item__dot" style={`background: var(--${app.slug === 'resource-guard' ? 'presence' : app.accent});`}></span>
+              <span class="dock-item__name">{app.shortName}</span>
+              <span class="dock-item__arch type-metadata">{app.architecture}</span>
+            </a>
+          ))}
+        </nav>
       </header>
       {apps.map((app, index) => <ProductShowcase app={app} index={index} locale={locale} />)}
       <div class="future-apps">
-        <p class="type-metadata">{copy.futureEyebrow}</p>
-        <p>{copy.future}</p>
-        <a href={getRoute(locale, 'apps')}>{copy.allApps} <span aria-hidden="true">→</span></a>
+        <div class="future-apps__copy">
+          <p class="type-metadata">{copy.futureEyebrow}</p>
+          <p>{copy.future}</p>
+        </div>
+        <a class="button button--primary" href={getRoute(locale, 'apps')}>{copy.allApps} <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -40,8 +77,8 @@ const apps = getApps(locale);
     isolation: isolate;
     overflow: hidden;
     background:
-      radial-gradient(circle at 8% 22%, color-mix(in srgb, var(--violet) 12%, transparent), transparent 28rem),
-      radial-gradient(circle at 95% 68%, color-mix(in srgb, var(--blue) 13%, transparent), transparent 30rem),
+      radial-gradient(circle at 12% 20%, oklch(56% 0.18 300 / 0.08), transparent 32rem),
+      radial-gradient(circle at 92% 65%, oklch(52% 0.14 255 / 0.08), transparent 34rem),
       linear-gradient(180deg, var(--paper), var(--paper-strong) 18%, var(--paper));
   }
 
@@ -50,91 +87,184 @@ const apps = getApps(locale);
     z-index: -1;
     top: -9rem;
     left: 50%;
-    width: min(90rem, 120vw);
+    width: min(90rem, 100%);
     height: 20rem;
     transform: translateX(-50%);
-    background: radial-gradient(ellipse, color-mix(in srgb, var(--violet) 13%, transparent), transparent 68%);
-    filter: blur(2rem);
+    background: radial-gradient(ellipse, oklch(56% 0.18 300 / 0.10), transparent 68%);
+    filter: blur(2.5rem);
     pointer-events: none;
   }
 
   .apps-heading {
     display: grid;
-    padding-top: clamp(5rem, 11vw, 9rem);
-    padding-bottom: clamp(2rem, 5vw, 4rem);
+    padding-top: clamp(4.5rem, 9vw, 8rem);
+    padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .apps-heading > * {
     margin: 0;
   }
 
-  .apps-heading > .type-metadata {
-    color: var(--violet);
-    font-size: 0.75rem;
+  .studio-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    background: var(--glass);
+    border: 1px solid var(--glass-line);
+    color: var(--violet-text);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.09em;
+    width: fit-content;
+  }
+
+  .presence-indicator {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--presence);
+    box-shadow: 0 0 8px var(--presence);
   }
 
   .apps-heading h2 {
-    font-size: clamp(3.5rem, 10vw, 8rem);
-    letter-spacing: -0.07em;
+    font-size: clamp(3rem, 7.5vw, 6rem);
+    letter-spacing: -0.035em;
+    line-height: 1.05;
   }
 
-  .apps-heading > p:last-child {
-    max-width: 40ch;
+  .apps-lead {
+    max-width: 44ch;
     color: var(--muted);
     font-size: var(--step-1);
+    line-height: 1.5;
+  }
+
+  .app-dock-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: var(--space-4);
+  }
+
+  .dock-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--paper-strong);
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 0.84rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .dock-item:hover {
+    transform: translateY(-1px);
+    border-color: var(--violet);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .dock-item__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+  }
+
+  .dock-item__arch {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 500;
   }
 
   .future-apps {
     display: grid;
-    max-width: 48rem;
+    max-width: 44rem;
     margin-inline: auto;
-    padding-block: var(--space-8);
+    margin-block: clamp(4rem, 8vw, 7rem);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius-large);
+    background: var(--glass);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
     text-align: center;
+    gap: var(--space-3);
   }
 
   .future-apps p {
-    margin-bottom: var(--space-2);
+    margin: 0;
   }
 
   .future-apps .type-metadata {
-    color: var(--violet);
-    font-size: 0.75rem;
+    color: var(--violet-text);
+    font-size: 0.78rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.09em;
+    letter-spacing: 0.08em;
   }
 
   .future-apps p:not(.type-metadata) {
     color: var(--ink);
     font-family: var(--font-display);
-    font-size: var(--step-2);
+    font-size: var(--step-1);
+    font-weight: 700;
+    letter-spacing: -0.03em;
   }
 
   .future-apps a {
-    margin-top: var(--space-4);
-    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: var(--space-2);
+    justify-self: center;
+    padding: 0.55rem 1.25rem;
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius-pill);
+    background: var(--paper-strong);
+    color: var(--ink);
+    font-family: var(--font-display);
     font-size: var(--step--1);
-    text-underline-offset: 0.3em;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .future-apps a:hover {
+    transform: translateY(-1px);
+    border-color: var(--line);
+    box-shadow: var(--shadow-soft);
   }
 
   @media (min-width: 48rem) {
     .apps-heading {
-      grid-template-columns: 0.7fr 1.3fr;
+      grid-template-columns: 0.85fr 1.15fr;
+      align-items: end;
     }
 
-    .apps-heading > .type-metadata,
+    .studio-badge,
     .apps-heading h2 {
       grid-column: 1;
     }
 
-    .apps-heading > p:last-child {
-      align-self: end;
-      grid-row: 1 / span 2;
+    .apps-lead {
       grid-column: 2;
       justify-self: end;
+      text-align: right;
+    }
+
+    .app-dock-preview {
+      grid-column: 1 / -1;
     }
   }
 </style>

@@ -17,6 +17,15 @@ const {
 ---
 
 <figure class:list={['app-shot', framed && 'app-window', className]}>
+  {framed && (
+    <div class="app-window__titlebar" aria-hidden="true">
+      <div class="app-window__traffic-lights">
+        <span class="traffic-dot traffic-dot--close"></span>
+        <span class="traffic-dot traffic-dot--min"></span>
+        <span class="traffic-dot traffic-dot--zoom"></span>
+      </div>
+    </div>
+  )}
   <img
     src={screenshot.src}
     alt={screenshot.alt}
@@ -28,3 +37,42 @@ const {
   />
   {screenshot.caption && <figcaption>{screenshot.caption}</figcaption>}
 </figure>
+
+<style>
+  .app-window__titlebar {
+    display: flex;
+    align-items: center;
+    height: 1.85rem;
+    padding-inline: 0.85rem;
+    background: color-mix(in srgb, var(--paper-strong) 92%, transparent);
+    border-bottom: 1px solid var(--line-subtle);
+  }
+
+  .app-window__traffic-lights {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .traffic-dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .traffic-dot--close {
+    background: #FF5F56;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .traffic-dot--min {
+    background: #FFBD2E;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .traffic-dot--zoom {
+    background: #27C93F;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+</style>
