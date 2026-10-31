@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" fill="none" role="img" aria-label="Iridescence PDF Reader icon">
+  <title>Iridescence PDF Reader</title>
+  <defs>
+    
+    <!-- Ambient ground shadow -->
+    <filter id="squircleShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="24" flood-color="#000000" flood-opacity="0.14"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+
+    <!-- Internal element soft shadow -->
+    <filter id="elementShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000000" flood-opacity="0.10"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+
+    <!-- Clean porcelain surface gradient (Apple natural daylight) -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EDF2F7"/>
+    </linearGradient>
+
+    <!-- Subtle specular top rim highlight -->
+    <linearGradient id="topRim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="80%" stop-color="#CBD5E1" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#94A3B8" stop-opacity="0.4"/>
+    </linearGradient>
+
+    <!-- Primary Accent Gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      
+    <stop offset="0%" stop-color="#3B82F6"/>
+    <stop offset="100%" stop-color="#1D4ED8"/>
+  
+    </linearGradient>
+  
+    <!-- Document Page Shadow -->
+    <filter id="pageShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000000" flood-opacity="0.10"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bgGrad)" filter="url(#squircleShadow)"/>
+<rect x="101" y="101" width="822" height="822" rx="184" stroke="url(#topRim)" stroke-width="2" fill="none"/>
+
+  <!-- Physical Document Sheet (White Card) -->
+  <g filter="url(#pageShadow)">
+    <!-- Document Page with folded corner: width 520, height 620, centered at (512, 512) -->
+    <!-- Page bounds: x from 252 to 772, y from 202 to 822. Fold corner at top right: 100x100 -->
+    <!-- Main page contour: (252, 232) rx=24 ... top right goes from (672, 202) to (772, 302) -->
+    <path d="M 276 202 L 672 202 L 772 302 L 772 798 C 772 811 761 822 748 822 L 276 822 C 263 822 252 811 252 798 L 252 226 C 252 213 263 202 276 202 Z" fill="#FFFFFF"/>
+    <!-- Page 1px border -->
+    <path d="M 276 202 L 672 202 L 772 302 L 772 798 C 772 811 761 822 748 822 L 276 822 C 263 822 252 811 252 798 L 252 226 C 252 213 263 202 276 202 Z" stroke="rgba(0,0,0,0.06)" stroke-width="2" fill="none"/>
+    
+    <!-- Folded Corner Flap -->
+    <path d="M 672 202 L 672 286 C 672 295 679 302 688 302 L 772 302 Z" fill="#E2E8F0"/>
+    <path d="M 672 202 L 672 286 C 672 295 679 302 688 302 L 772 302 Z" stroke="rgba(0,0,0,0.06)" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- Distinctive Left Reading Guide / Folio Ribbon (Azure Blue) -->
+  <!-- Vertical accent track: x from 292 to 324 (w=32), y from 260 to 764 (h=504), rx=10 -->
+  <rect x="296" y="260" width="32" height="504" rx="10" fill="url(#accentGrad)"/>
+
+  <!-- Document Hierarchy Bars (Structured Reading Metaphor) -->
+  <!-- Header Bar -->
+  <rect x="360" y="340" width="280" height="28" rx="8" fill="#1E293B"/>
+  <!-- Subheading Bar -->
+  <rect x="360" y="396" width="340" height="18" rx="6" fill="#64748B"/>
+  <!-- Paragraph lines -->
+  <rect x="360" y="444" width="340" height="12" rx="5" fill="#94A3B8"/>
+  <rect x="360" y="474" width="310" height="12" rx="5" fill="#CBD5E1"/>
+  <rect x="360" y="504" width="340" height="12" rx="5" fill="#CBD5E1"/>
+  <rect x="360" y="534" width="260" height="12" rx="5" fill="#CBD5E1"/>
+
+  <!-- Lower Section Block -->
+  <rect x="360" y="600" width="220" height="20" rx="7" fill="#1E293B"/>
+  <rect x="360" y="642" width="340" height="12" rx="5" fill="#94A3B8"/>
+  <rect x="360" y="672" width="320" height="12" rx="5" fill="#CBD5E1"/>
+  <rect x="360" y="702" width="280" height="12" rx="5" fill="#CBD5E1"/>
+</svg>

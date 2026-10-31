@@ -7,26 +7,10 @@ const { href = '/' } = Astro.props;
 ---
 
 <a class="brand-mark type-identity" href={href} aria-label="111iridescence.">
-  <svg class="brand-symbol" viewBox="0 0 128 128" width="22" height="22" fill="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="bm-c1" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#38BDF8"/>
-        <stop offset="100%" stop-color="#0284C7"/>
-      </linearGradient>
-      <linearGradient id="bm-c2" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#818CF8"/>
-        <stop offset="100%" stop-color="#4F46E5"/>
-      </linearGradient>
-      <linearGradient id="bm-c3" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#FB923C"/>
-        <stop offset="100%" stop-color="#EA580C"/>
-      </linearGradient>
-    </defs>
-    <g transform="translate(4, 2)">
-      <rect x="26" y="34" width="16" height="60" rx="6" fill="url(#bm-c1)"/>
-      <rect x="52" y="26" width="16" height="76" rx="6" fill="url(#bm-c2)"/>
-      <rect x="78" y="34" width="16" height="60" rx="6" fill="url(#bm-c3)"/>
-    </g>
+  <svg class="brand-symbol" viewBox="0 0 256 256" width="20" height="20" fill="none" aria-hidden="true">
+    <path d="M 74 68 L 96 68 L 96 188 L 74 188 L 74 90 L 60 104 L 60 82 Z" fill="currentColor"/>
+    <path d="M 122 68 L 144 68 L 144 188 L 122 188 L 122 90 L 108 104 L 108 82 Z" fill="currentColor"/>
+    <path d="M 170 68 L 192 68 L 192 188 L 170 188 L 170 90 L 156 104 L 156 82 Z" fill="var(--violet-text, #4F46E5)"/>
   </svg>
   <span>111iridescence.</span>
 </a>
@@ -50,7 +34,6 @@ const { href = '/' } = Astro.props;
 
   .brand-symbol {
     flex: 0 0 auto;
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
     transition: transform var(--transition-fast);
   }
 

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" fill="none" role="img" aria-label="Resource Guard icon">
+  <title>Resource Guard</title>
+  <defs>
+    
+    <!-- Ambient ground shadow -->
+    <filter id="squircleShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="24" flood-color="#000000" flood-opacity="0.14"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+
+    <!-- Internal element soft shadow -->
+    <filter id="elementShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000000" flood-opacity="0.10"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+
+    <!-- Clean porcelain surface gradient (Apple natural daylight) -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EDF2F7"/>
+    </linearGradient>
+
+    <!-- Subtle specular top rim highlight -->
+    <linearGradient id="topRim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="80%" stop-color="#CBD5E1" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#94A3B8" stop-opacity="0.4"/>
+    </linearGradient>
+
+    <!-- Primary Accent Gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      
+    <stop offset="0%" stop-color="#10B981"/>
+    <stop offset="100%" stop-color="#047857"/>
+  
+    </linearGradient>
+  
+    <!-- Dial Shadow -->
+    <filter id="dialShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bgGrad)" filter="url(#squircleShadow)"/>
+<rect x="101" y="101" width="822" height="822" rx="184" stroke="url(#topRim)" stroke-width="2" fill="none"/>
+
+  <!-- Architectural Instrument Outer Bezel: Center (512, 512), radius 290 -->
+  <g filter="url(#dialShadow)">
+    <circle cx="512" cy="512" r="290" fill="#FFFFFF"/>
+    <circle cx="512" cy="512" r="289" stroke="#E2E8F0" stroke-width="2" fill="none"/>
+    <circle cx="512" cy="512" r="268" fill="#F8FAFC"/>
+    <circle cx="512" cy="512" r="267" stroke="#E2E8F0" stroke-width="1.5" fill="none"/>
+  </g>
+
+  <!-- Dial Tick Marks (0° to 360° calibrated instrument) -->
+  <g stroke="#94A3B8" stroke-width="3" stroke-linecap="round">
+    <!-- 12 major cardinal & sub-cardinal ticks -->
+    <line x1="512" y1="264" x2="512" y2="280"/>
+    <line x1="512" y1="744" x2="512" y2="760"/>
+    <line x1="264" y1="512" x2="280" y2="512"/>
+    <line x1="744" y1="512" x2="760" y2="512"/>
+    <line x1="337" y1="337" x2="349" y2="349"/>
+    <line x1="687" y1="337" x2="675" y2="349"/>
+    <line x1="337" y1="687" x2="349" y2="675"/>
+    <line x1="687" y1="687" x2="675" y2="675"/>
+  </g>
+
+  <!-- Telemetry Active Arc (Emerald Green, sweeping from 225° to 45°, 270° arc) -->
+  <!-- Center (512, 512), radius = 220, stroke-width = 28 -->
+  <!-- Arc start: 135° (bottom left: 512 - 220*0.707, 512 + 220*0.707) = (356, 668) -->
+  <!-- Sweeping up over top (512, 292) to 45° (bottom right: 668, 668) -->
+  <path d="M 356 668 A 220 220 0 1 1 668 668" stroke="#E2E8F0" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <!-- Active Arc Segment (sweeping from 135° through 0° to 15°, representing ~68% system load) -->
+  <path d="M 356 668 A 220 220 0 1 1 724 455" stroke="url(#accentGrad)" stroke-width="26" stroke-linecap="round" fill="none"/>
+
+  <!-- Active Telemetry Pulse Sweep in Center -->
+  <!-- Center Instrument Screen: Circle r=140 -->
+  <circle cx="512" cy="512" r="144" fill="#111827"/>
+  <circle cx="512" cy="512" r="143" stroke="#1F2937" stroke-width="2" fill="none"/>
+
+  <!-- Live Pulse Waveform (Razor-sharp telemetry signal) -->
+  <path d="
+    M 388 512
+    L 440 512
+    L 456 462
+    L 480 572
+    L 508 432
+    L 532 582
+    L 556 482
+    L 576 522
+    L 592 512
+    L 636 512
+  " stroke="#34D399" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Indicator Status Pip -->
+  <circle cx="512" cy="626" r="6" fill="#10B981"/>
+</svg>

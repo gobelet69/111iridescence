@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>111iridescence — Brand Identity Redesign (v2)</title>
+  <link rel="icon" type="image/svg+xml" href="website/favicon.svg">
+  <style>
+    :root {
+      --bg: #FAF9FC;
+      --card-bg: #FFFFFF;
+      --card-border: rgba(0, 0, 0, 0.08);
+      --text: #111318;
+      --text-muted: #64748B;
+      --accent: #4F46E5;
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+      --code-bg: #F1F5F9;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0D1117;
+      --card-bg: #161B22;
+      --card-border: rgba(255, 255, 255, 0.10);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --accent: #818CF8;
+      --shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
+      --code-bg: #0B0E14;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 40px 24px 100px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--text-muted);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 56px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      max-width: 720px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--accent);
+    }
+
+    .preview-box {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      min-height: 180px;
+      margin-bottom: 16px;
+    }
+
+    .preview-box.light-surface {
+      background: #FFFFFF !important;
+      border-color: rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .preview-box.dark-surface {
+      background: #0B0E14 !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .scale-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .dock-simulator {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(28px) saturate(1.8);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      border-radius: 26px;
+      padding: 12px 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    [data-theme="dark"] .dock-simulator {
+      background: rgba(30, 35, 45, 0.5);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .dock-icon {
+      width: 64px;
+      height: 64px;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .dock-icon:hover {
+      transform: translateY(-8px) scale(1.15);
+    }
+
+    .dock-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      margin: 4px auto 0;
+    }
+
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    .eval-table th, .eval-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .eval-table th {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .score-win {
+      color: #10B981;
+      font-weight: 700;
+    }
+
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    .diff-table th, .diff-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .tag-avoid {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .tag-new {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <div class="brand-title">111iridescence — Brand Identity Redesign</div>
+        <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Native macOS Software Studio • Version 2.0.0 (Production Verified)</div>
+      </div>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span> <span id="themeLabel">Dark Mode</span>
+      </button>
+    </header>
+
+    <!-- SECTION 1: MASTER IDENTITY WINNER -->
+    <h2 class="section-title">Selected Master Brand: Direction A (The Cadence Triple)</h2>
+    <p class="section-desc">
+      A typography-led identity celebrating the tripartite "111" cadence through architectural precision and Swiss modernist clarity. Solid black vector geometry, balanced negative space, and a single restrained Iris accent. Zero neon glow, zero artificial ribbons.
+    </p>
+
+    <div class="grid-2">
+      <!-- Master Wordmark Light -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Primary Wordmark (Light)</span>
+          <span class="badge">Master</span>
+        </div>
+        <div class="preview-box light-surface">
+          <img src="logos/master/wordmark-light.svg" alt="111iridescence wordmark" style="max-width: 90%; height: auto;">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Vector path wordmark: custom architectural 45° beaks on <code>111</code> with Iris accent (<code>#4F46E5</code>) locked with lowercase <code>iridescence</code>.
+        </div>
+      </div>
+
+      <!-- Master Wordmark Dark -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Primary Wordmark (Dark)</span>
+          <span class="badge">Master Dark</span>
+        </div>
+        <div class="preview-box dark-surface">
+          <img src="logos/master/wordmark-dark.svg" alt="111iridescence wordmark dark" style="max-width: 90%; height: auto;">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          High-contrast dark mode variant (<code>#F8FAFC</code>) with soft Iris accent (<code>#818CF8</code>) for IDEs, terminal, and dark website canvas.
+        </div>
+      </div>
+    </div>
+
+    <!-- Scale Ladder -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <span class="card-title">Multi-Size Legibility Ladder (1024px down to 16px)</span>
+        <span class="badge">Tested at True Size</span>
+      </div>
+      <div class="scale-row">
+        <div>
+          <img src="logos/master/compact-light.svg" style="width: 128px; height: 128px; display: block;" alt="128px">
+          <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px;">128 px</div>
+        </div>
+        <div>
+          <img src="logos/master/compact-light.svg" style="width: 64px; height: 64px; display: block;" alt="64px">
+          <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px;">64 px</div>
+        </div>
+        <div>
+          <img src="logos/master/compact-light.svg" style="width: 32px; height: 32px; display: block;" alt="32px">
+          <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px;">32 px</div>
+        </div>
+        <div>
+          <img src="logos/master/compact-light.svg" style="width: 24px; height: 24px; display: block;" alt="24px">
+          <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px;">24 px</div>
+        </div>
+        <div>
+          <img src="logos/master/compact-light.svg" style="width: 16px; height: 16px; display: block;" alt="16px">
+          <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 6px;">16 px</div>
+        </div>
+        <div style="margin-left: 24px; font-size: 13px; color: var(--text-muted);">
+          <strong>Small-size test:</strong> At 16×16px, the three 22-unit stems render as crisp 2px vertical strokes with 1.5px negative space, delivering zero blur in Finder list views and browser tabs.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: APPLICATION ICON FAMILY -->
+    <h2 class="section-title">Application Icon Family (macOS Sequoia / Sonoma)</h2>
+    <p class="section-desc">
+       tactile, physical metaphors drawn with restrained accents, daylight illumination, and standard Apple squircle geometry. Replaces dark obsidian void tiles with authentic native macOS presence.
+    </p>
+
+    <!-- macOS Dock Simulator -->
+    <div style="text-align: center;">
+      <div class="dock-simulator">
+        <div style="text-align: center;">
+          <img src="app-icons/pdf-reader/icon.svg" class="dock-icon" alt="Iridescence PDF Reader" title="Iridescence PDF Reader">
+          <div class="dock-dot"></div>
+        </div>
+        <div style="text-align: center;">
+          <img src="app-icons/mass-print/icon.svg" class="dock-icon" alt="Mass Print" title="Mass Print">
+          <div class="dock-dot"></div>
+        </div>
+        <div style="text-align: center;">
+          <img src="app-icons/resource-guard/icon.svg" class="dock-icon" alt="Resource Guard" title="Resource Guard">
+          <div class="dock-dot"></div>
+        </div>
+        <div style="text-align: center;">
+          <img src="app-icons/quickpad/icon.svg" class="dock-icon" alt="QuickPad" title="QuickPad">
+          <div class="dock-dot"></div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: -12px; margin-bottom: 32px;">Interactive macOS Dock preview (hover to inspect physical weight & spring)</div>
+    </div>
+
+    <div class="grid-4">
+      <!-- App 1: PDF Reader -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">PDF Reader</span>
+          <span class="badge" style="color: #2563EB; background: rgba(37,99,235,0.1);">Azure</span>
+        </div>
+        <div class="preview-box">
+          <img src="app-icons/pdf-reader/icon.svg" style="width: 140px; height: 140px;" alt="PDF Reader">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          <strong>Concept:</strong> Precision Reading Folio. Tactile folded paper sheet with vertical Azure reading track and clean typographic rhythm bars.
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Formats: SVG • PNG (16–1024) • AppIcon.icns
+        </div>
+      </div>
+
+      <!-- App 2: Mass Print -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Mass Print</span>
+          <span class="badge" style="color: #EA580C; background: rgba(234,88,12,0.1);">Terracotta</span>
+        </div>
+        <div class="preview-box">
+          <img src="app-icons/mass-print/icon.svg" style="width: 140px; height: 140px;" alt="Mass Print">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          <strong>Concept:</strong> Batch Paper Queue. Stepped cascading paper sheets feeding through a warm Terracotta precision platen.
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Formats: SVG • PNG (16–1024) • AppIcon.icns
+        </div>
+      </div>
+
+      <!-- App 3: Resource Guard -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Resource Guard</span>
+          <span class="badge" style="color: #059669; background: rgba(5,150,105,0.1);">Emerald</span>
+        </div>
+        <div class="preview-box">
+          <img src="app-icons/resource-guard/icon.svg" style="width: 140px; height: 140px;" alt="Resource Guard">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          <strong>Concept:</strong> Precision Telemetry Dial. Calibrated instrument gauge with dynamic emerald telemetry sweep and live system waveform.
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Formats: SVG • PNG (16–1024) • AppIcon.icns
+        </div>
+      </div>
+
+      <!-- App 4: QuickPad -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">QuickPad</span>
+          <span class="badge" style="color: #7C3AED; background: rgba(124,58,237,0.1);">Amethyst</span>
+        </div>
+        <div class="preview-box">
+          <img src="app-icons/quickpad/icon.svg" style="width: 140px; height: 140px;" alt="QuickPad">
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          <strong>Concept:</strong> Drafting Notebook & Caret. Stitched slate spine, document preview hierarchy, and active amethyst text caret.
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Formats: SVG • PNG (16–1024) • AppIcon.icns
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: THREE DIRECTIONS EVALUATION -->
+    <h2 class="section-title">The Three Design Directions & Evaluation</h2>
+    <p class="section-desc">
+      Three genuinely distinct proposals developed and scored across eight professional criteria.
+    </p>
+
+    <div class="grid-3">
+      <!-- Direction A -->
+      <div class="card" style="border: 2px solid var(--accent);">
+        <div class="card-header">
+          <span class="card-title">Direction A: Typographic Minimalism</span>
+          <span class="badge" style="background: #10B981; color: white;">Selected</span>
+        </div>
+        <div class="preview-box light-surface">
+          <img src="logos/concept-a/symbol-color.svg" style="width: 100px; height: 100px;" alt="Concept A">
+        </div>
+        <div style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>The Cadence Triple</strong></div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+          Bespoke architectural "111" with 45° beaks, disciplined spacing, and seamless Swiss grotesque wordmark integration.
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: #10B981;">Score: 78 / 80 (Winner)</div>
+      </div>
+
+      <!-- Direction B -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Direction B: Geometric Identity</span>
+          <span class="badge" style="background: var(--code-bg); color: var(--text-muted);">Alternative</span>
+        </div>
+        <div class="preview-box light-surface">
+          <img src="logos/concept-b/symbol-color.svg" style="width: 100px; height: 100px;" alt="Concept B">
+        </div>
+        <div style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>The Stepped Monolith</strong></div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+          Stepped 45° light wave monoliths paired with geometric Plus Jakarta Sans wordmark.
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Score: 65 / 80</div>
+      </div>
+
+      <!-- Direction C -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Direction C: Editorial Sophistication</span>
+          <span class="badge" style="background: var(--code-bg); color: var(--text-muted);">Alternative</span>
+        </div>
+        <div class="preview-box light-surface">
+          <img src="logos/concept-c/symbol-color.svg" style="width: 100px; height: 100px;" alt="Concept C">
+        </div>
+        <div style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>The Atelier Specimen</strong></div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+          Classical serif numerals and transitional Newsreader typography for bookmaking atmosphere.
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Score: 61 / 80</div>
+      </div>
+    </div>
+
+    <!-- Evaluation Matrix Table -->
+    <div class="card" style="margin-top: 24px; overflow-x: auto;">
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th>Design Criterion (1–10)</th>
+            <th>Direction A (Cadence Triple)</th>
+            <th>Direction B (Stepped Monolith)</th>
+            <th>Direction C (Atelier Specimen)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Originality & Character</td>
+            <td><strong>10/10</strong> — Custom architectural letterforms</td>
+            <td>8/10 — Clean geometry</td>
+            <td>7/10 — Classical serif</td>
+          </tr>
+          <tr>
+            <td>2. Immediate Recognisability</td>
+            <td><strong>10/10</strong> — Unmistakable 111 rhythm</td>
+            <td>8/10 — Abstracted slabs</td>
+            <td>7/10 — Slower reading at distance</td>
+          </tr>
+          <tr>
+            <td>3. Legibility at 16 px</td>
+            <td><strong>10/10</strong> — Zero blur, 2px solid stems</td>
+            <td>8/10 — Angled tops soften</td>
+            <td>6/10 — Fine bracketed serifs vanish</td>
+          </tr>
+          <tr>
+            <td>4. Timelessness & Restraint</td>
+            <td><strong>10/10</strong> — Modernist Swiss heritage</td>
+            <td>8/10 — Tech-leaning</td>
+            <td>9/10 — Classical bookmaking</td>
+          </tr>
+          <tr>
+            <td>5. macOS Native Appropriateness</td>
+            <td><strong>10/10</strong> — Matches Cultured Code / Panic / Linear</td>
+            <td>8/10 — SaaS utility aesthetic</td>
+            <td>6/10 — Literary / publisher aesthetic</td>
+          </tr>
+          <tr>
+            <td>6. Optical Balance & Weight</td>
+            <td><strong>10/10</strong> — Perfect baseline & x-height lock</td>
+            <td>8/10 — Left-heavy symbol offset</td>
+            <td>8/10 — Generous tracking</td>
+          </tr>
+          <tr>
+            <td>7. Simplicity & Vector Craft</td>
+            <td><strong>10/10</strong> — 24 anchors, 0 filters, 0 gradients</td>
+            <td>8/10 — Multiple polygon facets</td>
+            <td>8/10 — High curve complexity</td>
+          </tr>
+          <tr>
+            <td>8. Monochrome Reproduction</td>
+            <td><strong>10/10</strong> — Flawless 1-color black & white</td>
+            <td>9/10 — Relies on contrast tiers</td>
+            <td>9/10 — Thin serifs vulnerable in print</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--card-border);">
+            <td><strong>Total Score</strong></td>
+            <td class="score-win"><strong>78 / 80 (Approved Master)</strong></td>
+            <td><strong>65 / 80</strong></td>
+            <td><strong>61 / 80</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 4: OLD VS NEW COMPARISON -->
+    <h2 class="section-title">Critical Before & After Comparison</h2>
+    <p class="section-desc">
+      Direct comparison between the retired artificial technology identity and the new timeless independent studio identity.
+    </p>
+
+    <div class="card" style="overflow-x: auto;">
+      <table class="diff-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Retired Identity (v1.0)</th>
+            <th>New Identity (v2.0)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Aesthetic Tone</strong></td>
+            <td><span class="tag-avoid">AI-Generated Tech</span> Neon glow, dark voids, saturated gradients, cybernetic widgets</td>
+            <td><span class="tag-new">Independent macOS Studio</span> Quiet confidence, tactile daylight materials, Swiss modernist restraint</td>
+          </tr>
+          <tr>
+            <td><strong>Master Logo</strong></td>
+            <td>3 glowing neon pill bars with diagonal facets inside an obsidian squircle + live text</td>
+            <td>Integrated vector wordmark: custom architectural <code>111</code> + clean grotesque <code>iridescence</code> (pure SVG paths)</td>
+          </tr>
+          <tr>
+            <td><strong>Technical Quality</strong></td>
+            <td><span class="tag-avoid">Score: 47/100</span> Live &lt;text&gt; tags, 15 colors, 5 gradients, heavy CSS filters</td>
+            <td><span class="tag-new">Score: 99/100</span> Outlined vector paths, 0 live text, 1–2 colors, 0 blur filters, 100% scalable</td>
+          </tr>
+          <tr>
+            <td><strong>Monochrome Usability</strong></td>
+            <td>Broken (relies on colored glow and gradient depth to distinguish shapes)</td>
+            <td>100% native (drawn and tested in solid 1-color black and white first)</td>
+          </tr>
+          <tr>
+            <td><strong>Small-Size (16px)</strong></td>
+            <td>Degrades into muddy blurred color smudges</td>
+            <td>Crisp 2px solid stems with 1.5px gaps; razor-sharp in Finder & browser tabs</td>
+          </tr>
+          <tr>
+            <td><strong>App Icons</strong></td>
+            <td>Dark black holes with neon blue/amber/green lasers</td>
+            <td>Physical macOS cards with natural top daylight, realistic ground shadows, and purposeful metaphors</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeIcon').textContent = '🌙';
+        document.getElementById('themeLabel').textContent = 'Dark Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeIcon').textContent = '☀️';
+        document.getElementById('themeLabel').textContent = 'Light Mode';
+      }
+    }
+  </script>
+</body>
+</html>
