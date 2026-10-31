@@ -9,18 +9,21 @@ test('homepage preserves the identity hero and makes the two macOS apps the focu
   await expect(hero.getByRole('heading', { level: 1 })).toHaveText('111iridescence.');
   await expect(hero).not.toContainText('Des applications macOS pensées');
   await expect(hero).not.toContainText('le signal n’est jamais fixe.');
-  await expect(apps.getByRole('article')).toHaveCount(3);
+  await expect(apps.getByRole('article')).toHaveCount(4);
 
   const chapters = apps.getByRole('article');
   await expect(chapters.nth(0)).toContainText('Iridescence PDF Reader');
   await expect(chapters.nth(1)).toContainText('Mass Print');
   await expect(chapters.nth(2)).toContainText('Resource Guard');
+  await expect(chapters.nth(3)).toContainText('QuickPad');
   await expect(chapters.nth(0).getByRole('img')).toHaveAttribute('src', /reader-workspace-light\.png$/);
   await expect(chapters.nth(1).getByRole('img')).toHaveAttribute('src', /mass-print-main\.png$/);
   await expect(chapters.nth(2).getByRole('img')).toHaveAttribute('src', /resource-guard-main\.png$/);
+  await expect(chapters.nth(3).getByRole('img')).toHaveAttribute('src', /quickpad-main\.png$/);
   await expect(chapters.nth(0).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/iridescence-pdf-reader');
   await expect(chapters.nth(1).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/mass-print');
   await expect(chapters.nth(2).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/resource-guard');
+  await expect(chapters.nth(3).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/quickpad');
   await expect(apps.getByText('Focused macOS tools that respect your data.')).toBeVisible();
 
   const presentation = await chapters.evaluateAll((items) => items.map((item) => {
@@ -34,7 +37,7 @@ test('homepage preserves the identity hero and makes the two macOS apps the focu
       titleMinBlockSize: Number.parseFloat(getComputedStyle(title).minBlockSize),
     };
   }));
-  expect(presentation).toHaveLength(3);
+  expect(presentation).toHaveLength(4);
   expect(presentation.every((item) => item && item.iconWidth === item.iconHeight && item.iconWidth >= 64)).toBe(true);
   if ((page.viewportSize()?.width ?? 0) >= 928) {
     expect(presentation.every((item) => item && item.titleMinBlockSize > 0)).toBe(true);
@@ -76,7 +79,7 @@ test('homepage product content remains available without JavaScript', async ({ b
   const page = await context.newPage();
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('111iridescence.');
-  await expect(page.getByRole('region', { name: 'My apps' }).getByRole('article')).toHaveCount(3);
+  await expect(page.getByRole('region', { name: 'My apps' }).getByRole('article')).toHaveCount(4);
   await expect(page.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#contenu');
   await context.close();
 });

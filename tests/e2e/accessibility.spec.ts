@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 const routes = [
-  '/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/about',
-  '/fr/', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/a-propos',
+  '/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/apps/quickpad', '/about',
+  '/fr/', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/apps/quickpad', '/fr/a-propos',
 ];
 
 test('current public pages have landmarks, ordered headings, intrinsic images, and no runtime errors', async ({ page }) => {

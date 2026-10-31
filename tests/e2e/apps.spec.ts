@@ -3,10 +3,11 @@ import { expect, test } from '@playwright/test';
 test('apps catalog presents current products and future growth', async ({ page }) => {
   await page.goto('/apps');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Apps for macOS');
-  await expect(page.getByRole('article')).toHaveCount(3);
+  await expect(page.getByRole('article')).toHaveCount(4);
   await expect(page.getByRole('link', { name: /Iridescence PDF Reader/ })).toHaveAttribute('href', '/apps/iridescence-pdf-reader');
   await expect(page.getByRole('link', { name: /Mass Print/ })).toHaveAttribute('href', '/apps/mass-print');
   await expect(page.getByRole('link', { name: /Resource Guard/ })).toHaveAttribute('href', '/apps/resource-guard');
+  await expect(page.getByRole('link', { name: /QuickPad/ })).toHaveAttribute('href', '/apps/quickpad');
   await expect(page.getByRole('main')).toContainText('More applications will follow');
 });
 
@@ -60,7 +61,7 @@ test('Resource Guard page exposes authentic chapters, metadata, and launch fallb
   await expect(page.getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
 });
 
-for (const slug of ['iridescence-pdf-reader', 'mass-print', 'resource-guard']) {
+for (const slug of ['iridescence-pdf-reader', 'mass-print', 'resource-guard', 'quickpad']) {
   test(`${slug} remains within the viewport and exposes one H1`, async ({ page }) => {
     await page.goto(`/apps/${slug}`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);

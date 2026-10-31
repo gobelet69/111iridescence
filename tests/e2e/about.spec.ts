@@ -51,6 +51,8 @@ test('about page follows an editorial journey with a transparent creation proces
     .toHaveAttribute('href', '/fr/apps/mass-print');
   await expect(page.getByRole('link', { name: 'Découvrir Resource Guard' }))
     .toHaveAttribute('href', '/fr/apps/resource-guard');
+  await expect(page.getByRole('link', { name: 'Découvrir QuickPad' }))
+    .toHaveAttribute('href', '/fr/apps/quickpad');
   await expect(page.getByRole('link', { name: 'Découvrir mes applications' }))
     .toHaveAttribute('href', '/fr/apps');
   await expect(page.locator('[data-about-signal]')).toHaveAttribute('aria-hidden', 'true');

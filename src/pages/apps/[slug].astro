@@ -1,6 +1,7 @@
 ---
 import MassPrintProduct from '../../components/apps/MassPrintProduct.astro';
 import PdfReaderProduct from '../../components/apps/PdfReaderProduct.astro';
+import QuickPadProduct from '../../components/apps/QuickPadProduct.astro';
 import ResourceGuardProduct from '../../components/apps/ResourceGuardProduct.astro';
 import ProductJsonLd from '../../components/apps/ProductJsonLd.astro';
 import { getApps, type AppDefinition } from '../../data/apps';
@@ -17,7 +18,9 @@ const Product = app.slug === 'mass-print'
   ? MassPrintProduct
   : app.slug === 'resource-guard'
     ? ResourceGuardProduct
-    : PdfReaderProduct;
+    : app.slug === 'quickpad'
+      ? QuickPadProduct
+      : PdfReaderProduct;
 ---
 
 <BaseLayout title={app.seo.title} description={app.seo.description} image={app.seo.image} locale="en" alternatePath={getRoute('fr', 'product', app.slug)}>

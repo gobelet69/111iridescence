@@ -85,4 +85,30 @@ export const englishAppContent: Record<AppSlug, AppEditorial> = {
     ],
     seo: { title: 'Resource Guard for macOS', description: 'Ultra-lightweight menu bar utility for macOS Apple Silicon: CPU, memory pressure, and safe app termination.', image: '/apps/resource-guard/og.png' },
   },
+  'quickpad': {
+    tagline: 'Open instantly. Edit without friction.',
+    description: 'An ultra-fast native macOS text editor and structured file inspector, built with Swift 6 and AppKit.',
+    longDescription: 'Cold-launch in under 100 ms with an ~8 MB memory footprint, stream 100 MB logs without blocking, and inspect Markdown, JSON trees, and RFC 4180 CSV tables side by side.',
+    compatibility: 'macOS 13 or later',
+    architecture: 'Apple Silicon and Intel',
+    primaryScreenshot: { src: '/apps/quickpad/quickpad-main.png', alt: 'QuickPad main window in split view with a Markdown editor and live GitHub Flavored Markdown preview.', width: 1180, height: 760 },
+    screenshots: [
+      { src: '/apps/quickpad/quickpad-main.png', alt: 'QuickPad split view with syntax highlighting and live Markdown preview.', width: 1180, height: 760, caption: 'Native editing and real-time Markdown preview side by side.' },
+      { src: '/apps/quickpad/quickpad-json.png', alt: 'QuickPad JSON tree inspector with instant filtering and JSON path extraction.', width: 1180, height: 760, caption: 'Interactive JSON hierarchy with instant filtering and path copying.' },
+    ],
+    features: [
+      { title: 'Sub-100 ms Startup', description: 'Built in pure Swift 6 and AppKit: under 9 MB idle RAM footprint and 0% idle CPU usage.' },
+      { title: 'Structured Previews', description: 'Live GFM Markdown preview, interactive JSON tree inspector, and RFC 4180 CSV grid.' },
+      { title: '100 MB File Streaming', description: 'Open massive logs and data dumps in under 50 ms without blocking the main thread.' },
+      { title: 'Universal Text Integrity', description: 'Automatic UTF-8, UTF-16, and ISO-8859-1 detection, LF/CRLF preservation, and binary guards.' },
+      { title: 'Atomic Writes', description: 'Crash-resilient staging writes ensure destination files are never corrupted on save.' },
+      { title: '100% Local & Private', description: 'Zero telemetry, zero network requests, and zero background daemons.' },
+    ],
+    sections: [
+      { id: 'speed', title: 'Instant responsiveness at any file size', description: 'QuickPad launches immediately and streams 100 MB files in under 50 milliseconds through its native AppKit text engine.', screenshot: '/apps/quickpad/quickpad-main.png' },
+      { id: 'inspectors', title: 'Inspect Markdown, JSON, and CSV side by side', description: 'Switch seamlessly between source, split view, and dedicated inspectors to navigate JSON trees or 100,000-row CSV tables.', screenshot: '/apps/quickpad/quickpad-json.png' },
+      { id: 'integrity', title: 'Your files stay intact from the first byte to the last', description: 'Every save uses atomic file replacement while preserving original character encodings and line endings.', screenshot: '/apps/quickpad/quickpad-main.png' },
+    ],
+    seo: { title: 'QuickPad for macOS', description: 'Ultra-fast native macOS text editor in Swift 6 and AppKit with live Markdown preview, JSON/CSV inspectors, and atomic writes.', image: '/apps/quickpad/og.png' },
+  },
 };

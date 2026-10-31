@@ -1,4 +1,4 @@
-export type AppSlug = 'iridescence-pdf-reader' | 'mass-print' | 'resource-guard';
+export type AppSlug = 'iridescence-pdf-reader' | 'mass-print' | 'resource-guard' | 'quickpad';
 import type { Locale } from '../i18n';
 import { englishAppContent } from './app-locales';
 export type PublicationStatus = 'available' | 'coming-soon';
@@ -243,6 +243,62 @@ const frenchApps: AppDefinition[] = [
       title: 'Resource Guard pour macOS',
       description: 'Utilitaire de barre des menus léger pour macOS Apple Silicon : surveillance CPU, pression mémoire et arrêt sécurisé.',
       image: '/apps/resource-guard/og.png',
+    },
+  },
+  {
+    slug: 'quickpad',
+    name: 'QuickPad',
+    shortName: 'QuickPad',
+    tagline: 'Ouvrez instantanément. Éditez sans friction.',
+    description: 'Un éditeur de texte et inspecteur de fichiers structurés ultra-rapide pour macOS, écrit en Swift 6 et AppKit.',
+    longDescription: 'Lancez l’application en moins de 100 ms avec une empreinte mémoire inférieure à 9 Mo, ouvrez des fichiers de 100 Mo sans blocage et inspectez vos documents Markdown, JSON ou CSV en temps réel.',
+    icon: '/apps/quickpad/icon.png',
+    accent: 'iris',
+    platform: 'macOS',
+    compatibility: 'macOS 13 ou version ultérieure',
+    architecture: 'Apple Silicon et Intel',
+    publicationStatus: 'available',
+    repository: 'gobelet69/quickpad',
+    releasePolicy: { acceptedAssets: ['universal-dmg', 'dmg'] },
+    primaryScreenshot: {
+      src: '/apps/quickpad/quickpad-main.png',
+      alt: 'Fenêtre principale de QuickPad en vue scindée avec éditeur Markdown et aperçu GitHub Flavored Markdown en direct.',
+      width: 1180,
+      height: 760,
+    },
+    screenshots: [
+      {
+        src: '/apps/quickpad/quickpad-main.png',
+        alt: 'QuickPad en vue scindée avec coloration syntaxique et aperçu Markdown en direct.',
+        width: 1180,
+        height: 760,
+        caption: 'Édition native et aperçu Markdown temps réel côte à côte.',
+      },
+      {
+        src: '/apps/quickpad/quickpad-json.png',
+        alt: 'Inspecteur d’arborescence JSON de QuickPad avec filtrage et extraction de chemin JSON.',
+        width: 1180,
+        height: 760,
+        caption: 'Arborescence JSON interactive avec filtrage instantané et copie de chemin.',
+      },
+    ],
+    features: [
+      { title: 'Démarrage sous 100 ms', description: 'Écrit en Swift 6 et AppKit pur : moins de 9 Mo de RAM au repos et 0 % de CPU en veille.' },
+      { title: 'Aperçus structurés', description: 'Aperçu Markdown GFM en direct, arborescence JSON interactive et grille CSV RFC 4180.' },
+      { title: 'Fichiers jusqu’à 100 Mo', description: 'Ouverture en moins de 50 ms des journaux et exports volumineux sans figer l’interface.' },
+      { title: 'Intégrité universelle', description: 'Détection automatique UTF-8, UTF-16, ISO-8859-1, fins de ligne LF/CRLF et protection binaire.' },
+      { title: 'Écriture atomique', description: 'Sauvegarde résiliente via fichier de transit atomique pour éviter toute corruption.' },
+      { title: '100 % local et privé', description: 'Aucune télémétrie, aucun appel réseau, aucun démon en arrière-plan.' },
+    ],
+    sections: [
+      { id: 'speed', title: 'Une réactivité immédiate, quelle que soit la taille', description: 'QuickPad s’ouvre instantanément et charge des fichiers de 100 Mo en moins de 50 millisecondes grâce à son moteur AppKit natif.', screenshot: '/apps/quickpad/quickpad-main.png' },
+      { id: 'inspectors', title: 'Inspectez Markdown, JSON et CSV côte à côte', description: 'Basculez entre le code source, la vue scindée et l’inspecteur dédié pour explorer un arbre JSON ou une table CSV de plus de 100 000 lignes.', screenshot: '/apps/quickpad/quickpad-json.png' },
+      { id: 'integrity', title: 'Vos fichiers restent intacts, du premier au dernier octet', description: 'Chaque enregistrement passe par une écriture atomique sécurisée en préservant l’encodage et les fins de ligne d’origine.', screenshot: '/apps/quickpad/quickpad-main.png' },
+    ],
+    seo: {
+      title: 'QuickPad pour macOS',
+      description: 'Éditeur de texte macOS natif ultra-rapide en Swift 6 et AppKit avec aperçu Markdown, inspecteur JSON/CSV et écriture atomique.',
+      image: '/apps/quickpad/og.png',
     },
   },
 ];

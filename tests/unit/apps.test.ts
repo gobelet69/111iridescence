@@ -7,8 +7,9 @@ describe('macOS app catalog', () => {
       'iridescence-pdf-reader',
       'mass-print',
       'resource-guard',
+      'quickpad',
     ]);
-    expect(new Set(apps.map((app) => app.slug)).size).toBe(3);
+    expect(new Set(apps.map((app) => app.slug)).size).toBe(4);
   });
 
   it('shares product facts while localizing every editorial field', () => {
@@ -88,6 +89,26 @@ describe('macOS app catalog', () => {
       'AppKit 100% natif',
       'Surveillance adaptative',
       'Pression mémoire intelligente',
+    ]));
+  });
+
+  it('describes QuickPad as a native Swift 6 and AppKit text editor', () => {
+    const app = getApp('quickpad');
+
+    expect(app).toMatchObject({
+      name: 'QuickPad',
+      repository: 'gobelet69/quickpad',
+      compatibility: 'macOS 13 ou version ultérieure',
+      architecture: 'Apple Silicon et Intel',
+      publicationStatus: 'available',
+      releasePolicy: {
+        acceptedAssets: ['universal-dmg', 'dmg'],
+      },
+    });
+    expect(app.features.map((feature) => feature.title)).toEqual(expect.arrayContaining([
+      'Démarrage sous 100 ms',
+      'Aperçus structurés',
+      'Écriture atomique',
     ]));
   });
 
