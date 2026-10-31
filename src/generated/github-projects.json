@@ -3,12 +3,28 @@
     "repo": "gobelet69/111iridescence",
     "name": "111iridescence",
     "url": "https://github.com/gobelet69/111iridescence",
+    "description": "Site public, blog technique, projets et administration de 111iridescence.org",
+    "homepage": "https://111iridescence.org",
+    "stars": 0,
+    "language": "TypeScript",
+    "updatedAt": "2026-10-31T10:44:12Z",
+    "archived": false,
+    "fork": false,
+    "topics": [
+      "astro",
+      "personal-website"
+    ]
+  },
+  {
+    "repo": "gobelet69/111iridescence-legacy",
+    "name": "111iridescence-legacy",
+    "url": "https://github.com/gobelet69/111iridescence-legacy",
     "description": null,
     "homepage": null,
     "stars": 0,
     "language": "JavaScript",
     "updatedAt": "2026-04-18T11:15:05Z",
-    "archived": false,
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -21,7 +37,7 @@
     "stars": 0,
     "language": "C",
     "updatedAt": "2026-04-25T20:50:10Z",
-    "archived": false,
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -33,8 +49,8 @@
     "homepage": null,
     "stars": 0,
     "language": "HTML",
-    "updatedAt": "2026-05-17T16:46:40Z",
-    "archived": false,
+    "updatedAt": "2026-08-15T22:44:09Z",
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -46,8 +62,8 @@
     "homepage": null,
     "stars": 0,
     "language": "HTML",
-    "updatedAt": "2025-02-02T22:05:23Z",
-    "archived": false,
+    "updatedAt": "2026-08-15T23:20:24Z",
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -59,8 +75,8 @@
     "homepage": null,
     "stars": 0,
     "language": "JavaScript",
-    "updatedAt": "2024-03-16T10:44:13Z",
-    "archived": false,
+    "updatedAt": "2026-08-15T23:29:06Z",
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -86,48 +102,35 @@
     "stars": 0,
     "language": "JavaScript",
     "updatedAt": "2026-01-24T11:13:52Z",
-    "archived": false,
+    "archived": true,
     "fork": false,
     "topics": []
   },
   {
-    "repo": "gobelet69/courses",
-    "name": "courses",
-    "url": "https://github.com/gobelet69/courses",
-    "description": null,
+    "repo": "gobelet69/ctf-tools",
+    "name": "ctf-tools",
+    "url": "https://github.com/gobelet69/ctf-tools",
+    "description": "101 lightweight, privacy-first browser tools for Capture The Flag challenges. Static HTML, vanilla JS, local processing.",
     "homepage": null,
     "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-04-18T11:15:05Z",
+    "language": "HTML",
+    "updatedAt": "2026-09-19T13:46:27Z",
     "archived": false,
     "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/dashboard",
-    "name": "dashboard",
-    "url": "https://github.com/gobelet69/dashboard",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-04-21T07:07:45Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/DO180-apps",
-    "name": "DO180-apps",
-    "url": "https://github.com/gobelet69/DO180-apps",
-    "description": "DO180 Repository for Sample Applications",
-    "homepage": null,
-    "stars": 0,
-    "language": null,
-    "updatedAt": "2024-05-26T09:23:01Z",
-    "archived": false,
-    "fork": true,
-    "topics": []
+    "topics": [
+      "cryptography",
+      "ctf",
+      "cybersecurity",
+      "forensics",
+      "html",
+      "privacy",
+      "reverse-engineering",
+      "security-tools",
+      "static-site",
+      "steganography",
+      "vanilla-javascript",
+      "web-security"
+    ]
   },
   {
     "repo": "gobelet69/editor",
@@ -138,20 +141,7 @@
     "stars": 0,
     "language": "JavaScript",
     "updatedAt": "2026-04-25T21:52:31Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/feed",
-    "name": "feed",
-    "url": "https://github.com/gobelet69/feed",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-04-18T11:15:05Z",
-    "archived": false,
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -163,34 +153,8 @@
     "homepage": null,
     "stars": 0,
     "language": "Batchfile",
-    "updatedAt": "2024-03-12T09:21:32Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/global-auth",
-    "name": "global-auth",
-    "url": "https://github.com/gobelet69/global-auth",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-03-25T16:18:33Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/habits-tracker",
-    "name": "habits-tracker",
-    "url": "https://github.com/gobelet69/habits-tracker",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-04-18T11:40:54Z",
-    "archived": false,
+    "updatedAt": "2026-08-15T23:33:45Z",
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -202,8 +166,8 @@
     "homepage": null,
     "stars": 0,
     "language": "C",
-    "updatedAt": "2024-04-16T13:56:52Z",
-    "archived": false,
+    "updatedAt": "2026-08-15T23:25:36Z",
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -215,7 +179,20 @@
     "homepage": "https://instant-personnal-site.vercel.app",
     "stars": 0,
     "language": "HTML",
-    "updatedAt": "2026-01-18T18:15:33Z",
+    "updatedAt": "2026-08-15T23:15:15Z",
+    "archived": true,
+    "fork": false,
+    "topics": []
+  },
+  {
+    "repo": "gobelet69/iridecence-pdf-reader",
+    "name": "iridecence-pdf-reader",
+    "url": "https://github.com/gobelet69/iridecence-pdf-reader",
+    "description": "Ultra-fast, native macOS Liquid Glass PDF reader written in pure Rust & AppKit/PDFKit",
+    "homepage": null,
+    "stars": 0,
+    "language": "Swift",
+    "updatedAt": "2026-10-31T13:15:14Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -229,20 +206,7 @@
     "stars": 0,
     "language": null,
     "updatedAt": "2025-10-17T12:58:34Z",
-    "archived": false,
-    "fork": true,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/Iridescent-Fox",
-    "name": "Iridescent-Fox",
-    "url": "https://github.com/gobelet69/Iridescent-Fox",
-    "description": "My own fork of firefox, bc i'm a nerd and i'm into browser",
-    "homepage": "https://www.firefox.com/",
-    "stars": 0,
-    "language": null,
-    "updatedAt": "2025-10-19T09:07:13Z",
-    "archived": false,
+    "archived": true,
     "fork": true,
     "topics": []
   },
@@ -254,7 +218,20 @@
     "homepage": null,
     "stars": 0,
     "language": "Python",
-    "updatedAt": "2024-04-16T13:53:24Z",
+    "updatedAt": "2026-08-15T23:27:21Z",
+    "archived": true,
+    "fork": false,
+    "topics": []
+  },
+  {
+    "repo": "gobelet69/mac-resource-guard",
+    "name": "mac-resource-guard",
+    "url": "https://github.com/gobelet69/mac-resource-guard",
+    "description": "Ultra-lightweight native macOS menu bar utility for CPU & memory pressure monitoring (Swift, AppKit, Mach/Darwin APIs)",
+    "homepage": null,
+    "stars": 0,
+    "language": "Swift",
+    "updatedAt": "2026-10-31T13:15:47Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -273,29 +250,40 @@
     "topics": []
   },
   {
+    "repo": "gobelet69/Mass-Print",
+    "name": "Mass-Print",
+    "url": "https://github.com/gobelet69/Mass-Print",
+    "description": null,
+    "homepage": null,
+    "stars": 0,
+    "language": "Rust",
+    "updatedAt": "2026-10-31T13:15:26Z",
+    "archived": false,
+    "fork": false,
+    "topics": []
+  },
+  {
     "repo": "gobelet69/Osint-Framework",
     "name": "Osint-Framework",
     "url": "https://github.com/gobelet69/Osint-Framework",
-    "description": "Osint4Ever",
+    "description": null,
     "homepage": null,
     "stars": 1,
-    "language": "HTML",
-    "updatedAt": "2026-05-12T08:39:24Z",
+    "language": null,
+    "updatedAt": "2026-08-15T22:47:46Z",
     "archived": false,
     "fork": false,
-    "topics": [
-      "111-showcase"
-    ]
+    "topics": []
   },
   {
-    "repo": "gobelet69/osintwebtool",
-    "name": "osintwebtool",
-    "url": "https://github.com/gobelet69/osintwebtool",
+    "repo": "gobelet69/pdf-library-docker",
+    "name": "pdf-library-docker",
+    "url": "https://github.com/gobelet69/pdf-library-docker",
     "description": null,
     "homepage": null,
     "stars": 0,
     "language": "JavaScript",
-    "updatedAt": "2024-12-21T20:00:22Z",
+    "updatedAt": "2026-09-24T13:41:11Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -309,22 +297,130 @@
     "stars": 0,
     "language": "HTML",
     "updatedAt": "2026-01-24T14:35:46Z",
-    "archived": false,
+    "archived": true,
     "fork": false,
     "topics": []
   },
   {
-    "repo": "gobelet69/pivertpatrosite",
-    "name": "pivertpatrosite",
-    "url": "https://github.com/gobelet69/pivertpatrosite",
-    "description": "patro activities",
+    "repo": "gobelet69/portail",
+    "name": "portail",
+    "url": "https://github.com/gobelet69/portail",
+    "description": "Hub et intégration des outils de 111iridescence.org/portail",
+    "homepage": "https://111iridescence.org/portail",
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-08-22T13:20:47Z",
+    "archived": false,
+    "fork": false,
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-auth",
+    "name": "portail-auth",
+    "url": "https://github.com/gobelet69/portail-auth",
+    "description": null,
     "homepage": null,
     "stars": 0,
     "language": "JavaScript",
-    "updatedAt": "2025-09-07T18:25:18Z",
-    "archived": false,
+    "updatedAt": "2026-03-25T16:18:33Z",
+    "archived": true,
     "fork": false,
-    "topics": []
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-courses",
+    "name": "portail-courses",
+    "url": "https://github.com/gobelet69/portail-courses",
+    "description": null,
+    "homepage": null,
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-04-18T11:15:05Z",
+    "archived": true,
+    "fork": false,
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-dashboard",
+    "name": "portail-dashboard",
+    "url": "https://github.com/gobelet69/portail-dashboard",
+    "description": null,
+    "homepage": null,
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-04-21T07:07:45Z",
+    "archived": true,
+    "fork": false,
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-feed",
+    "name": "portail-feed",
+    "url": "https://github.com/gobelet69/portail-feed",
+    "description": null,
+    "homepage": null,
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-04-18T11:15:05Z",
+    "archived": true,
+    "fork": false,
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-habits",
+    "name": "portail-habits",
+    "url": "https://github.com/gobelet69/portail-habits",
+    "description": null,
+    "homepage": null,
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-04-18T11:40:54Z",
+    "archived": true,
+    "fork": false,
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-todo",
+    "name": "portail-todo",
+    "url": "https://github.com/gobelet69/portail-todo",
+    "description": null,
+    "homepage": null,
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-05-02T16:46:15Z",
+    "archived": true,
+    "fork": false,
+    "topics": [
+      "portail"
+    ]
+  },
+  {
+    "repo": "gobelet69/portail-vault",
+    "name": "portail-vault",
+    "url": "https://github.com/gobelet69/portail-vault",
+    "description": "personal website",
+    "homepage": null,
+    "stars": 0,
+    "language": "JavaScript",
+    "updatedAt": "2026-04-20T12:02:20Z",
+    "archived": true,
+    "fork": false,
+    "topics": [
+      "111-showcase",
+      "portail"
+    ]
   },
   {
     "repo": "gobelet69/PwdGen",
@@ -342,79 +438,14 @@
     ]
   },
   {
-    "repo": "gobelet69/r2-explorer-template",
-    "name": "r2-explorer-template",
-    "url": "https://github.com/gobelet69/r2-explorer-template",
-    "description": null,
+    "repo": "gobelet69/quickpad",
+    "name": "quickpad",
+    "url": "https://github.com/gobelet69/quickpad",
+    "description": "Ultra-fast native macOS text editor with intelligent live previews, engineered in Swift 6 for Apple Silicon",
     "homepage": null,
     "stars": 0,
-    "language": null,
-    "updatedAt": "2026-04-13T14:14:31Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/r2-explorer-template890",
-    "name": "r2-explorer-template890",
-    "url": "https://github.com/gobelet69/r2-explorer-template890",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "TypeScript",
-    "updatedAt": "2026-04-13T14:15:11Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/sb1-bsmnlv",
-    "name": "sb1-bsmnlv",
-    "url": "https://github.com/gobelet69/sb1-bsmnlv",
-    "description": "Created with StackBlitz ⚡️",
-    "homepage": "https://stackblitz.com/edit/sb1-bsmnlv",
-    "stars": 0,
-    "language": "TypeScript",
-    "updatedAt": "2024-11-02T13:18:17Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/sb1-eaed73",
-    "name": "sb1-eaed73",
-    "url": "https://github.com/gobelet69/sb1-eaed73",
-    "description": "Created with StackBlitz ⚡️",
-    "homepage": "https://stackblitz.com/edit/sb1-xaa3zj",
-    "stars": 0,
-    "language": "TypeScript",
-    "updatedAt": "2024-11-02T13:25:56Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/Se-cu-app",
-    "name": "Se-cu-app",
-    "url": "https://github.com/gobelet69/Se-cu-app",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "C",
-    "updatedAt": "2024-11-14T12:56:08Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/testmardkown-vierwer",
-    "name": "testmardkown-vierwer",
-    "url": "https://github.com/gobelet69/testmardkown-vierwer",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": null,
-    "updatedAt": "2026-03-25T15:41:39Z",
+    "language": "Swift",
+    "updatedAt": "2026-10-31T13:15:54Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -427,21 +458,8 @@
     "homepage": null,
     "stars": 0,
     "language": "JavaScript",
-    "updatedAt": "2026-01-19T18:26:15Z",
-    "archived": false,
-    "fork": false,
-    "topics": []
-  },
-  {
-    "repo": "gobelet69/todolist",
-    "name": "todolist",
-    "url": "https://github.com/gobelet69/todolist",
-    "description": null,
-    "homepage": null,
-    "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-05-02T16:46:15Z",
-    "archived": false,
+    "updatedAt": "2026-08-15T23:10:17Z",
+    "archived": true,
     "fork": false,
     "topics": []
   },
@@ -454,23 +472,30 @@
     "stars": 0,
     "language": "JavaScript",
     "updatedAt": "2024-08-26T07:44:32Z",
-    "archived": false,
+    "archived": true,
     "fork": false,
     "topics": []
   },
   {
-    "repo": "gobelet69/vault",
-    "name": "vault",
-    "url": "https://github.com/gobelet69/vault",
-    "description": "personal website",
+    "repo": "gobelet69/web-tools",
+    "name": "web-tools",
+    "url": "https://github.com/gobelet69/web-tools",
+    "description": "104 lightweight, privacy-first browser tools. Static HTML, vanilla JS, local file processing, no framework.",
     "homepage": null,
     "stars": 0,
-    "language": "JavaScript",
-    "updatedAt": "2026-04-20T12:02:20Z",
+    "language": "HTML",
+    "updatedAt": "2026-09-19T12:49:26Z",
     "archived": false,
     "fork": false,
     "topics": [
-      "111-showcase"
+      "cloudflare-pages",
+      "ffmpeg",
+      "html",
+      "privacy",
+      "static-site",
+      "utilities",
+      "vanilla-javascript",
+      "web-tools"
     ]
   }
 ]

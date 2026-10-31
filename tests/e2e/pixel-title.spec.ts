@@ -282,3 +282,114 @@ test('responsive pixel rebuilds do not trigger observer loop errors', async ({ p
 
   expect(await page.evaluate(() => (window as typeof window & { observerErrors: string[] }).observerErrors)).toEqual([]);
 });
+
+test('every rendered pixel remains strictly locked to integer grid coordinates during reveal, idle, and cursor interaction', async ({ page }) => {
+  await page.addInitScript(() => {
+    const originalFillRect = CanvasRenderingContext2D.prototype.fillRect;
+    (window as typeof window & {
+      gridAudit: {
+        totalDraws: number;
+        offGridDraws: number;
+        nonSquareDraws: number;
+        invalidAlphaCount: number;
+      };
+    }).gridAudit = {
+      totalDraws: 0,
+      offGridDraws: 0,
+      nonSquareDraws: 0,
+      invalidAlphaCount: 0,
+    };
+
+    CanvasRenderingContext2D.prototype.fillRect = function patchedFillRect(rx: number, ry: number, rw: number, rh: number) {
+      const canvas = this.canvas;
+      if (canvas && canvas.hasAttribute('data-pixel-canvas') && canvas.dataset.gridCellSize) {
+        const audit = (window as typeof window & {
+          gridAudit: {
+            totalDraws: number;
+            offGridDraws: number;
+            nonSquareDraws: number;
+            invalidAlphaCount: number;
+          };
+        }).gridAudit;
+        audit.totalDraws += 1;
+
+        if (Math.abs(rw - rh) > 1e-4) {
+          audit.nonSquareDraws += 1;
+        }
+        if (this.globalAlpha < 0 || this.globalAlpha > 1) {
+          audit.invalidAlphaCount += 1;
+        }
+
+        const originX = Number(canvas.dataset.gridOriginX);
+        const originY = Number(canvas.dataset.gridOriginY);
+        const cellSize = Number(canvas.dataset.gridCellSize);
+        const columns = Number(canvas.dataset.gridColumns);
+        const rows = Number(canvas.dataset.gridRows);
+
+        const centerX = rx + rw / 2;
+        const centerY = ry + rh / 2;
+        const col = (centerX - originX) / cellSize;
+        const row = (centerY - originY) / cellSize;
+        const nearestCol = Math.round(col);
+        const nearestRow = Math.round(row);
+
+        const isIntegerAligned =
+          Math.abs(col - nearestCol) <= 1e-3 &&
+          Math.abs(row - nearestRow) <= 1e-3 &&
+          nearestCol >= 0 &&
+          nearestCol < columns &&
+          nearestRow >= 0 &&
+          nearestRow < rows;
+
+        if (!isIntegerAligned) {
+          audit.offGridDraws += 1;
+        }
+      }
+      return originalFillRect.call(this, rx, ry, rw, rh);
+    };
+  });
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const hero = page.locator('[data-pixel-hero]');
+  const canvas = page.locator('[data-pixel-canvas]');
+  await expect(canvas).toHaveAttribute('data-render-state', 'ready');
+
+  // Observe initial reveal wave + sweep cursor across the matrix + click ripple
+  await page.waitForTimeout(250);
+  const bounds = await hero.boundingBox();
+  expect(bounds).not.toBeNull();
+  if (!bounds) return;
+
+  await page.mouse.move(bounds.x + bounds.width * 0.35, bounds.y + bounds.height * 0.5);
+  await page.waitForTimeout(120);
+  await page.mouse.move(bounds.x + bounds.width * 0.65, bounds.y + bounds.height * 0.5);
+  await page.mouse.down();
+  await page.mouse.up();
+  await page.waitForTimeout(120);
+
+  // Click in an empty area outside the word to spawn a pixel-art star, then hover across it to scramble/destruct it
+  await page.mouse.move(bounds.x + bounds.width * 0.2, bounds.y + bounds.height * 0.18);
+  await page.mouse.down();
+  await page.mouse.up();
+  await expect(canvas).toHaveAttribute('data-user-spawned-stars', '1');
+  await page.waitForTimeout(120);
+  await page.mouse.move(bounds.x + bounds.width * 0.25, bounds.y + bounds.height * 0.22);
+  await page.waitForTimeout(80);
+  await page.mouse.move(bounds.x + bounds.width * 0.2, bounds.y + bounds.height * 0.18);
+  await page.waitForTimeout(150);
+
+  const audit = await page.evaluate(() => (window as typeof window & {
+    gridAudit: {
+      totalDraws: number;
+      offGridDraws: number;
+      nonSquareDraws: number;
+      invalidAlphaCount: number;
+    };
+  }).gridAudit);
+
+  expect(audit.totalDraws).toBeGreaterThan(2000);
+  expect(audit.offGridDraws).toBe(0);
+  expect(audit.nonSquareDraws).toBe(0);
+  expect(audit.invalidAlphaCount).toBe(0);
+});
