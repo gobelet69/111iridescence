@@ -7,7 +7,7 @@
     "homepage": "https://111iridescence.org",
     "stars": 0,
     "language": "TypeScript",
-    "updatedAt": "2026-10-31T10:44:12Z",
+    "updatedAt": "2026-10-31T13:56:52Z",
     "archived": false,
     "fork": false,
     "topics": [
@@ -192,7 +192,20 @@
     "homepage": null,
     "stars": 0,
     "language": "Swift",
-    "updatedAt": "2026-10-31T13:15:14Z",
+    "updatedAt": "2026-11-02T10:39:47Z",
+    "archived": false,
+    "fork": false,
+    "topics": []
+  },
+  {
+    "repo": "gobelet69/iridescence-installer",
+    "name": "iridescence-installer",
+    "url": "https://github.com/gobelet69/iridescence-installer",
+    "description": "Official macOS application catalog manager, installer & updater for the 111iridescence ecosystem",
+    "homepage": null,
+    "stars": 0,
+    "language": "Swift",
+    "updatedAt": "2026-11-02T11:01:19Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -231,7 +244,7 @@
     "homepage": null,
     "stars": 0,
     "language": "Swift",
-    "updatedAt": "2026-10-31T13:15:47Z",
+    "updatedAt": "2026-11-02T11:00:06Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -257,7 +270,7 @@
     "homepage": null,
     "stars": 0,
     "language": "Rust",
-    "updatedAt": "2026-10-31T13:15:26Z",
+    "updatedAt": "2026-11-02T10:40:10Z",
     "archived": false,
     "fork": false,
     "topics": []
@@ -445,7 +458,7 @@
     "homepage": null,
     "stars": 0,
     "language": "Swift",
-    "updatedAt": "2026-10-31T13:15:54Z",
+    "updatedAt": "2026-11-02T11:00:37Z",
     "archived": false,
     "fork": false,
     "topics": []
