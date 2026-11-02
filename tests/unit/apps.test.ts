@@ -4,12 +4,13 @@ import { apps, getApp, getApps } from '../../src/data/apps';
 describe('macOS app catalog', () => {
   it('keeps a unique, deliberate product order', () => {
     expect(apps.map((app) => app.slug)).toEqual([
+      'iridescence-installer',
       'iridescence-pdf-reader',
       'mass-print',
       'resource-guard',
       'quickpad',
     ]);
-    expect(new Set(apps.map((app) => app.slug)).size).toBe(4);
+    expect(new Set(apps.map((app) => app.slug)).size).toBe(5);
   });
 
   it('shares product facts while localizing every editorial field', () => {
@@ -22,6 +23,32 @@ describe('macOS app catalog', () => {
     expect(french.tagline).toBe('Tous vos documents. Le bon ordre. Une seule impression.');
     expect(getApps('en')).toHaveLength(getApps('fr').length);
     expect(getApps('en').every((app) => app.description && app.features.every((feature) => feature.description))).toBe(true);
+  });
+
+  it('describes Iridescence Installer as a flagship ecosystem manager', () => {
+    const app = getApp('iridescence-installer');
+
+    expect(app).toMatchObject({
+      name: 'Iridescence Installer',
+      repository: 'gobelet69/iridescence-installer',
+      compatibility: 'macOS 13 ou version ultérieure',
+      architecture: 'Apple Silicon et Intel',
+      publicationStatus: 'available',
+      releasePolicy: {
+        acceptedAssets: ['universal-dmg', 'dmg'],
+      },
+    });
+    expect(app.screenshots.map((image) => image.src)).toEqual(expect.arrayContaining([
+      '/apps/iridescence-installer/installer-main.png',
+      '/apps/iridescence-installer/installer-discover.png',
+      '/apps/iridescence-installer/installer-updates.png',
+      '/apps/iridescence-installer/installer-installed.png',
+    ]));
+    expect(app.sections.map((section) => section.id)).toEqual(expect.arrayContaining([
+      'discover',
+      'updates',
+      'quarantine',
+    ]));
   });
 
   it('describes PDF Reader from its verified repository contract', () => {

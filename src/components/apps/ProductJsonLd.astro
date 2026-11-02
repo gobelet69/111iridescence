@@ -14,7 +14,7 @@ const data = {
   '@type': 'SoftwareApplication',
   name: app.name,
   description: app.seo.description,
-  applicationCategory: app.slug === 'mass-print' || app.slug === 'resource-guard' ? 'UtilitiesApplication' : app.slug === 'quickpad' ? 'DeveloperApplication' : 'BusinessApplication',
+  applicationCategory: app.slug === 'iridescence-installer' || app.slug === 'mass-print' || app.slug === 'resource-guard' ? 'UtilitiesApplication' : app.slug === 'quickpad' ? 'DeveloperApplication' : 'BusinessApplication',
   operatingSystem: app.compatibility,
   url: new URL(getRoute(locale, 'product', app.slug), SITE.origin).href,
   image: new URL(app.seo.image, SITE.origin).href,

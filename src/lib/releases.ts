@@ -79,6 +79,7 @@ function matchesPolicy(name: string, policy: AcceptedAsset): boolean {
         || normalized.includes('resourceguard')
         || normalized.includes('resource-guard')
         || normalized.includes('quickpad')
+        || normalized.includes('installer')
       );
   }
   return normalized.endsWith('.zip')

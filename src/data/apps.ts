@@ -1,4 +1,4 @@
-export type AppSlug = 'iridescence-pdf-reader' | 'mass-print' | 'resource-guard' | 'quickpad';
+export type AppSlug = 'iridescence-installer' | 'iridescence-pdf-reader' | 'mass-print' | 'resource-guard' | 'quickpad';
 import type { Locale } from '../i18n';
 import { englishAppContent } from './app-locales';
 export type PublicationStatus = 'available' | 'coming-soon';
@@ -36,7 +36,7 @@ export interface AppDefinition {
   description: string;
   longDescription: string;
   icon: string;
-  accent: 'iris' | 'blue';
+  accent: 'iris' | 'blue' | 'cyan';
   platform: 'macOS';
   compatibility: string;
   architecture: string;
@@ -55,6 +55,76 @@ export interface AppDefinition {
 }
 
 const frenchApps: AppDefinition[] = [
+  {
+    slug: 'iridescence-installer',
+    name: 'Iridescence Installer',
+    shortName: 'Installer',
+    tagline: 'Tout l’écosystème 111iridescence. En un clic.',
+    description: 'Gestionnaire d’applications natif pour macOS : découvrez, installez et mettez à jour tous les logiciels de l’atelier sans friction Gatekeeper.',
+    longDescription: 'Fini les montages manuels de DMG et les blocages de sécurité à répétition. Iridescence Installer automatise les releases GitHub, gère la quarantaine de manière ciblée et maintient vos apps à jour en toute transparence.',
+    icon: '/apps/iridescence-installer/icon.png',
+    accent: 'cyan',
+    platform: 'macOS',
+    compatibility: 'macOS 13 ou version ultérieure',
+    architecture: 'Apple Silicon et Intel',
+    publicationStatus: 'available',
+    repository: 'gobelet69/iridescence-installer',
+    releasePolicy: { acceptedAssets: ['universal-dmg', 'dmg'] },
+    primaryScreenshot: {
+      src: '/apps/iridescence-installer/installer-main.png',
+      alt: 'Fenêtre principale d’Iridescence Installer avec la liste des applications de l’écosystème, leur version et leur statut.',
+      width: 920,
+      height: 608,
+    },
+    screenshots: [
+      {
+        src: '/apps/iridescence-installer/installer-main.png',
+        alt: 'Fenêtre principale d’Iridescence Installer avec les applications installées.',
+        width: 920,
+        height: 608,
+        caption: 'Détection exclusive et gestion unifiée des outils 111iridescence.',
+      },
+      {
+        src: '/apps/iridescence-installer/installer-discover.png',
+        alt: 'Catalogue Découvrir parcourant les applications disponibles de l’écosystème.',
+        width: 920,
+        height: 608,
+        caption: 'Exploration dynamique des nouveaux outils de l’atelier sans recompiler l’application.',
+      },
+      {
+        src: '/apps/iridescence-installer/installer-updates.png',
+        alt: 'Gestionnaire de mises à jour avec détection de nouvelles versions et notes de release.',
+        width: 920,
+        height: 608,
+        caption: 'Mises à jour atomiques et vérification d’intégrité SHA-256 en un clic.',
+      },
+      {
+        src: '/apps/iridescence-installer/installer-installed.png',
+        alt: 'Gestion fine des applications installées, architectures et état de quarantaine.',
+        width: 920,
+        height: 608,
+        caption: 'Levée ciblée de la quarantaine Gatekeeper pour les apps de confiance.',
+      },
+    ],
+    features: [
+      { title: 'Installation en 1 clic', description: 'Téléchargement, extraction DMG/Zip, vérification SHA-256 et installation atomique dans /Applications sans manipulation manuelle.' },
+      { title: 'Gestion ciblée de Gatekeeper', description: 'Levée automatique de l’attribut de quarantaine scoped com.apple.quarantine sur les apps vérifiées sans affaiblir la sécurité globale.' },
+      { title: 'Mises à jour automatiques', description: 'Détection des nouvelles versions GitHub avec ETag conditionnel, téléchargement différentiel et bouton Mettre à jour tout.' },
+      { title: 'Catalogue Découvrir', description: 'Exploration dynamique des nouveaux outils de l’atelier via les dépôts GitHub officiels sans recompiler l’installateur.' },
+      { title: 'Sauvegarde & Restauration', description: 'Archivage automatique de la version précédente avant mise à jour pour un retour en arrière immédiat en cas de besoin.' },
+      { title: 'Auto-mise à jour intégrée', description: 'Iridescence Installer met à jour son propre bundle de manière autonome avec vérification d’intégrité.' },
+    ],
+    sections: [
+      { id: 'discover', title: 'Tout l’atelier à portée de main', description: 'Parcourez le catalogue officiel, installez n’importe quelle application en un clic et suivez les nouvelles sorties en temps réel.', screenshot: '/apps/iridescence-installer/installer-discover.png' },
+      { id: 'updates', title: 'Mises à jour atomiques et transparentes', description: 'Vérification automatique des releases GitHub, affichage des notes de version et remplacement atomique sans interruption de flux.', screenshot: '/apps/iridescence-installer/installer-updates.png' },
+      { id: 'quarantine', title: 'La simplicité sans compromettre votre Mac', description: 'Une gestion ciblée de l’attribut com.apple.quarantine réservée aux applications 111iridescence, sans jamais désactiver Gatekeeper sur votre système.', screenshot: '/apps/iridescence-installer/installer-installed.png' },
+    ],
+    seo: {
+      title: 'Iridescence Installer pour macOS',
+      description: 'Gestionnaire d’applications officiel pour macOS : installez, découvrez et mettez à jour tous les logiciels de l’atelier 111iridescence sans friction.',
+      image: '/apps/iridescence-installer/og.png',
+    },
+  },
   {
     slug: 'iridescence-pdf-reader',
     name: 'Iridescence PDF Reader',

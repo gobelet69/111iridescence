@@ -23,6 +23,7 @@ test('language selector preserves home, catalog, about and product pages', async
     ['/', '/fr/'],
     ['/apps', '/fr/apps'],
     ['/about', '/fr/a-propos'],
+    ['/apps/iridescence-installer', '/fr/apps/iridescence-installer'],
     ['/apps/iridescence-pdf-reader', '/fr/apps/iridescence-pdf-reader'],
     ['/apps/mass-print', '/fr/apps/mass-print'],
     ['/apps/resource-guard', '/fr/apps/resource-guard'],
@@ -54,8 +55,8 @@ test('both language trees remain complete without JavaScript', async ({ browser 
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   for (const path of [
-    '/', '/about', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/apps/quickpad',
-    '/fr/', '/fr/a-propos', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/apps/quickpad',
+    '/', '/about', '/apps', '/apps/iridescence-installer', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/apps/quickpad',
+    '/fr/', '/fr/a-propos', '/fr/apps', '/fr/apps/iridescence-installer', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/apps/quickpad',
   ]) {
     const response = await page.goto(path);
     expect(response?.status(), path).toBe(200);

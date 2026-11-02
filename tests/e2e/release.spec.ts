@@ -2,8 +2,8 @@ import { readFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
 
 const publicRoutes = [
-  '/', '/apps', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/apps/quickpad', '/about',
-  '/fr/', '/fr/apps', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/apps/quickpad', '/fr/a-propos',
+  '/', '/apps', '/apps/iridescence-installer', '/apps/iridescence-pdf-reader', '/apps/mass-print', '/apps/resource-guard', '/apps/quickpad', '/about',
+  '/fr/', '/fr/apps', '/fr/apps/iridescence-installer', '/fr/apps/iridescence-pdf-reader', '/fr/apps/mass-print', '/fr/apps/resource-guard', '/fr/apps/quickpad', '/fr/a-propos',
 ];
 
 test('public release surfaces stay coherent, canonical, and anonymous', async ({ page, request }) => {
@@ -27,6 +27,7 @@ test('homepage keeps its app content and navigation without JavaScript', async (
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '111iridescence.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Apps', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Iridescence Installer' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Iridescence PDF Reader' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Mass Print' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Resource Guard' })).toBeVisible();

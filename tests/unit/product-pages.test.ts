@@ -1,5 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, it } from 'vitest';
+import InstallerProduct from '../../src/components/apps/InstallerProduct.astro';
 import MassPrintProduct from '../../src/components/apps/MassPrintProduct.astro';
 import PdfReaderProduct from '../../src/components/apps/PdfReaderProduct.astro';
 import QuickPadProduct from '../../src/components/apps/QuickPadProduct.astro';
@@ -7,6 +8,20 @@ import ResourceGuardProduct from '../../src/components/apps/ResourceGuardProduct
 import { apps, getApp } from '../../src/data/apps';
 
 describe('product page compositions', () => {
+  it('renders overview, features, gallery and download for Iridescence Installer', async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(InstallerProduct, {
+      props: { app: getApp('iridescence-installer', 'fr'), locale: 'fr' },
+    });
+
+    expect(html.match(/<h1/g)).toHaveLength(1);
+    for (const id of ['overview', 'features', 'gallery', 'discover', 'updates', 'quarantine', 'download']) {
+      expect(html).toContain(`id="${id}"`);
+    }
+    expect(html).toContain('data-release-slug="iridescence-installer"');
+    expect(html).toContain('href="/fr/apps"');
+  });
+
   it('renders every required PDF Reader chapter from verified product data', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(PdfReaderProduct, {
@@ -66,7 +81,7 @@ describe('product page compositions', () => {
   });
 
   it('keeps catalog slugs unique and route-ready', () => {
-    expect(apps.map((app) => app.slug)).toEqual(['iridescence-pdf-reader', 'mass-print', 'resource-guard', 'quickpad']);
+    expect(apps.map((app) => app.slug)).toEqual(['iridescence-installer', 'iridescence-pdf-reader', 'mass-print', 'resource-guard', 'quickpad']);
     expect(new Set(apps.map((app) => app.slug)).size).toBe(apps.length);
   });
 });

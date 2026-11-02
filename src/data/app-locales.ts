@@ -5,6 +5,67 @@ export type AppEditorial = Pick<AppDefinition,
   'primaryScreenshot' | 'screenshots' | 'features' | 'sections' | 'seo'>;
 
 export const englishAppContent: Record<AppSlug, AppEditorial> = {
+  'iridescence-installer': {
+    tagline: 'The entire 111iridescence ecosystem. In one click.',
+    description: 'A native macOS application manager: discover, install, and update every atelier tool without Gatekeeper friction.',
+    longDescription: 'No more manual DMG mounting or repetitive security dialogs. Iridescence Installer automates GitHub releases, manages scoped quarantine, and keeps your apps effortlessly up to date.',
+    compatibility: 'macOS 13 or later',
+    architecture: 'Apple Silicon and Intel',
+    primaryScreenshot: {
+      src: '/apps/iridescence-installer/installer-main.png',
+      alt: 'Iridescence Installer main window showing ecosystem applications, versions, and status.',
+      width: 920,
+      height: 608,
+    },
+    screenshots: [
+      {
+        src: '/apps/iridescence-installer/installer-main.png',
+        alt: 'Iridescence Installer main window showing installed atelier apps.',
+        width: 920,
+        height: 608,
+        caption: 'Exclusive detection and unified management of 111iridescence tools.',
+      },
+      {
+        src: '/apps/iridescence-installer/installer-discover.png',
+        alt: 'Discover catalog exploring available applications across the ecosystem.',
+        width: 920,
+        height: 608,
+        caption: 'Dynamic exploration of new atelier tools without recompiling the application.',
+      },
+      {
+        src: '/apps/iridescence-installer/installer-updates.png',
+        alt: 'Update manager with version detection and release notes.',
+        width: 920,
+        height: 608,
+        caption: 'One-click atomic updates and SHA-256 integrity verification.',
+      },
+      {
+        src: '/apps/iridescence-installer/installer-installed.png',
+        alt: 'Detailed management of installed applications, architectures, and quarantine state.',
+        width: 920,
+        height: 608,
+        caption: 'Targeted Gatekeeper quarantine management for verified atelier apps.',
+      },
+    ],
+    features: [
+      { title: 'One-Click Installation', description: 'Download, DMG/Zip extraction, SHA-256 integrity verification, and atomic installation into /Applications.' },
+      { title: 'Scoped Gatekeeper Handling', description: 'Seamlessly manages extended quarantine attributes for trusted atelier apps without compromising global system security.' },
+      { title: 'Automated Updates', description: 'Monitors GitHub releases with conditional ETag caching, background checks, and a single Update All button.' },
+      { title: 'Discover Catalog', description: 'Dynamically explores new atelier tools via official GitHub topics without requiring installer recompilation.' },
+      { title: 'Rollback & Safety', description: 'Automatically backs up previous versions before upgrading for instantaneous one-click recovery.' },
+      { title: 'Self-Updating Engine', description: 'Iridescence Installer keeps itself up to date with full checksum verification and atomic relaunch.' },
+    ],
+    sections: [
+      { id: 'discover', title: 'The entire atelier at your fingertips', description: 'Explore the official catalog, install any application with one click, and stay up to date with new releases.', screenshot: '/apps/iridescence-installer/installer-discover.png' },
+      { id: 'updates', title: 'Atomic, seamless updates', description: 'Automated GitHub release checks with conditional ETags, release notes inspection, and safe bundle replacement.', screenshot: '/apps/iridescence-installer/installer-updates.png' },
+      { id: 'quarantine', title: 'Effortless ease without compromising safety', description: 'Targeted extended attribute handling strictly scoped to 111iridescence apps, never disabling system-wide Gatekeeper.', screenshot: '/apps/iridescence-installer/installer-installed.png' },
+    ],
+    seo: {
+      title: 'Iridescence Installer for macOS',
+      description: 'Official macOS application manager: discover, install, and update every 111iridescence atelier tool seamlessly.',
+      image: '/apps/iridescence-installer/og.png',
+    },
+  },
   'iridescence-pdf-reader': {
     tagline: 'Read quickly. Stay focused.',
     description: 'A native PDF reader for macOS, designed for fast, fluid, distraction-free reading.',

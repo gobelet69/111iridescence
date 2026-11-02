@@ -27,6 +27,8 @@
   --violet-text: rgb(126, 34, 206); /* oklch(44% 0.22 305) - Accessible high-contrast iris (6.4:1) */
   --blue: rgb(56, 128, 220); /* oklch(56% 0.18 245) - Cerulean Beam */
   --blue-text: rgb(29, 78, 216); /* oklch(44% 0.18 250) - Accessible high-contrast cerulean (6.2:1) */
+  --cyan: rgb(12, 192, 232); /* Luminous Cyan */
+  --cyan-text: rgb(8, 145, 178); /* Accessible high-contrast cyan */
   --presence: rgb(52, 211, 153); /* oklch(76% 0.16 155) - Emerald pulse */
   --presence-text: rgb(4, 120, 87); /* oklch(38% 0.16 155) - Accessible high-contrast emerald (6.8:1) */
   --coral: rgb(238, 118, 106); /* oklch(68% 0.16 34) */
