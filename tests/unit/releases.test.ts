@@ -36,7 +36,7 @@ describe('release normalization', () => {
       version: '0.1.3',
       format: 'DMG universel',
       architecture: 'Apple Silicon et Intel',
-      compatibility: 'macOS 12.3 ou version ultérieure',
+      compatibility: 'macOS 13 ou version ultérieure',
       downloadUrl: 'https://github.com/download/Mass.Print_0.1.3_universal.dmg',
       releaseUrl: baseRelease.html_url,
       publishedAt: baseRelease.published_at,

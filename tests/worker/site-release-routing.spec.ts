@@ -34,7 +34,7 @@ test('site worker exposes the current public Mass Print DMG release', async ({ r
     available: true,
     format: 'DMG universel',
     architecture: 'Apple Silicon et Intel',
-    compatibility: 'macOS 12.3 ou version ultérieure',
+    compatibility: 'macOS 13 ou version ultérieure',
   });
   expect(release.version).toMatch(/^\d+\.\d+\.\d+/);
   expect(release.downloadUrl).toMatch(/^https:\/\/github\.com\/gobelet69\/Mass-Print\/releases\/download\//);

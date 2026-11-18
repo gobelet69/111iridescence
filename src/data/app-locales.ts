@@ -101,10 +101,10 @@ export const englishAppContent: Record<AppSlug, AppEditorial> = {
     tagline: 'All your documents. The right order. One print run.',
     description: 'Arrange multiple documents in the exact order you need, then print them sequentially from one window.',
     longDescription: 'Drop files from Finder, reorder them manually or with precise sorting, choose your printer, and stay in control through the final document.',
-    compatibility: 'macOS 12.3 or later',
+    compatibility: 'macOS 13 or later',
     architecture: 'Apple Silicon and Intel',
-    primaryScreenshot: { src: '/apps/mass-print/mass-print-main.png', alt: 'Mass Print window with four ordered documents, print options, and the Print All button.', width: 1180, height: 760 },
-    screenshots: [{ src: '/apps/mass-print/mass-print-main.png', alt: 'Mass Print document queue with order, status, and print options.', width: 1180, height: 760, caption: 'The visible queue is the exact order sent to the printer.' }],
+    primaryScreenshot: { src: '/apps/mass-print/mass-print-main.png', alt: 'Native Mass Print development preview with four demonstration documents, reorder buttons, and print options.', caption: 'Native development preview. Downloads follow the latest public release.', width: 2080, height: 1440 },
+    screenshots: [{ src: '/apps/mass-print/mass-print-main.png', alt: 'Mass Print document queue with order, status, and print options.', width: 2080, height: 1440, caption: 'Native development preview with demonstration documents and printer.' }],
     features: [
       { title: 'Controlled order', description: 'Drag rows, use accessible buttons, or reverse a preset sort.' },
       { title: 'Useful sorting', description: 'Natural name, date, size, type, page count, or addition order.' },

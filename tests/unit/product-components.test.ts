@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, it } from 'vitest';
 import AppScreenshot from '../../src/components/apps/AppScreenshot.astro';
@@ -14,24 +15,29 @@ describe('product presentation primitives', () => {
     });
 
     expect(html).toContain('src="/apps/mass-print/mass-print-main.png"');
-    expect(html).toContain('width="1180"');
-    expect(html).toContain('height="760"');
+    expect(html).toContain('width="2080"');
+    expect(html).toContain('height="1440"');
+    const png = await readFile(new URL('../../public/apps/mass-print/mass-print-main.png', import.meta.url));
+    expect(png.readUInt32BE(16)).toBe(app.primaryScreenshot.width);
+    expect(png.readUInt32BE(20)).toBe(app.primaryScreenshot.height);
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('decoding="async"');
     expect(html).toContain(app.primaryScreenshot.alt);
   });
 
-  it('keeps an unavailable release semantic until runtime discovery succeeds', async () => {
+  it('provides a real releases-page fallback before discovery', async () => {
     const app = getApp('iridescence-pdf-reader');
     const container = await AstroContainer.create();
     const html = await container.renderToString(ReleaseDownload, { props: { app, locale: 'fr' } });
 
-    expect(html).toContain('Bientôt disponible');
-    expect(html).toContain('aria-disabled="true"');
+    expect(html).toContain('Voir les releases sur GitHub');
+    expect(html).toContain('href="https://github.com/gobelet69/iridecence-pdf-reader/releases"');
+    expect(html).toContain('data-release-role="status"');
+    expect(html).toContain('data-release-role="retry"');
     expect(html).toContain('data-release-slug="iridescence-pdf-reader"');
     expect(html).toContain('data-release-role="link"');
     expect(html).toContain('Version détectée automatiquement');
-    expect(html).not.toMatch(/data-release-role="link"[^>]+href=/);
+    expect(html).not.toContain('aria-disabled="true"');
   });
 
   it('keeps release notes out of compact homepage controls', async () => {
@@ -57,7 +63,7 @@ describe('product presentation primitives', () => {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: 'Mass Print',
-      operatingSystem: 'macOS 12.3 ou version ultérieure',
+      operatingSystem: 'macOS 13 ou version ultérieure',
       applicationCategory: 'UtilitiesApplication',
     });
     expect(data.url).toBe('https://111iridescence.org/fr/apps/mass-print');

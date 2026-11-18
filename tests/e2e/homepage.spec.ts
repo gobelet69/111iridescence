@@ -82,7 +82,10 @@ test('homepage product content remains available without JavaScript', async ({ b
   const page = await context.newPage();
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('111iridescence.');
-  await expect(page.getByRole('region', { name: 'My apps' }).getByRole('article')).toHaveCount(4);
+  await expect(page.getByRole('region', { name: 'My apps' }).getByRole('article')).toHaveCount(5);
+  for (const name of ['Iridescence Installer', 'Iridescence PDF Reader', 'Mass Print', 'Resource Guard', 'QuickPad']) {
+    await expect(page.getByRole('heading', { name, exact: true })).toBeVisible();
+  }
   await expect(page.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#contenu');
   await context.close();
 });

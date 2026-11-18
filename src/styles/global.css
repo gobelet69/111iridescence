@@ -580,7 +580,7 @@ button:focus-visible {
     grid-column: 1;
   }
   .product-download {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(14rem, 1fr) minmax(0, 1.2fr);
   }
 }
 
@@ -766,3 +766,9 @@ li {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Product names keep readable measure beside asynchronously loaded metadata. */
+.product-download > *, .release-download, .release-download__details { min-width: 0; }
+.release-download__details { overflow-wrap: anywhere; }
+
+.release-download [hidden] { display: none; }

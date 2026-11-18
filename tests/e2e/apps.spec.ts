@@ -20,6 +20,7 @@ test('Installer page exposes authentic chapters, metadata, and launch fallback',
   }
   await expect(page.getByRole('img', { name: /main window|applications/i }).first()).toBeVisible();
   await expect(page.getByText('macOS 13 or later', { exact: true }).first()).toBeVisible();
+  await expect(page.locator('[data-release-role="link"]').last()).toHaveAttribute('href', 'https://github.com/gobelet69/iridescence-installer/releases');
   const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
   expect(jsonLd).toContain('SoftwareApplication');
   await expect(page.getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
@@ -33,7 +34,8 @@ test('PDF Reader page exposes authentic chapters, metadata, and launch fallback'
   }
   await expect(page.getByRole('img', { name: /main window/ })).toHaveAttribute('src', /reader-workspace-light\.png$/);
   await expect(page.getByText('macOS 14 or later', { exact: true }).first()).toBeVisible();
-  await expect(page.locator('[data-release-role="link"]').last()).toHaveText('Coming soon');
+  await expect(page.locator('[data-release-role="link"]').last()).toHaveText('View releases on GitHub');
+  await expect(page.locator('[data-release-role="link"]').last()).toHaveAttribute('href', 'https://github.com/gobelet69/iridecence-pdf-reader/releases');
   const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
   expect(jsonLd).toContain('SoftwareApplication');
   await expect(page.getByRole('link', { name: /All apps/ })).toHaveAttribute('href', '/apps');
@@ -86,3 +88,29 @@ for (const slug of ['iridescence-installer', 'iridescence-pdf-reader', 'mass-pri
     expect(widths.scroll, slug).toBeLessThanOrEqual(widths.client);
   });
 }
+
+
+test('release discovery times out and can recover through retry', async ({ page }) => {
+  let requests = 0;
+  await page.route('**/api/releases/mass-print', async route => {
+    requests++;
+    if (requests === 1) return; // Keep headers pending until the client's deadline aborts.
+    await route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+      available: true, version: 'qa', format: 'DMG', notes: 'Synthetic QA release',
+      downloadUrl: 'https://github.com/gobelet69/Mass-Print/releases/download/vqa/Mass.Print.dmg',
+    }) });
+  });
+  await page.goto('/apps/mass-print');
+  const panel = page.locator('[data-release-panel="mass-print"]').last();
+  const link = panel.locator('[data-release-role="link"]');
+  const status = panel.locator('[data-release-role="status"]');
+  await expect(status).toHaveAttribute('data-release-state', 'loading');
+  await expect(status).toHaveAttribute('data-release-state', 'error', { timeout: 15_000 });
+  await expect(link).toHaveAttribute('href', 'https://github.com/gobelet69/Mass-Print/releases');
+  const retry = panel.locator('[data-release-role="retry"]');
+  await expect(retry).toBeVisible();
+  await retry.click();
+  await expect(link).toHaveAttribute('data-release-state', 'available');
+  await expect(retry).toBeHidden();
+  expect(requests).toBe(2);
+});

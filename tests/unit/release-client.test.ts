@@ -39,7 +39,7 @@ const availableRelease = {
   version: '0.1.3',
   format: 'DMG universel',
   architecture: 'Apple Silicon et Intel',
-  compatibility: 'macOS 12.3 ou version ultérieure',
+  compatibility: 'macOS 13 ou version ultérieure',
   downloadUrl: 'https://github.com/gobelet69/Mass-Print/releases/download/v0.1.3/Mass.Print_0.1.3_universal.dmg',
   releaseUrl: 'https://github.com/gobelet69/Mass-Print/releases/tag/v0.1.3',
   publishedAt: '2026-10-24T12:56:16Z',
@@ -135,5 +135,61 @@ describe('release download enhancement', () => {
     expect(link.textContent).toBe('Bientôt disponible');
     expect(version.textContent).toBe('Version détectée automatiquement');
     expect(link.attributes.has('href')).toBe(false);
+  });
+});
+
+
+describe('release discovery feedback', () => {
+  it('shows pending feedback until the request settles', async () => {
+    const status = element('mass-print', 'status');
+    let settle!: (response: Response) => void;
+    const request = mountReleaseDownloads(fixture([status]) as unknown as ParentNode,
+      () => new Promise<Response>((resolve) => { settle = resolve; }), 'en');
+    expect(status.textContent).toBe('Checking the latest release…');
+    settle(Response.json({ available: false }));
+    await request;
+    expect(status.textContent).toBe('No compatible download is available.');
+  });
+  it.each(['network', 'http', 'invalid'] as const)('distinguishes %s errors from an unavailable release', async (failure) => {
+    const status = element('mass-print', 'status');
+    const fetchRelease = async () => {
+      if (failure === 'network') throw new Error('offline');
+      return failure === 'http' ? new Response('', { status: 503 }) : Response.json({});
+    };
+    await mountReleaseDownloads(fixture([status]) as unknown as ParentNode, fetchRelease, 'fr');
+    expect(status.attributes.get('data-release-state')).toBe('error');
+    expect(status.textContent).toContain('Impossible de vérifier');
+  });
+});
+
+describe('release request deadline', () => {
+  it.each(['headers', 'body'] as const)('offers recovery when %s never settles', async (phase) => {
+    vi.useFakeTimers();
+    try {
+      const status = element('mass-print', 'status');
+      const link = element('mass-print', 'link', 'View releases on GitHub');
+      link.setAttribute('href', 'https://github.com/gobelet69/Mass-Print/releases');
+      const retry = element('mass-print', 'retry');
+      // This fixture has no real DOM event dispatch; timeout visibility is the contract under test.
+      Object.assign(retry, { addEventListener: () => {} });
+      let requestSignal: AbortSignal | null | undefined;
+      const stalledFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
+        requestSignal = init?.signal;
+        if (phase === 'headers') return new Promise<Response>(() => {});
+        return { ok: true, json: () => new Promise<unknown>(() => {}) } as Response;
+      };
+      const pending = mountReleaseDownloads(fixture([status, link, retry]) as unknown as ParentNode, stalledFetch, 'en');
+      await vi.advanceTimersByTimeAsync(9_999);
+      expect(status.attributes.get('data-release-state')).toBe('loading');
+      await vi.advanceTimersByTimeAsync(1);
+      expect(status.attributes.get('data-release-state')).toBe('error');
+      expect(retry.hidden).toBe(false);
+      expect(requestSignal?.aborted).toBe(true);
+      expect(link.attributes.get('href')).toBe('https://github.com/gobelet69/Mass-Print/releases');
+      await pending;
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

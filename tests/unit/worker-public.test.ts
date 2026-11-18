@@ -199,7 +199,7 @@ describe('public GitHub release endpoint', () => {
       available: true,
       version: '0.1.3',
       format: 'DMG universel',
-      compatibility: 'macOS 12.3 ou version ultérieure',
+      compatibility: 'macOS 13 ou version ultérieure',
     });
   });
 

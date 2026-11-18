@@ -85,7 +85,7 @@ describe('macOS app catalog', () => {
       name: 'Mass Print',
       tagline: 'Tous vos documents. Le bon ordre. Une seule impression.',
       repository: 'gobelet69/Mass-Print',
-      compatibility: 'macOS 12.3 ou version ultérieure',
+      compatibility: 'macOS 13 ou version ultérieure',
       architecture: 'Apple Silicon et Intel',
       publicationStatus: 'available',
       releasePolicy: {
