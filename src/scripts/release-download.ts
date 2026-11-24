@@ -51,6 +51,8 @@ function applyAvailableRelease(root: ParentNode, slug: string, release: Availabl
     for (const notes of targets(root, slug, 'notes')) {
       notes.textContent = release.notes;
       notes.hidden = false;
+      const disclosure = notes.closest('details');
+      if (disclosure) disclosure.hidden = false;
     }
   }
 }

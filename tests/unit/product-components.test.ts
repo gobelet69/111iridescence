@@ -40,14 +40,15 @@ describe('product presentation primitives', () => {
     expect(html).not.toContain('aria-disabled="true"');
   });
 
-  it('keeps release notes out of compact homepage controls', async () => {
+  it('keeps release details and omits notes in the compact product control', async () => {
     const app = getApp('mass-print');
     const container = await AstroContainer.create();
     const html = await container.renderToString(ReleaseDownload, {
-      props: { app, locale: 'en', compact: true },
+      props: { app, locale: 'en', variant: 'compact' },
     });
 
     expect(html).toContain('release-download--compact');
+    expect(html).toContain('data-release-role="version"');
     expect(html).not.toContain('data-release-role="notes"');
   });
 

@@ -23,12 +23,10 @@ import { SITE } from '../config/site';
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    min-height: min(48rem, calc(100svh - 4.75rem));
-    border-bottom: 1px solid var(--line);
-    background:
-      radial-gradient(circle at 19% 24%, color-mix(in srgb, var(--blue) 12%, transparent), transparent 28rem),
-      radial-gradient(circle at 77% 66%, color-mix(in srgb, var(--coral) 15%, transparent), transparent 29rem),
-      var(--paper);
+    min-height: clamp(15rem, 30vw, 28rem);
+    border-block-end: 1px solid var(--line);
+    /* Opaque stops preserve the gradient without WebKit artifacts behind the canvas. */
+    background: radial-gradient(ellipse at 63% 12% in srgb, var(--paper-strong), var(--field-blue) 70%);
   }
 
   .hero-inner {
@@ -38,14 +36,14 @@ import { SITE } from '../config/site';
     width: min(calc(100% - 2rem), 90rem);
     min-height: inherit;
     margin-inline: auto;
-    padding-block: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: var(--space-5);
     grid-template-rows: 1fr;
   }
 
   .pixel-stage {
     position: relative;
     display: grid;
-    min-height: clamp(16rem, 42vw, 31rem);
+    min-height: 0;
     place-items: center;
   }
 
@@ -60,12 +58,6 @@ import { SITE } from '../config/site';
     text-align: center;
     white-space: nowrap;
     transition: opacity 180ms ease;
-  }
-
-  :global(html.js) .pixel-hero h1 {
-    opacity: 0;
-    pointer-events: none;
-    user-select: none;
   }
 
   canvas {
@@ -88,19 +80,15 @@ import { SITE } from '../config/site';
   }
 
   @media (max-width: 40rem) {
-    .pixel-hero {
-      min-height: min(42rem, calc(100svh - 7.5rem));
-    }
-
-    .pixel-stage {
-      min-height: 16rem;
-    }
-
     h1 {
       font-size: clamp(1.75rem, 10.4vw, 3.6rem);
       letter-spacing: -0.08em;
     }
 
+  }
+
+  @media (max-width: 23rem) {
+    .pixel-hero { min-height: 12rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {

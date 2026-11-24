@@ -2,9 +2,10 @@
 import type { AppDefinition } from '../../data/apps';
 import AppIcon from './AppIcon.astro';
 import AppScreenshot from './AppScreenshot.astro';
+import ProductHero from './ProductHero.astro';
 import ProductFeatureList from './ProductFeatureList.astro';
 import ReleaseDownload from './ReleaseDownload.astro';
-import { getRoute, type Locale } from '../../i18n';
+import type { Locale } from '../../i18n';
 import { pageCopy } from '../../i18n/pages';
 
 interface Props { app: AppDefinition; locale: Locale }
@@ -14,17 +15,7 @@ const screenshots = Object.fromEntries(app.screenshots.map((shot) => [shot.src, 
 ---
 
 <div class="product-page product-page--iris">
-  <a class="product-back type-navigation" href={getRoute(locale, 'apps')}>← {copy.allApps}</a>
-  <section id="overview" class="product-hero container" aria-labelledby="product-title">
-    <div class="product-hero__copy">
-      <AppIcon app={app} />
-      <h1 id="product-title">{app.name}</h1>
-      <p class="product-tagline">{app.tagline}</p>
-      <p class="product-lead">{app.description}</p>
-      <ReleaseDownload app={app} locale={locale} />
-    </div>
-    <AppScreenshot screenshot={app.primaryScreenshot} eager />
-  </section>
+  <ProductHero app={app} locale={locale} />
 
   <section id="features" class="product-section container" aria-labelledby="pdf-overview-title">
     <header><h2 id="pdf-overview-title">{copy.overviewTitle}</h2></header>

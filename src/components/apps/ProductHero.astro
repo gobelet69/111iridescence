@@ -1,0 +1,30 @@
+---
+import type { AppDefinition } from '../../data/apps';
+import { getRoute, type Locale } from '../../i18n';
+import { pageCopy } from '../../i18n/pages';
+import AppIcon from './AppIcon.astro';
+import AppScreenshot from './AppScreenshot.astro';
+import ReleaseDownload from './ReleaseDownload.astro';
+
+interface Props { app: AppDefinition; locale: Locale }
+const { app, locale } = Astro.props;
+const copy = pageCopy(locale).product;
+---
+
+<section id="overview" class="product-intro" aria-labelledby="product-title">
+  <div class="container">
+    <a class="product-back" href={getRoute(locale, 'apps')}><span aria-hidden="true">‹</span> {copy.allApps}</a>
+    <div class="product-hero">
+      <div class="product-hero__copy">
+        <AppIcon app={app} size="small" />
+        <h1 id="product-title">{app.name}</h1>
+        <p class="product-tagline">{app.tagline}</p>
+        <p class="product-lead">{app.description}</p>
+        <ReleaseDownload app={app} locale={locale} variant="compact" />
+      </div>
+      <div class:list={['product-hero__preview', app.slug === 'resource-guard' && 'product-hero__preview--compact']}>
+        <AppScreenshot screenshot={app.primaryScreenshot} eager />
+      </div>
+    </div>
+  </div>
+</section>

@@ -22,12 +22,12 @@ test('hero keeps the pixel title free from supporting copy', async ({ page }) =>
 });
 
 for (const viewport of [
-  { width: 1440, height: 900, heroHeight: 768 },
-  { width: 1280, height: 800, heroHeight: 724 },
-  { width: 768, height: 1024, heroHeight: 768 },
-  { width: 390, height: 844, heroHeight: 672 },
+  { width: 1440, height: 900, heroHeight: 433 },
+  { width: 1280, height: 800, heroHeight: 385 },
+  { width: 768, height: 1024, heroHeight: 241 },
+  { width: 390, height: 844, heroHeight: 241 },
 ]) {
-  test(`preserves hero geometry at ${viewport.width}×${viewport.height}`, async ({ page }) => {
+  test(`renders the resized hero at ${viewport.width}×${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto('/');
     const hero = page.locator('[data-pixel-hero]');
@@ -197,6 +197,7 @@ test('reduced motion keeps the same signal phase after a responsive rebuild', as
 });
 
 test('mobile pixel title keeps an expressive vertical scale', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 

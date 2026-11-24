@@ -13,9 +13,11 @@ const apps = getApps(locale);
 ---
 
 <BaseLayout title={copy.title} description={copy.description} locale={locale} alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'apps')}>
-  <header class="catalog-hero container">
-    <h1>{copy.title}</h1>
-    <p>{copy.lead}</p>
+  <header class="catalog-hero">
+    <div class="container">
+      <h1>{copy.title}</h1>
+      <p>{copy.lead}</p>
+    </div>
   </header>
   <section class="catalog container" aria-label={copy.label}>
     {apps.map((app) => (
@@ -27,7 +29,7 @@ const apps = getApps(locale);
           <p>{app.description}</p>
           <a class="button button--secondary" href={getRoute(locale, 'product', app.slug)}>{copy.discover} {app.name}</a>
         </div>
-        <AppScreenshot screenshot={app.primaryScreenshot} />
+        <div class="catalog-card__preview"><AppScreenshot screenshot={app.primaryScreenshot} /></div>
       </article>
     ))}
   </section>
@@ -39,150 +41,52 @@ const apps = getApps(locale);
 
 <style>
   .catalog-hero {
-    padding-block: clamp(4rem, 8vw, 7rem);
+    padding-block: var(--space-7);
+    border-block-end: 1px solid var(--line);
+    background: var(--signal-field);
   }
 
-  .catalog-hero h1 {
-    margin-bottom: var(--space-4);
-    font-size: clamp(2.8rem, 7vw, 5.5rem);
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-  }
+  .catalog-hero h1 { margin-bottom: var(--space-3); text-wrap: balance; }
+  .catalog-hero p { max-width: 48ch; margin: 0; color: var(--muted); font-size: var(--step-1); }
 
-  .catalog-hero > p:last-child {
-    max-width: 48ch;
-    margin: 0;
-    color: var(--muted);
-    font-size: var(--step-1);
-    line-height: 1.6;
-    text-wrap: pretty;
-  }
-
-  .catalog {
-    display: grid;
-    gap: clamp(2.5rem, 5vw, 4rem);
-    padding-bottom: var(--space-8);
-  }
+  .catalog { padding-block: var(--space-5) var(--space-7); }
 
   .catalog-card {
-    --card-accent: var(--violet);
-    --card-accent-text: var(--violet-text);
+    --catalog-field: var(--field-violet);
     display: grid;
     min-width: 0;
     align-items: center;
-    gap: clamp(2rem, 5vw, 4.5rem);
-    padding: clamp(1.75rem, 4vw, 3.5rem);
-    border: 1px solid var(--glass-line);
-    border-radius: var(--radius-large);
-    background:
-      radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--card-accent) 8%, transparent), transparent 24rem),
-      linear-gradient(135deg, var(--glass), color-mix(in srgb, var(--card-accent) 4%, var(--glass)));
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(16px);
-    overflow: hidden;
-    transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+    gap: clamp(1.25rem, 5vw, 4rem);
+    padding-block: var(--space-5);
   }
 
-  .catalog-card:hover {
-    border-color: var(--line);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-window);
-  }
+  .catalog-card + .catalog-card { border-block-start: 1px solid var(--line); }
+  .catalog-card--blue { --catalog-field: var(--field-blue); }
+  .catalog-card--cyan { --catalog-field: var(--field-cyan); }
+  .catalog-card--resource-guard { --catalog-field: var(--field-green); }
 
-  .catalog-card--blue {
-    --card-accent: var(--blue);
-    --card-accent-text: var(--blue-text);
-  }
+  .catalog-card__copy { min-width: 0; }
+  .catalog-card__copy .type-metadata { margin: var(--space-3) 0 var(--space-2); color: var(--muted); font-size: var(--step--1); }
+  .catalog-card h2 { margin-bottom: var(--space-2); font-size: var(--step-2); }
+  .catalog-card__copy p:not(.type-metadata) { max-width: 52ch; margin-bottom: var(--space-3); color: var(--muted); }
 
-  .catalog-card--cyan,
-  .catalog-card--iridescence-installer {
-    --card-accent: var(--cyan);
-    --card-accent-text: var(--cyan-text);
-  }
-
-  .catalog-card--resource-guard {
-    --card-accent: var(--presence);
-    --card-accent-text: var(--presence-text);
-  }
-
-  .catalog-card__copy {
+  .catalog-card__preview {
+    display: grid;
     min-width: 0;
+    place-items: center;
+    padding: clamp(1rem, 3vw, 2.5rem);
+    border-radius: var(--radius);
+    background: var(--catalog-field);
   }
 
-  .catalog-card__copy > .type-metadata {
-    margin: var(--space-4) 0 var(--space-2);
-    color: var(--card-accent-text);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
+  .catalog-card__preview :global(.app-shot) { max-inline-size: 26rem; }
+  .catalog-card--resource-guard .catalog-card__preview :global(.app-shot) { max-inline-size: 15rem; }
 
-  .catalog-card h2 {
-    margin-bottom: var(--space-3);
-    font-size: var(--step-2);
-    letter-spacing: -0.035em;
-    line-height: 1.1;
-  }
+  .catalog-future { margin-block-end: var(--space-8); padding: var(--space-5); border-inline-start: 3px solid var(--blue-text); background: var(--field-blue); }
+  .catalog-future h2 { margin-bottom: var(--space-2); font-size: var(--step-1); }
+  .catalog-future p { margin: 0; color: var(--muted); }
 
-  .catalog-card__copy > p:not(.type-metadata) {
-    color: var(--muted);
-    font-size: var(--step-0);
-    line-height: 1.6;
-    margin-bottom: var(--space-4);
-    text-wrap: pretty;
-  }
-
-  .catalog-card .button {
-    margin-top: var(--space-2);
-  }
-
-  .catalog-future {
-    max-width: 44rem;
-    margin-inline: auto;
-    margin-bottom: var(--space-8);
-    padding: clamp(2rem, 5vw, 3.5rem);
-    border: 1px solid var(--glass-line);
-    border-radius: var(--radius-large);
-    background: var(--glass);
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(14px);
-    text-align: center;
-  }
-
-  .catalog-future .type-metadata {
-    color: var(--violet-text);
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .catalog-future h2 {
-    margin-bottom: var(--space-3);
-    font-size: var(--step-1);
-    letter-spacing: -0.03em;
-  }
-
-  .catalog-future > p:last-child {
-    max-width: 50ch;
-    margin-inline: auto;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  @media (min-width: 58rem) {
-    .catalog-card {
-      grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
-    }
-    .catalog-card:nth-child(even) {
-      grid-template-columns: minmax(0, 1.22fr) minmax(18rem, 0.78fr);
-    }
-    .catalog-card:nth-child(even) .catalog-card__copy {
-      grid-column: 2;
-    }
-    .catalog-card:nth-child(even) :global(.app-shot) {
-      grid-row: 1;
-      grid-column: 1;
-    }
+  @media (min-width: 46rem) {
+    .catalog-card { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
   }
 </style>

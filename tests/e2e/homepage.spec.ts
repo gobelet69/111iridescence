@@ -1,6 +1,18 @@
 import { expect, test } from '@playwright/test';
 
-test('homepage preserves the identity hero and makes the two macOS apps the focus', async ({ page }) => {
+test('homepage preserves the identity hero and makes the five macOS apps the focus', async ({ page }) => {
+  await page.route('**/api/releases/**', (route) => {
+    const massPrint = route.request().url().endsWith('/mass-print');
+    return route.fulfill({
+      json: massPrint ? {
+        available: true,
+        version: '0.1.3',
+        format: 'DMG universel',
+        downloadUrl: 'https://github.com/gobelet69/Mass-Print/releases/download/v0.1.3/Mass.Print_0.1.3_universal.dmg',
+        notes: '',
+      } : { available: false },
+    });
+  });
   await page.goto('/');
   const main = page.getByRole('main');
   const hero = page.locator('[data-pixel-hero]');
@@ -10,6 +22,11 @@ test('homepage preserves the identity hero and makes the two macOS apps the focu
   await expect(hero).not.toContainText('Des applications macOS pensées');
   await expect(hero).not.toContainText('le signal n’est jamais fixe.');
   await expect(apps.getByRole('article')).toHaveCount(5);
+
+  const shortcuts = apps.getByRole('navigation', { name: 'Direct app access' });
+  await expect(shortcuts.getByRole('link')).toHaveCount(5);
+  await expect(shortcuts.getByRole('link', { name: 'QuickPad' })).toHaveAttribute('href', '/apps/quickpad');
+  await expect(apps.getByText('Focused macOS tools that respect your data.')).toBeVisible();
 
   const chapters = apps.getByRole('article');
   await expect(chapters.nth(0)).toContainText('Iridescence Installer');
@@ -22,31 +39,22 @@ test('homepage preserves the identity hero and makes the two macOS apps the focu
   await expect(chapters.nth(2).getByRole('img')).toHaveAttribute('src', /mass-print-main\.png$/);
   await expect(chapters.nth(3).getByRole('img')).toHaveAttribute('src', /resource-guard-main\.png$/);
   await expect(chapters.nth(4).getByRole('img')).toHaveAttribute('src', /quickpad-main\.png$/);
-  await expect(chapters.nth(0).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/iridescence-installer');
-  await expect(chapters.nth(1).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/iridescence-pdf-reader');
-  await expect(chapters.nth(2).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/mass-print');
-  await expect(chapters.nth(3).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/resource-guard');
-  await expect(chapters.nth(4).getByRole('link', { name: 'Discover' })).toHaveAttribute('href', '/apps/quickpad');
-  await expect(apps.getByText('Focused macOS tools that respect your data.')).toBeVisible();
-
-  const presentation = await chapters.evaluateAll((items) => items.map((item) => {
-    const iconFrame = item.querySelector<HTMLElement>('.product-chapter__icon-frame');
-    const title = item.querySelector<HTMLElement>('h3');
-    if (!iconFrame || !title) return null;
-    const frame = iconFrame.getBoundingClientRect();
-    return {
-      iconWidth: frame.width,
-      iconHeight: frame.height,
-      titleMinBlockSize: Number.parseFloat(getComputedStyle(title).minBlockSize),
-    };
-  }));
-  expect(presentation).toHaveLength(5);
-  expect(presentation.every((item) => item && item.iconWidth === item.iconHeight && item.iconWidth >= 64)).toBe(true);
-  if ((page.viewportSize()?.width ?? 0) >= 928) {
-    expect(presentation.every((item) => item && item.titleMinBlockSize > 0)).toBe(true);
-    expect(presentation[0]?.titleMinBlockSize).toBe(presentation[1]?.titleMinBlockSize);
+  const products = [
+    ['Iridescence Installer', 'iridescence-installer'],
+    ['Iridescence PDF Reader', 'iridescence-pdf-reader'],
+    ['Mass Print', 'mass-print'],
+    ['Resource Guard', 'resource-guard'],
+    ['QuickPad', 'quickpad'],
+  ];
+  for (const [index, [name, slug]] of products.entries()) {
+    const chapter = chapters.nth(index);
+    await expect(chapter.getByRole('link', { name: `Discover ${name}` })).toHaveAttribute('href', `/apps/${slug}`);
+    await expect(chapter.getByRole('link')).toHaveCount(2);
+    await expect(chapter).not.toContainText(/macOS \d+/);
   }
 
+  await expect(chapters.nth(2).getByRole('link', { name: 'Download for macOS' })).toHaveAttribute('href', /Mass\.Print_0\.1\.3_universal\.dmg$/);
+  await expect(chapters.first().getByRole('link', { name: 'View releases on GitHub' })).toHaveAttribute('href', /github\.com\/[^/]+\/[^/]+\/releases$/);
   await expect(main).not.toContainText('À lire et à explorer');
   await expect(main).not.toContainText('PwdGen');
   await expect(main).not.toContainText('Blog');

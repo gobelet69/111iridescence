@@ -1,4 +1,5 @@
 ---
+import AppIcon from '../components/apps/AppIcon.astro';
 import PixelHero from '../components/PixelHero.astro';
 import ProductShowcase from '../components/apps/ProductShowcase.astro';
 import { SITE } from '../config/site';
@@ -40,231 +41,71 @@ const apps = getApps(locale);
   <PixelHero />
 
   <section id="apps" class="apps-section" aria-labelledby="apps-title">
-    <div class="apps-transition" aria-hidden="true"></div>
     <div class="container">
-      <header class="apps-heading">
-        <div class="studio-badge type-metadata">
-          <span class="presence-indicator" aria-hidden="true"></span>
-          <span>111iridescence Studio · Native macOS</span>
-        </div>
-        <h2 id="apps-title">{copy.title}</h2>
-        <p class="apps-lead">{copy.lead}</p>
-        <nav class="app-dock-preview" aria-label={locale === 'fr' ? 'Accès direct aux applications' : 'Direct app access'}>
+      <div class="apps-banner">
+        <header class="apps-heading">
+          <div>
+            <h2 id="apps-title">{copy.title}</h2>
+            <p class="apps-lead">{copy.lead}</p>
+          </div>
+          <a class="button button--secondary" href={getRoute(locale, 'apps')}>{copy.allApps}</a>
+        </header>
+        <nav class="app-index" aria-label={locale === 'fr' ? 'Accès direct aux applications' : 'Direct app access'}>
           {apps.map((app) => (
-            <a href={getRoute(locale, 'product', app.slug)} class="dock-item">
-              <span class="dock-item__dot" style={`background: var(--${app.slug === 'resource-guard' ? 'presence' : app.accent});`}></span>
-              <span class="dock-item__name">{app.shortName}</span>
-              <span class="dock-item__arch type-metadata">{app.architecture}</span>
+            <a href={getRoute(locale, 'product', app.slug)}>
+              <AppIcon app={app} size="small" />
+              <span>{app.shortName}</span>
             </a>
           ))}
         </nav>
-      </header>
-      {apps.map((app, index) => <ProductShowcase app={app} index={index} locale={locale} />)}
-      <div class="future-apps">
-        <div class="future-apps__copy">
-          <p class="type-metadata">{copy.futureEyebrow}</p>
-          <p>{copy.future}</p>
-        </div>
-        <a class="button button--primary" href={getRoute(locale, 'apps')}>{copy.allApps} <span aria-hidden="true">→</span></a>
       </div>
+      {apps.map((app, index) => <ProductShowcase app={app} index={index} locale={locale} />)}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .apps-section {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 12% 20%, oklch(56% 0.18 300 / 0.08), transparent 32rem),
-      radial-gradient(circle at 92% 65%, oklch(52% 0.14 255 / 0.08), transparent 34rem),
-      linear-gradient(180deg, var(--paper), var(--paper-strong) 18%, var(--paper));
-  }
+  .apps-section { padding-block: var(--space-5) var(--space-8); }
 
-  .apps-transition {
-    position: absolute;
-    z-index: -1;
-    top: -9rem;
-    left: 50%;
-    width: min(90rem, 100%);
-    height: 20rem;
-    transform: translateX(-50%);
-    background: radial-gradient(ellipse, oklch(56% 0.18 300 / 0.10), transparent 68%);
-    filter: blur(2.5rem);
-    pointer-events: none;
+  .apps-banner {
+    margin-block-end: var(--space-5);
+    padding: clamp(1rem, 3vw, 2rem);
+    border-radius: var(--radius-large);
+    background: var(--line-subtle);
   }
 
   .apps-heading {
-    display: grid;
-    padding-top: clamp(4.5rem, 9vw, 8rem);
-    padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-3);
-  }
-
-  .apps-heading > * {
-    margin: 0;
-  }
-
-  .studio-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.85rem;
-    border-radius: var(--radius-pill);
-    background: var(--glass);
-    border: 1px solid var(--glass-line);
-    color: var(--violet-text);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    width: fit-content;
-  }
-
-  .presence-indicator {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background: var(--presence);
-    box-shadow: 0 0 8px var(--presence);
-  }
-
-  .apps-heading h2 {
-    font-size: clamp(3rem, 7.5vw, 6rem);
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-  }
-
-  .apps-lead {
-    max-width: 44ch;
-    color: var(--muted);
-    font-size: var(--step-1);
-    line-height: 1.5;
-  }
-
-  .app-dock-preview {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-top: var(--space-4);
-  }
-
-  .dock-item {
-    display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.45rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-pill);
-    background: var(--paper-strong);
-    text-decoration: none;
-    color: var(--ink);
-    font-size: 0.84rem;
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-  }
-
-  .dock-item:hover {
-    transform: translateY(-1px);
-    border-color: var(--violet);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .dock-item__dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-  }
-
-  .dock-item__arch {
-    color: var(--muted);
-    font-size: 0.78rem;
-    font-weight: 500;
-  }
-
-  .future-apps {
-    display: grid;
-    max-width: 44rem;
-    margin-inline: auto;
-    margin-block: clamp(4rem, 8vw, 7rem);
-    padding: clamp(2rem, 5vw, 3.5rem);
-    border: 1px solid var(--glass-line);
-    border-radius: var(--radius-large);
-    background: var(--glass);
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(16px);
-    text-align: center;
+    justify-content: space-between;
     gap: var(--space-3);
+    margin-block-end: var(--space-4);
   }
 
-  .future-apps p {
-    margin: 0;
+  h2 { margin: 0; font-size: var(--step-3); }
+  .apps-lead { margin: var(--space-2) 0 0; color: var(--muted); }
+
+  .app-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
   }
 
-  .future-apps .type-metadata {
-    color: var(--violet-text);
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .future-apps p:not(.type-metadata) {
-    color: var(--ink);
-    font-family: var(--font-display);
-    font-size: var(--step-1);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
-
-  .future-apps a {
+  .app-index a {
     display: inline-flex;
+    min-height: 2.75rem;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: var(--space-2);
-    justify-self: center;
-    padding: 0.55rem 1.25rem;
-    border: 1px solid var(--glass-line);
-    border-radius: var(--radius-pill);
+    gap: var(--space-2);
+    padding: 0.375rem 0.75rem 0.375rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
     background: var(--paper-strong);
-    color: var(--ink);
-    font-family: var(--font-display);
     font-size: var(--step--1);
-    font-weight: 700;
+    font-weight: 650;
     text-decoration: none;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
   }
 
-  .future-apps a:hover {
-    transform: translateY(-1px);
-    border-color: var(--line);
-    box-shadow: var(--shadow-soft);
-  }
-
-  @media (min-width: 48rem) {
-    .apps-heading {
-      grid-template-columns: 0.85fr 1.15fr;
-      align-items: end;
-    }
-
-    .studio-badge,
-    .apps-heading h2 {
-      grid-column: 1;
-    }
-
-    .apps-lead {
-      grid-column: 2;
-      justify-self: end;
-      text-align: right;
-    }
-
-    .app-dock-preview {
-      grid-column: 1 / -1;
-    }
-  }
+  .app-index a:hover { border-color: var(--blue-text); color: var(--blue-text); }
+  .app-index :global(.app-icon) { width: 1.75rem; height: 1.75rem; filter: none; }
 </style>

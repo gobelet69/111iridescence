@@ -14,8 +14,8 @@ const copy = pageCopy(locale).notFound;
   canonicalPath={getRoute(locale, 'notFound')}
   alternatePath={getRoute(locale === 'en' ? 'fr' : 'en', 'notFound')}
 >
-  <section class="not-found container">
-    <div class="not-found-copy">
+  <section class="not-found">
+    <div class="not-found-copy container">
       <h1>{copy.title}</h1>
       <p>{copy.message}</p>
       <nav class="type-navigation" aria-label={copy.nav}>
@@ -38,7 +38,9 @@ const copy = pageCopy(locale).notFound;
   }
 
   .not-found-copy {
-    max-width: 42rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--radius-large);
+    background: var(--signal-field);
   }
 
   h1 {

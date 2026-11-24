@@ -62,6 +62,11 @@ test('Mass Print page activates the real-shaped DMG download experience', async 
   await expect(download).toHaveText('Download for macOS');
   await expect(download).toHaveAttribute('href', /Mass\.Print_0\.1\.3_universal\.dmg$/);
   await expect(page.getByText('Your documents stay on your Mac')).toBeVisible();
+  const notes = page.locator('#download .release-notes');
+  await expect(notes.getByText('Universal macOS build.')).toBeHidden();
+  await notes.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(notes.getByText('Universal macOS build.')).toBeVisible();
 });
 
 test('Resource Guard page exposes authentic chapters, metadata, and launch fallback', async ({ page }) => {

@@ -6,15 +6,17 @@ type TestElement = {
   textContent: string;
   attributes: Map<string, string>;
   hidden: boolean;
+  closest(selector: string): { hidden: boolean } | null;
   setAttribute(name: string, value: string): void;
 };
 
-function element(slug: string, role: string, text = ''): TestElement {
+function element(slug: string, role: string, text = '', disclosure?: { hidden: boolean }): TestElement {
   return {
     dataset: { releaseSlug: slug, releaseRole: role },
     textContent: text,
     attributes: new Map(),
     hidden: role === 'notes',
+    closest: (selector) => selector === 'details' ? disclosure ?? null : null,
     setAttribute(name, value) {
       this.attributes.set(name, value);
     },
@@ -65,7 +67,8 @@ describe('release download enhancement', () => {
     const footerLink = element('mass-print', 'link', 'Bientôt disponible');
     const version = element('mass-print', 'version');
     const format = element('mass-print', 'format');
-    const notes = element('mass-print', 'notes');
+    const disclosure = { hidden: true };
+    const notes = element('mass-print', 'notes', '', disclosure);
     const fetchRelease = vi.fn(async () => Response.json(availableRelease));
 
     await mountReleaseDownloads(
@@ -85,6 +88,7 @@ describe('release download enhancement', () => {
     expect(format.textContent).toBe('DMG universel');
     expect(notes.textContent).toBe('Universal macOS build.');
     expect(notes.hidden).toBe(false);
+    expect(disclosure.hidden).toBe(false);
   });
 
   it('localizes an available release for English pages', async () => {

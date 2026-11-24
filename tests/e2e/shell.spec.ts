@@ -33,18 +33,18 @@ test('renders the anonymous public identity and discreet portal link', async ({ 
   await expect(page.locator('body')).not.toContainText(/Théo|Deville/i);
 });
 
-test('uses the identity typeface for headings, navigation, and factual metadata', async ({ page }) => {
+test('uses the identity typeface for navigation and the system typeface for product titles', async ({ page }) => {
   await page.goto('/');
 
   const displayElements = [
-    page.getByRole('heading', { level: 3, name: 'Iridescence PDF Reader', exact: true }),
     page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Apps' }),
-    page.locator('.product-chapter__identity-copy').first(),
     page.getByRole('contentinfo').getByRole('link', { name: 'GitHub' }),
   ];
 
   const bodyFont = await page.locator('body').evaluate((element) => getComputedStyle(element).fontFamily);
   expect(bodyFont).not.toContain('0xProto NF');
+  const title = page.getByRole('heading', { level: 3, name: 'Iridescence PDF Reader', exact: true });
+  await expect(title).toHaveCSS('font-family', bodyFont);
 
   for (const element of displayElements) {
     await expect(element).toBeVisible();
